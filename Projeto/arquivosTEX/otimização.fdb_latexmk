@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1781139828.50099 "c:/Unifesp/Trabalho Programação Linear/Código/Projeto/otimização.tex" "otimização.pdf" "otimização" 1781139829.42627 0
+["pdflatex"] 1781140965.98172 "c:/Unifesp/Trabalho Programação Linear/Código/Projeto/otimização.tex" "otimização.pdf" "otimização" 1781140967.06493 0
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1781139629 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1095.pk" 1781139638 28976 d547a8bece5456aebefb7d5cb6794593 ""
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1200.pk" 1781137921 31952 3342e375d6c012cf5a089f79e3950de2 ""
@@ -110,9 +110,9 @@
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/tex/latex/zref/zref-abspage.sty" 1773584792 2269 91cd03da61ab1da00145ba8a81560051 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/tex/latex/zref/zref-base.sty" 1773584792 20785 8db5f0a2b2ce96dda9fac87ccab29449 ""
-  "c:/Unifesp/Trabalho Programação Linear/Código/Projeto/otimização.tex" 1781139826 10372 f48b1d4ab26e16e3e3dce857a5f5c4a2 ""
-  "otimização.aux" 1781139829 1090 b6b0490e6d359a744baf0337694c88bd "pdflatex"
-  "otimização.tex" 1781139826 10372 f48b1d4ab26e16e3e3dce857a5f5c4a2 ""
+  "c:/Unifesp/Trabalho Programação Linear/Código/Projeto/otimização.tex" 1781140963 10370 fe206653634866694a0542edfe8c680f ""
+  "otimização.aux" 1781140966 1090 b6b0490e6d359a744baf0337694c88bd "pdflatex"
+  "otimização.tex" 1781140963 10370 fe206653634866694a0542edfe8c680f ""
   (generated)
   "otimização.aux"
   "otimização.log"
