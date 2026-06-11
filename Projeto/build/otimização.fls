@@ -1,7 +1,7 @@
 PWD c:\Unifesp\Trabalho Programação Linear\Código\Projeto
 INPUT C:\Users\Guilherme\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
 INPUT c:\Unifesp\Trabalho Programação Linear\Código\Projeto\otimização.tex
-OUTPUT otimização.log
+OUTPUT c:\Unifesp\Trabalho Programação Linear\Código\Projeto\build\otimização.log
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\tex\latex\base\size12.clo
@@ -108,10 +108,10 @@ INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\tex\latex\tools\array.sty
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\tex\latex\tools\array.sty
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\tex\latex\parskip\parskip.sty
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\tex\latex\parskip\parskip.sty
-INPUT .\otimização.aux
-INPUT .\otimização.aux
-INPUT otimização.aux
-OUTPUT otimização.aux
+INPUT c:\Unifesp\Trabalho Programação Linear\Código\Projeto\build\otimização.aux
+INPUT c:\Unifesp\Trabalho Programação Linear\Código\Projeto\build\otimização.aux
+INPUT c:\Unifesp\Trabalho Programação Linear\Código\Projeto\build\otimização.aux
+OUTPUT c:\Unifesp\Trabalho Programação Linear\Código\Projeto\build\otimização.aux
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
@@ -148,7 +148,7 @@ INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm7.tfm
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm0800.tfm
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm0600.tfm
-OUTPUT otimização.pdf
+OUTPUT c:\Unifesp\Trabalho Programação Linear\Código\Projeto\build\otimização.pdf
 INPUT C:\Users\Guilherme\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1095.tfm
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr10.tfm
@@ -162,7 +162,7 @@ INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmbx1
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmbx8.tfm
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmbx6.tfm
 INPUT C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmbx12.tfm
-INPUT otimização.aux
+INPUT c:\Unifesp\Trabalho Programação Linear\Código\Projeto\build\otimização.aux
 INPUT C:\Users\Guilherme\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1200.pk
 INPUT C:\Users\Guilherme\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1200.pk
 INPUT C:\Users\Guilherme\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk

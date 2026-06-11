@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.6.10)  10 JUN 2026 22:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.6.10)  11 JUN 2026 00:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -360,7 +360,7 @@ Package: array 2026/02/24 v2.7b Tabular extension package (FMi)
 \ar@cellbox=\box63
 ) (C:\Users\Guilherme\AppData\Local\Programs\MiKTeX\tex/latex/parskip\parskip.sty
 Package: parskip 2021-03-14 v2.0h non-zero parskip adjustments
-) (otimização.aux
+) (c:\Unifesp\Trabalho Programação Linear\Código\Projeto\build\otimização.aux
 Package babel Info: 'brazil' activates 'portuges' shorthands.
 (babel)             Reported on input line 6.
 )
@@ -438,7 +438,11 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 102.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2] [3] [4] (otimização.aux)
+{C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
+Package mdframed Info: Not enough space on this page on input line 216.
+ [2]
+Package mdframed Info: Not enough space on this page on input line 216.
+ [3] [4] (c:\Unifesp\Trabalho Programação Linear\Código\Projeto\build\otimização.aux)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-05-26>
@@ -446,14 +450,14 @@ L3 programming layer <2026-05-26>
  ) 
 Here is how much of TeX's memory you used:
  7214 strings out of 467509
- 118237 string characters out of 5406836
- 577014 words of memory out of 5000000
+ 118507 string characters out of 5406836
+ 578014 words of memory out of 5000000
  36330 multiletter control sequences out of 15000+600000
  644232 words of font info for 81 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,14n,79p,1260b,320s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\Guilherme\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk> <C:\Users\Guilherme\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1095.pk> <C:\Users\Guilherme\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1095.pk> <C:\Users\Guilherme\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\Guilherme\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\Guilherme\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C:\Users\Guilherme\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1095.pk> <C:\Users\Guilherme\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\Guilherme\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\Guilherme\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx2074.pk><C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on otimização.pdf (4 pages, 215851 bytes).
+Output written on "c:\Unifesp\Trabalho Programação Linear\Código\Projeto\build\otimização.pdf" (4 pages, 216312 bytes).
 PDF statistics:
  377 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

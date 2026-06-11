@@ -102,7 +102,7 @@ O modelo busca \textbf{minimizar o custo logístico total} de transporte entre p
 \[
   \boxed{
     \min \; Z = \sum_{i \in I} \sum_{l \in L} \sum_{j \in P} \sum_{t \in T}
-    ct_{\,\phi(l),\,j} \cdot \frac{x_{i,\,l,\,j,\,t}}{200{.}000}
+    (k_{i,l} + \frac{ct_{\,\phi(l),\,j}}{200{.}000}) \cdot {x_{i,\,l,\,j,\,t}}
   }
 \]
 
@@ -170,7 +170,7 @@ Minimizar o custo logístico total da malha:
 
 \[
     \min \; Z = \sum_{i \in I} \sum_{l \in L} \sum_{j \in P} \sum_{t \in T}
-    ct_{\,\phi(l),\,j} \cdot \frac{x_{i,\,l,\,j,\,t}}{200{.}000}
+    (k_{i,l} + \frac{ct_{\,\phi(l),\,j}}{200{.}000}) \cdot {x_{i,\,l,\,j,\,t}}
 \]
 
 onde $\dfrac{x_{i,l,j,t}}{200{.}000}$ representa o número de caminhões necessários
@@ -179,11 +179,12 @@ onde $\dfrac{x_{i,l,j,t}}{200{.}000}$ representa o número de caminhões necess�
 % ============================================================
 \section{Restrições}
 
-Variáveis auxiliares utilizadas nas restrições:
+Variáveis auxiliares utilizadas nas restrições e na função objetivo:
 
 \begin{itemize}[leftmargin=1.5em]
   \item $n_{i,\,j,\,t}$: demanda do produto $i$ com destino $j$ no período $t$.
   \item $r_{i,\,l,\,t}$: taxa de produção do produto $i$ na linha $l$ no período $t$.
+  \item $k_{i,l}$: custo de produção do produto $i$ na linha $l$.
 \end{itemize}
 
 \vspace{8pt}
@@ -245,8 +246,8 @@ Variáveis auxiliares utilizadas nas restrições:
 
 \textbf{\color{ballblue}min}
 \[
-  Z = \sum_{i \in I} \sum_{l \in L} \sum_{j \in P} \sum_{t \in T}
-  ct_{\,\phi(l),\,j} \cdot \frac{x_{i,\,l,\,j,\,t}}{200{.}000}
+    \; Z = \sum_{i \in I} \sum_{l \in L} \sum_{j \in P} \sum_{t \in T}
+    (k_{i,l} + \frac{ct_{\,\phi(l),\,j}}{200{.}000}) \cdot {x_{i,\,l,\,j,\,t}}
 \]
 
 \vspace{4pt}
