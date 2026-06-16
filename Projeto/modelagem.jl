@@ -100,7 +100,7 @@ modelo = Model(Gurobi.Optimizer)
 # ==============================================================================
 # PASSO 9: Função Objetivo — Minimizar custo logístico total
 #
-#   min Z = Σ_{i,l,j,t}  ct[ϕ(l), j] / 200_000  ×  x[i,l,j,t]
+#   # min Z = Σ_{i,l,j,t} ( k[i,l] + ct[ϕ(l),j] / 200_000 ) × x[i,l,j,t]
 # ==============================================================================
 
 @objective(modelo, Min,
