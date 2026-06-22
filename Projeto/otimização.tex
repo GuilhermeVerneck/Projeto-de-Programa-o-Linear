@@ -104,7 +104,7 @@ O modelo busca \textbf{minimizar o custo total de opera\c{c}\~{a}o} da malha ind
 
 \begin{center}
 \renewcommand{\arraystretch}{1.4}
-\begin{tabular}{>{\bfseries\color{ballblue}}c l c r}
+\begin{tabular}{>{\bfseries\color{ballblue}}c p{7cm} c r}
   \toprule
   S\'{i}mbolo & Descri\c{c}\~{a}o & \'{I}ndice & Cardinalidade \\
   \midrule
@@ -113,7 +113,7 @@ O modelo busca \textbf{minimizar o custo total de opera\c{c}\~{a}o} da malha ind
   $P$ & Plantas (f\'{a}bricas) & $o,\,d,\,p$ & 10 \\
   $T$ & Per\'{i}odos cronol\'{o}gicos $(t_1, t_2, \ldots, t_{15})$ & $t$ & 15 dias \\
   $F$ & Formatos de lata do portf\'{o}lio & $-$ & 3 \\
-  $\mathcal{C}$ & Pares cap\'{a}veis $(i, l)$: formato do SKU $i$ = formato da linha $l$ & $(i,l)$ & $\subseteq I \times L$ \\
+  $\mathcal{C}$ & Pares cap\'{a}veis $(i, l)$: formato de $i$ coincide com o formato da linha $l$ & $(i,l)$ & $\subseteq I \times L$ \\
   \bottomrule
 \end{tabular}
 \end{center}
@@ -150,8 +150,8 @@ Seja o par $(o, d)$ representando origem $o$ e destino $d$, com $o, d \in P$:
 
 \begin{align*}
   r_{l,t}   &: \text{taxa de produ\c{c}\~{a}o da linha } l \text{ no dia } t \text{ (latas/hora)} \\
-             &\quad \text{\small Indexado por linha e dia, n\~{a}o por SKU --- a taxa depende do formato da linha, n\~{a}o do produto.} \\
-             &\quad \text{\small Se n\~{a}o h\'{a} registro de rate para a linha $l$ no dia $t$, a produ\c{c}\~{a}o naquele dia \'{e} proibida.} \\[6pt]
+             &\quad \text{\small N\~{a}o indexado por SKU --- a taxa depende do formato da linha.} \\
+             &\quad \text{\small Aus\^{e}ncia de registro implica produ\c{c}\~{a}o proibida naquele dia.} \\[6pt]
   k_{i,l}   &: \text{custo de produ\c{c}\~{a}o do SKU } i \text{ na linha } l \text{ (R\$/lata)} \\
   v_{i,l}   &: \text{custo de estocagem do SKU } i \text{ na linha } l \text{ (R\$/lata/dia)}
 \end{align*}
@@ -160,7 +160,7 @@ Seja o par $(o, d)$ representando origem $o$ e destino $d$, com $o, d \in P$:
 
 \begin{align*}
   \eta_{i,l,t}    &: \text{demanda do SKU } i \text{ alocada \`{a} linha } l \text{ com prazo no dia } t \text{ (latas)} \\
-                   &\quad \text{\small A demanda chega com uma linha espec\'{i}fica de destino. Pode ser incompat\'{i}vel com o formato da linha (ru\'{i}do).}\\[6pt]
+                   &\quad \text{\small Pode ser incompat\'{i}vel com o formato da linha (ru\'{i}do de $\approx$10\%).}\\[6pt]
   e^{\max}_{l}    &: \text{capacidade m\'{a}xima de armazenagem da linha } l \text{ (latas)} \\
                    &\quad \text{\small Limite f\'{i}sico fixo --- n\~{a}o varia por SKU nem por per\'{i}odo.}
 \end{align*}
@@ -202,14 +202,80 @@ S\~{a}o tr\^{e}s vari\'{a}veis de decis\~{a}o, todas cont\'{i}nuas e n\~{a}o-neg
 \end{tabular}
 \end{center}
 
-\vspace{8pt}
+\vspace{10pt}
 
+% ── Justificativa de f ───────────────────────────────────────────────────────
 \begin{mdframed}[style=destaque]
-  \textbf{\color{ballblue}Observa\c{c}\~{a}o sobre dimens\~{a}o.}
-  O modelo antigo tinha uma \'{u}nica vari\'{a}vel $x_{i,l,j,t}$ que tentava capturar produ\c{c}\~{a}o
-  e destino simultaneamente. A nova formula\c{c}\~{a}o separa os tr\^{e}s fluxos f\'{i}sicos distintos:
-  \textbf{produzir} ($x$), \textbf{guardar} ($e$) e \textbf{transferir} ($f$) ---
-  cada um com seu pr\'{o}prio custo e suas pr\'{o}prias restri\c{c}\~{o}es.
+  \textbf{\color{ballblue}Por que $f_{i,o,d,t}$ e n\~{a}o simplesmente $x_{i,l,t}$ com destino?}
+
+  \medskip
+  O custo de frete \'{e} pago pelo \textbf{movimento f\'{i}sico de latas entre plantas} --- n\~{a}o pela produ\c{c}\~{a}o em si.
+  Um caminh\~{a}o s\'{o} \'{e} contratado quando latas \emph{saem} de uma planta e \emph{chegam} em outra.
+  Se a planta de Jacare\'{i} produz 1.000.000 de latas e guarda tudo no estoque local por 3 dias sem
+  transferir nada, nenhum caminh\~{a}o \'{e} usado --- custo log\'{i}stico zero.
+
+  \medskip
+  O caminho f\'{i}sico das latas \'{e}:
+  \[
+    x_{i,l,t} \;\xrightarrow{\text{vai ao estoque}}\; e_{i,l,t}
+    \;\xrightarrow{\text{sai da planta}}\; f_{i,\,\phi(l),\,d,\,t}
+    \;\xrightarrow{\text{chega ao destino}}\; \text{atendimento}
+  \]
+
+  Portanto, cada vari\'{a}vel carrega seu pr\'{o}prio custo:
+  $x$ paga $k_{i,l}$ (produ\c{c}\~{a}o), \;$e$ paga $v_{i,l}$ (estocagem), \;$f$ paga $ct_{o,d}$ (frete).
+  Unir tudo em uma s\'{o} vari\'{a}vel impediria o modelo de tomar decis\~{o}es como:
+  ``produzir agora e transferir depois'' ou ``estocar aqui e evitar frete''.
+\end{mdframed}
+
+\vspace{10pt}
+
+% ── Balanço de estoque ───────────────────────────────────────────────────────
+\begin{mdframed}[style=destaque]
+  \textbf{\color{ballblue}Como o estoque $e_{i,l,t}$ se forma --- intui\c{c}\~{a}o do balan\c{c}o}
+
+  \medskip
+  O n\'{i}vel de estoque ao final do dia $t$ resulta de quatro fluxos:
+
+  \[
+    \begin{aligned}
+      e_{i,l,t} \;=\;\;
+      & \underbrace{e_{i,l,\,t-1}}_{\text{estoque anterior}}
+        \;+\; \underbrace{x_{i,l,t}}_{\text{produ\c{c}\~{a}o do dia}}
+        \;+\; \underbrace{\sum_{o \in P} f_{i,\,o,\,\phi(l),\,t}}_{\text{recebido de outras plantas}} \\[10pt]
+      & -\; \underbrace{\sum_{d \in P} f_{i,\,\phi(l),\,d,\,t}}_{\text{enviado a outras plantas}}
+        \;-\; \underbrace{a_{i,l,t}}_{\text{atendimento local}}
+    \end{aligned}
+  \]
+
+  \smallskip
+  \textit{Esta equa\c{c}\~{a}o ser\'{a} formalizada como restri\c{c}\~{a}o de igualdade no modelo. Aqui serve apenas
+  para interpretar o que cada vari\'{a}vel representa no balan\c{c}o f\'{i}sico do armazém.}
+\end{mdframed}
+
+\vspace{10pt}
+
+% ── Atendimento local ────────────────────────────────────────────────────────
+\begin{mdframed}[style=destaque]
+  \textbf{\color{ballblue}O que \'{e} o atendimento local $a_{i,l,t}$?}
+
+  \medskip
+  $a_{i,l,t}$ representa as latas do SKU $i$ que \textbf{saem do estoque da linha $l$ para satisfazer
+  a demanda $\eta_{i,l,t}$} no dia $t$ --- sem sair da planta.
+  \'{E} uma sa\'{i}da interna: as latas foram produzidas (localmente ou recebidas via transfer\^{e}ncia),
+  ficaram no armazém da linha, e s\~{a}o consumidas para fechar o pedido daquela linha.
+
+  \medskip
+  A distin\c{c}\~{a}o entre $a_{i,l,t}$ e $f_{i,o,d,t}$ \'{e} fundamental:
+  \begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item $f_{i,o,d,t}$: latas que \textbf{viajam entre plantas} --- geram custo de frete.
+    \item $a_{i,l,t}$: latas que \textbf{saem do estoque para o cliente local} --- sem custo de frete.
+  \end{itemize}
+
+  \medskip
+  O atendimento local tamb\'{e}m \'{e} o mecanismo pelo qual os \textbf{10\% de pedidos com ru\'{i}do de formato}
+  s\~{a}o resolvidos: a linha incompat\'{i}vel recebe $f$ de uma planta apta, armazena no estoque,
+  e depois usa $a_{i,l,t}$ para atender o pedido originalmente mal alocado.
 \end{mdframed}
 
 % ============================================================

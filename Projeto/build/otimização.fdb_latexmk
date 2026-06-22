@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1782101890.06867 "c:/Unifesp/Programação Linear/Trabalho Programação Linear/Código/Projeto/otimização.tex" "build/otimização.pdf" "otimização" 1782101891.21627 0
+["pdflatex"] 1782102546.84114 "c:/Unifesp/Programação Linear/Trabalho Programação Linear/Código/Projeto/otimização.tex" "build/otimização.pdf" "otimização" 1782102548.39045 0
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1781139629 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1095.pk" 1781139638 28976 d547a8bece5456aebefb7d5cb6794593 ""
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1200.pk" 1781137921 31952 3342e375d6c012cf5a089f79e3950de2 ""
@@ -12,6 +12,7 @@
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecti1200.pk" 1781137918 39120 413c98004891a223ce3367654bba8624 ""
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ectt1095.pk" 1782101887 21972 bb1ecf45dc24ab4958dca4c5a66972e8 ""
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/tcrm1095.pk" 1781139636 12668 985f027de88c24a3d97c60b311c2066a ""
+  "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/tcrm1200.pk" 1781137919 14064 3e5c9bce13ea90242b73b218331bf03b ""
   "C:/Users/Guilherme/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1781137879 13369040 aed43ed6a8ca7b6807ac310ed237229c ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/ecbx1095.tfm" 993061956 3228 aacd2ac2d814480e4422ad7e830fd2d4 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/ecbx1200.tfm" 993061958 3200 b8d69bc738e5ef3e08cefeef3109ff56 ""
@@ -26,6 +27,7 @@
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/ecti1200.tfm" 993062324 2832 28bbd97ca29f46e76c87a158a9915203 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/ectt1095.tfm" 993062342 1352 fa21dcb5ddc7d1dc47d14cd897fdeb0f ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/tcrm1095.tfm" 993062508 1460 8005ce585ff351dff78998923504da5e ""
+  "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/tfm/jknappen/ec/tcrm1200.tfm" 993062508 1444 95ffe0f19b974d50849790c8225c7ef7 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233951848 1004 54797486969f23fa377b128694d548df ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1233951848 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1233951854 916 f87d7c45f9c908e672703b83b72241a3 ""
@@ -100,9 +102,9 @@
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/tex/latex/zref/zref-abspage.sty" 1773584792 2269 91cd03da61ab1da00145ba8a81560051 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/tex/latex/zref/zref-base.sty" 1773584792 20785 8db5f0a2b2ce96dda9fac87ccab29449 ""
-  "build/otimização.aux" 1782101890 746 9b417a1952eb5d123574da7f6c56d897 "pdflatex"
-  "c:/Unifesp/Programação Linear/Trabalho Programação Linear/Código/Projeto/otimização.tex" 1782101882 11292 6a2669b098f6494514066f58e0b22cbe ""
-  "otimização.tex" 1782101882 11292 6a2669b098f6494514066f58e0b22cbe ""
+  "build/otimização.aux" 1782102548 746 394c39cfd9328310dfc0d2af26f7a648 "pdflatex"
+  "c:/Unifesp/Programação Linear/Trabalho Programação Linear/Código/Projeto/otimização.tex" 1782102546 14630 3ee41caaf7431cdeaa9b3a2735a64518 ""
+  "otimização.tex" 1782102546 14630 3ee41caaf7431cdeaa9b3a2735a64518 ""
   (generated)
   "build/otimização.aux"
   "build/otimização.log"
