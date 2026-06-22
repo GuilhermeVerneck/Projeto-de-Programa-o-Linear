@@ -1,7 +1,6 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[brazil]{babel}
 \usepackage{amsmath, amssymb}
 \usepackage{geometry}
 \usepackage{booktabs}
@@ -29,8 +28,8 @@
 
 \titlespacing{\section}{0pt}{18pt}{8pt}
 
-% ── Ambiente destacado para restrições ───────────────────────────────────────
-\mdfdefinestyle{restricao}{
+% ── Ambiente destacado ────────────────────────────────────────────────────────
+\mdfdefinestyle{destaque}{
   backgroundcolor=lightgray,
   linecolor=ballblue,
   linewidth=1.2pt,
@@ -46,28 +45,14 @@
   skipbelow=4pt,
 }
 
-\newcommand{\restricao}[2]{%
-  \begin{mdframed}[style=restricao]
-    \textbf{\color{ballblue}#1}\quad #2
-  \end{mdframed}%
-}
-
-% ── Cabeçalho do título ───────────────────────────────────────────────────────
-\newcommand{\titulosecao}[1]{%
-  \vspace{6pt}
-  {\large\bfseries\color{ballblue} #1}\\[-4pt]
-  {\color{ballblue}\rule{\linewidth}{0.8pt}}
-  \vspace{4pt}
-}
-
 % =============================================================================
 \begin{document}
 
 % ── Capa ─────────────────────────────────────────────────────────────────────
 \begin{center}
   {\color{ballblue}\rule{\linewidth}{2pt}}\\[8pt]
-  {\LARGE\bfseries Modelo de Programação Linear}\\[4pt]
-  {\large\color{darkgray} Planejamento Macroscópico — Ball Corporation}\\[8pt]
+  {\LARGE\bfseries Modelo de Programa\c{c}\~{a}o Linear}\\[4pt]
+  {\large\color{darkgray} Planejamento Macrosc\'{o}pico --- Ball Corporation}\\[8pt]
   {\color{ballblue}\rule{\linewidth}{2pt}}
 \end{center}
 
@@ -76,233 +61,210 @@
 % ── Índice temático rápido ────────────────────────────────────────────────────
 \begin{center}
   \small\color{darkgray}
-  \textbf{1.~Modelo de minimização de custos}
+  \textbf{1.~Modelo de minimiza\c{c}\~{a}o de custos}
   \enspace\textbullet\enspace
-  \textbf{2.~Custos}
+  \textbf{2.~Conjuntos}
   \enspace\textbullet\enspace
-  \textbf{3.~Conjuntos}
+  \textbf{3.~Par\^{a}metros}
   \enspace\textbullet\enspace
-  \textbf{4.~Funções auxiliares}
+  \textbf{4.~Fun\c{c}\~{a}o Auxiliar}
   \enspace\textbullet\enspace
-  \textbf{5.~Variável de decisão}
+  \textbf{5.~Vari\'{a}veis de Decis\~{a}o}
   \enspace\textbullet\enspace
-  \textbf{6.~Função objetivo}
-  \enspace\textbullet\enspace
-  \textbf{7.~Restrições}
+  \textbf{6.~Fun\c{c}\~{a}o Objetivo}
 \end{center}
 
 \vspace{4pt}
 {\color{accentgray}\rule{\linewidth}{0.5pt}}
 
 % ============================================================
-\section{Modelo de minimização de custos}
+\section{Modelo de minimiza\c{c}\~{a}o de custos}
 
-O modelo busca \textbf{minimizar o custo logístico total} de transporte entre plantas da rede Ball Corporation, respeitando capacidades produtivas e logísticas e garantindo o atendimento à demanda de cada SKU por destino e período.
+O modelo busca \textbf{minimizar o custo total de opera\c{c}\~{a}o} da malha industrial da Ball Corporation, contemplando tr\^{e}s componentes de custo: produ\c{c}\~{a}o, estocagem e transfer\^{e}ncia log\'{i}stica entre plantas. O modelo \'{e} estritamente cont\'{i}nuo (sem vari\'{a}veis bin\'{a}rias ou inteiras) e cobre um horizonte de 15 dias.
 
 \[
   \boxed{
-    \min \; Z = \sum_{i \in I} \sum_{l \in L} \sum_{j \in P} \sum_{t \in T}
-    (k_{i,l} + \frac{ct_{\,\phi(l),\,j}}{200{.}000}) \cdot {x_{i,\,l,\,j,\,t}}
+    \min \; Z =
+    \underbrace{\sum_{i \in I}\sum_{l \in L}\sum_{t \in T} k_{i,l} \cdot x_{i,l,t}}_{\text{custo de produ\c{c}\~{a}o}}
+    +\;
+    \underbrace{\sum_{i \in I}\sum_{l \in L}\sum_{t \in T} v_{i,l} \cdot e_{i,l,t}}_{\text{custo de estoque}}
+    +\;
+    \underbrace{\sum_{i \in I}\sum_{o \in P}\sum_{d \in P}\sum_{t \in T} ct_{o,d} \cdot \dfrac{f_{i,o,d,t}}{200{.}000}}_{\text{custo log\'{i}stico}}
   }
 \]
 
 \begin{center}
   \small\color{darkgray}
-  Sujeito às restrições de capacidade logística, atendimento à demanda,\\
-  capacidade produtiva e não-negatividade detalhadas nas seções seguintes.
+  Sujeito \`{a}s restri\c{c}\~{o}es de capabilidade, balan\c{c}o de estoque, atendimento \`{a} demanda,\\
+  capacidade produtiva, limite de armazenagem e n\~{a}o-negatividade.
 \end{center}
 
 % ============================================================
-\section{Custos (Parâmetros Logísticos)}
+\section{Conjuntos (\'Indices)}
 
-Seja o par $(o, j)$ representando origem $o$ e destino $j$, com $o \in P$ e $j \in P$:
-\begin{align*}
-    cb_{o,j} &: \text{custo de combustível da rota } o \to j \\
-    cp_{o,j} &: \text{custo de pedágio da rota } o \to j \\
-    cl_{o,j} &: \text{custo de mão de obra da rota } o \to j \\
-    ct_{o,j} &= cb_{o,j} + cp_{o,j} + cl_{o,j} \qquad \text{(custo total do frete por caminhão)}
-\end{align*}
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{>{\bfseries\color{ballblue}}c l c r}
+  \toprule
+  S\'{i}mbolo & Descri\c{c}\~{a}o & \'{I}ndice & Cardinalidade \\
+  \midrule
+  $I$ & SKUs (produtos finais) & $i$ & 30 \\
+  $L$ & Linhas de produ\c{c}\~{a}o ativas & $l$ & 30 \\
+  $P$ & Plantas (f\'{a}bricas) & $o,\,d,\,p$ & 10 \\
+  $T$ & Per\'{i}odos cronol\'{o}gicos $(t_1, t_2, \ldots, t_{15})$ & $t$ & 15 dias \\
+  $F$ & Formatos de lata do portf\'{o}lio & $-$ & 3 \\
+  $\mathcal{C}$ & Pares cap\'{a}veis $(i, l)$: formato do SKU $i$ = formato da linha $l$ & $(i,l)$ & $\subseteq I \times L$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
 
-\textbf{Fluxo interno:} quando $o = j$, fixamos $ct_{o,j} = 0$.
+\vspace{6pt}
+
+\begin{mdframed}[style=destaque]
+  \textbf{\color{ballblue}Conjunto $\mathcal{C}$ --- Capabilidade.}
+  Os tr\^{e}s formatos de lata s\~{a}o: \textit{9.1 Oz Sleek}, \textit{12 Oz Standard} e \textit{16 Oz Tall}.
+  Cada planta (e suas 3 linhas) opera exclusivamente com 1 formato. Um par $(i, l)$ pertence a $\mathcal{C}$
+  se e somente se o formato exigido pelo SKU $i$ coincide com o formato da linha $l$.
+  Fora de $\mathcal{C}$, a produ\c{c}\~{a}o \'{e} estritamente proibida ($x_{i,l,t} = 0$).
+  Os $\approx 10\%$ de pedidos alocados a linhas incompat\'{i}veis (ru\'{i}do comercial) s\~{a}o
+  resolvidos via transfer\^{e}ncia log\'{i}stica $f_{i,o,d,t}$ de uma planta apta.
+\end{mdframed}
 
 % ============================================================
-\section{Conjuntos (Índices)}
+\section{Par\^{a}metros}
+
+\subsection*{Par\^{a}metros log\'{i}sticos \textnormal{\small(fonte: \texttt{input\_logistic\_costs\_artificial.csv})}}
+
+Seja o par $(o, d)$ representando origem $o$ e destino $d$, com $o, d \in P$:
+
+\begin{align*}
+  cb_{o,d} &: \text{custo de combust\'{i}vel da rota } o \to d \\
+  cp_{o,d} &: \text{custo de ped\'{a}gio da rota } o \to d \\
+  cl_{o,d} &: \text{custo de m\~{a}o de obra da rota } o \to d \\
+  ct_{o,d} &= cb_{o,d} + cp_{o,d} + cl_{o,d} \qquad \text{(custo total do frete por caminh\~{a}o)}
+\end{align*}
+
+\textbf{Fluxo interno:} quando $o = d$, fixamos $ct_{o,d} = 0$ \quad (sem transfer\^{e}ncia, sem custo).
+
+\subsection*{Par\^{a}metros de produ\c{c}\~{a}o \textnormal{\small(fontes: \texttt{input\_production\_rate} e \texttt{input\_sku\_costs})}}
+
+\begin{align*}
+  r_{l,t}   &: \text{taxa de produ\c{c}\~{a}o da linha } l \text{ no dia } t \text{ (latas/hora)} \\
+             &\quad \text{\small Indexado por linha e dia, n\~{a}o por SKU --- a taxa depende do formato da linha, n\~{a}o do produto.} \\
+             &\quad \text{\small Se n\~{a}o h\'{a} registro de rate para a linha $l$ no dia $t$, a produ\c{c}\~{a}o naquele dia \'{e} proibida.} \\[6pt]
+  k_{i,l}   &: \text{custo de produ\c{c}\~{a}o do SKU } i \text{ na linha } l \text{ (R\$/lata)} \\
+  v_{i,l}   &: \text{custo de estocagem do SKU } i \text{ na linha } l \text{ (R\$/lata/dia)}
+\end{align*}
+
+\subsection*{Par\^{a}metros de demanda e armazenagem \textnormal{\small(fontes: \texttt{input\_production\_need} e \texttt{input\_line\_storage\_limit})}}
+
+\begin{align*}
+  \eta_{i,l,t}    &: \text{demanda do SKU } i \text{ alocada \`{a} linha } l \text{ com prazo no dia } t \text{ (latas)} \\
+                   &\quad \text{\small A demanda chega com uma linha espec\'{i}fica de destino. Pode ser incompat\'{i}vel com o formato da linha (ru\'{i}do).}\\[6pt]
+  e^{\max}_{l}    &: \text{capacidade m\'{a}xima de armazenagem da linha } l \text{ (latas)} \\
+                   &\quad \text{\small Limite f\'{i}sico fixo --- n\~{a}o varia por SKU nem por per\'{i}odo.}
+\end{align*}
+
+% ============================================================
+\section{Fun\c{c}\~{a}o Auxiliar}
+
+\[
+  \phi : L \to P, \quad \phi(l) = p \qquad \text{(mapeamento hier\'{a}rquico: linha } l \mapsto \text{planta } p\text{)}
+\]
+
+Como cada planta tem exatamente 3 linhas, $\phi$ \'{e} sobrejetora e determina univocamente a origem de qualquer transfer\^{e}ncia.
+
+% ============================================================
+\section{Vari\'{a}veis de Decis\~{a}o}
+
+S\~{a}o tr\^{e}s vari\'{a}veis de decis\~{a}o, todas cont\'{i}nuas e n\~{a}o-negativas:
+
+\vspace{8pt}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{>{\bfseries\color{ballblue}}c p{9cm} l}
+  \toprule
+  Vari\'{a}vel & Descri\c{c}\~{a}o & Dom\'{i}nio \\
+  \midrule
+  $x_{i,l,t}$
+    & Volume produzido do SKU $i$ na linha $l$ no dia $t$ (latas).
+      S\'{o} definida para $(i,l) \in \mathcal{C}$.
+    & $\mathbb{R}_+$ \\[4pt]
+  $e_{i,l,t}$
+    & N\'{i}vel de estoque do SKU $i$ armazenado na linha $l$ ao final do dia $t$ (latas).
+    & $\mathbb{R}_+$ \\[4pt]
+  $f_{i,o,d,t}$
+    & Volume do SKU $i$ transferido da planta $o$ para a planta $d$ no dia $t$ (latas).
+      Quando $o = d$, $f_{i,o,d,t} = 0$.
+    & $\mathbb{R}_+$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{8pt}
+
+\begin{mdframed}[style=destaque]
+  \textbf{\color{ballblue}Observa\c{c}\~{a}o sobre dimens\~{a}o.}
+  O modelo antigo tinha uma \'{u}nica vari\'{a}vel $x_{i,l,j,t}$ que tentava capturar produ\c{c}\~{a}o
+  e destino simultaneamente. A nova formula\c{c}\~{a}o separa os tr\^{e}s fluxos f\'{i}sicos distintos:
+  \textbf{produzir} ($x$), \textbf{guardar} ($e$) e \textbf{transferir} ($f$) ---
+  cada um com seu pr\'{o}prio custo e suas pr\'{o}prias restri\c{c}\~{o}es.
+\end{mdframed}
+
+% ============================================================
+\section{Fun\c{c}\~{a}o Objetivo}
+
+Minimizar o custo total de opera\c{c}\~{a}o da malha, somando os tr\^{e}s termos:
+
+\[
+  \min \; Z =
+  \sum_{\substack{i \in I,\, l \in L \\ (i,l)\,\in\,\mathcal{C}}}\;\sum_{t \in T} k_{i,l} \cdot x_{i,l,t}
+  \;+\;
+  \sum_{i \in I}\sum_{l \in L}\sum_{t \in T} v_{i,l} \cdot e_{i,l,t}
+  \;+\;
+  \sum_{i \in I}\sum_{\substack{o \in P,\, d \in P \\ o \,\neq\, d}}\sum_{t \in T} ct_{o,d} \cdot \frac{f_{i,o,d,t}}{200{.}000}
+\]
+
+\vspace{8pt}
 
 \begin{center}
 \renewcommand{\arraystretch}{1.3}
-\begin{tabular}{>{\bfseries\color{ballblue}}c l r}
-  \toprule
-  Índice & Descrição & Cardinalidade \\
-  \midrule
-  $I$ & Conjunto de SKUs (produtos finais), indexado por $i$ & 30 SKUs \\
-  $L$ & Conjunto de linhas de produção ativas, indexado por $l$ & 30 linhas \\
-  $P$ & Conjunto de plantas (fábricas), indexado por $p$ & 10 plantas \\
-  $T$ & Conjunto de períodos $(t_{01}, t_{02}, \ldots, t_{15})$, indexado por $t$ & 15 períodos \\
-  \bottomrule
-\end{tabular}
-\end{center}
-
-% ============================================================
-\section{Funções Auxiliares}
-
-\begin{align*}
-    \gamma(i, l, t) &= v \quad \text{(volume de latas demandado)} \\
-    \phi(l)         &= p \quad \text{(mapeamento hierárquico: linha } l \mapsto \text{planta } p\text{)} \\
-    \psi(o,j)       &= ct_{o,j} \quad \text{com } ct_{o,j} = 0 \text{ se } o = j
-\end{align*}
-
-% ============================================================
-\section{Variável de Decisão}
-
-\[
-    x_{i,\,l,\,j,\,t} \;\in\; \mathbb{R}_+
-\]
-
-\begin{center}
-  \small
-  \textit{Volume (latas) do produto $i$, produzido na linha $l$, destinado à planta $j$, no período $t$.}
-\end{center}
-
-% ============================================================
-\section{Função Objetivo}
-
-Minimizar o custo logístico total da malha:
-
-\[
-    \min \; Z = \sum_{i \in I} \sum_{l \in L} \sum_{j \in P} \sum_{t \in T}
-    (k_{i,l} + \frac{ct_{\,\phi(l),\,j}}{200{.}000}) \cdot {x_{i,\,l,\,j,\,t}}
-\]
-
-onde $\dfrac{x_{i,l,j,t}}{200{.}000}$ representa o número de caminhões necessários
-(capacidade de $25\text{ pallets} \times 8{.}000\text{ latas} = 200{.}000\text{ latas/caminhão}$).
-
-% ============================================================
-\section{Restrições}
-
-Variáveis auxiliares utilizadas nas restrições e na função objetivo:
-
-\begin{itemize}[leftmargin=1.5em]
-  \item $n_{i,\,j,\,t}$: demanda do produto $i$ com destino $j$ no período $t$.
-  \item $r_{i,\,l,\,t}$: taxa de produção do produto $i$ na linha $l$ no período $t$.
-  \item $k_{i,l}$: custo de produção do produto $i$ na linha $l$.
-\end{itemize}
-
-\vspace{8pt}
-
-\restricao{R1 — Capacidade logística de escoamento.}{%
-  80 caminhões/dia por planta, cada um com capacidade de 200.000 latas:
-  \[
-    \sum_{i \in I}\; \sum_{\substack{l \in L \\ \phi(l) = p}}\; \sum_{j \in P}
-    \frac{x_{i,\,l,\,j,\,t}}{200{.}000}
-    \;\leq\; 80
-    \qquad \forall\, p \in P,\; \forall\, t \in T
-  \]}
-
-\restricao{R2 — Atendimento à demanda.}{%
-  A produção deve suprir a demanda $n_{i,j,t}$ de cada SKU por planta e período:
-  \[
-    \sum_{l \in L} x_{i,\,l,\,j,\,t}
-    \;\geq\; n_{i,\,j,\,t}
-    \qquad \forall\, i \in I,\; \forall\, j \in P,\; \forall\, t \in T
-  \]}
-
-\restricao{R3 — Capacidade produtiva.}{%
-  As horas de uso da linha não ultrapassam o turno de 24 horas:
-  \[
-    \sum_{i \in I}\; \sum_{j \in P}
-    \frac{x_{i,\,l,\,j,\,t}}{r_{i,\,l,\,t}}
-    \;\leq\; 24
-    \qquad \forall\, l \in L,\; \forall\, t \in T
-  \]}
-
-\restricao{R4 — Não-negatividade.}{%
-  \[
-    x_{i,\,l,\,j,\,t} \;\geq\; 0
-    \qquad \forall\, i \in I,\; l \in L,\; j \in P,\; t \in T
-  \]}
-
-\vspace{12pt}
-{\color{accentgray}\rule{\linewidth}{0.5pt}}
-\begin{center}
-  \small\color{darkgray}
-  Dimensão do problema: $|I| \times |L| \times |P| \times |T| = 30 \times 30 \times 10 \times 15 = \mathbf{135{.}000}$ variáveis de decisão.
-\end{center}
-
-% ============================================================
-\newpage
-\section{Formulação Compacta do PL}
-
-\vspace{6pt}
-
-\begin{mdframed}[
-  backgroundcolor=white,
-  linecolor=ballblue,
-  linewidth=1.5pt,
-  innerleftmargin=16pt,
-  innerrightmargin=16pt,
-  innertopmargin=14pt,
-  innerbottommargin=14pt,
-]
-
-\textbf{\color{ballblue}min}
-\[
-    \; Z = \sum_{i \in I} \sum_{l \in L} \sum_{j \in P} \sum_{t \in T}
-    (k_{i,l} + \frac{ct_{\,\phi(l),\,j}}{200{.}000}) \cdot {x_{i,\,l,\,j,\,t}}
-\]
-
-\vspace{4pt}
-\textbf{\color{ballblue}s.a.}
-
-\vspace{6pt}
-\begin{alignat}{3}
-  % R1
-  &\sum_{i \in I}\; \sum_{\substack{l \in L \\ \phi(l)=p}}\; \sum_{j \in P}
-    \frac{x_{i,\,l,\,j,\,t}}{200{.}000}
-    &&\;\leq\; 80
-    &&\qquad \forall\, p \in P,\; \forall\, t \in T
-    \tag{R1}\\[10pt]
-  % R2
-  &\sum_{l \in L} x_{i,\,l,\,j,\,t}
-    &&\;\geq\; n_{i,\,j,\,t}
-    &&\qquad \forall\, i \in I,\; \forall\, j \in P,\; \forall\, t \in T
-    \tag{R2}\\[10pt]
-  % R3
-  &\sum_{i \in I}\;\sum_{j \in P}
-    \frac{x_{i,\,l,\,j,\,t}}{r_{i,\,l,\,t}}
-    &&\;\leq\; 24
-    &&\qquad \forall\, l \in L,\; \forall\, t \in T
-    \tag{R3}\\[10pt]
-  % R4
-  &x_{i,\,l,\,j,\,t}
-    &&\;\geq\; 0
-    &&\qquad \forall\, i \in I,\; l \in L,\; j \in P,\; t \in T
-    \tag{R4}
-\end{alignat}
-
-\end{mdframed}
-
-\vspace{10pt}
-
-\begin{center}
-\renewcommand{\arraystretch}{1.25}
 \small
-\begin{tabular}{>{\bfseries\color{ballblue}}c l}
+\begin{tabular}{>{\bfseries\color{ballblue}}c l l}
   \toprule
-  Tag & Descrição \\
+  Termo & F\'{o}rmula & Interpreta\c{c}\~{a}o \\
   \midrule
-  R1 & Capacidade logística de escoamento (80 caminhões/dia por planta) \\
-  R2 & Atendimento à demanda por SKU, destino e período \\
-  R3 & Capacidade produtiva (turno de 24 h por linha) \\
-  R4 & Não-negatividade das variáveis de decisão \\
+  Produ\c{c}\~{a}o
+    & $k_{i,l} \cdot x_{i,l,t}$
+    & Custo unit\'{a}rio (R\$/lata) vezes volume produzido \\
+  Estoque
+    & $v_{i,l} \cdot e_{i,l,t}$
+    & Custo de carregar 1 lata no armazém por 1 dia \\
+  Log\'{i}stica
+    & $ct_{o,d} \cdot \dfrac{f_{i,o,d,t}}{200{.}000}$
+    & Custo por caminh\~{a}o $\times$ n\'{u}mero de caminh\~{o}es \\
   \bottomrule
 \end{tabular}
+\end{center}
+
+\vspace{6pt}
+\begin{center}
+  \small\color{darkgray}
+  Capacidade do caminh\~{a}o: $25\text{ pallets} \times 8{.}000\text{ latas} = 200{.}000\text{ latas/caminh\~{a}o}$
 \end{center}
 
 \vspace{8pt}
 {\color{accentgray}\rule{\linewidth}{0.5pt}}
 \begin{center}
   \small\color{darkgray}
-  Dimensão do problema: $|I| \times |L| \times |P| \times |T| = 30 \times 30 \times 10 \times 15 = \mathbf{135{.}000}$ variáveis de decisão.
+  Restri\c{c}\~{o}es a serem detalhadas na pr\'{o}xima vers\~{a}o:
+  capabilidade de formato $\cdot$
+  balan\c{c}o de estoque $\cdot$
+  atendimento \`{a} demanda $\cdot$
+  capacidade produtiva (24\,h) $\cdot$
+  limite de armazenagem $\cdot$
+  n\~{a}o-negatividade
 \end{center}
 
 \end{document}
