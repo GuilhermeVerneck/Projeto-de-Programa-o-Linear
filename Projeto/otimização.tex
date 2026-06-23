@@ -13,36 +13,23 @@
 
 \geometry{margin=2.5cm, top=3cm, bottom=3cm}
 
-% ── Cores ────────────────────────────────────────────────────────────────────
 \definecolor{ballblue}{RGB}{0, 82, 147}
 \definecolor{lightgray}{RGB}{245, 245, 245}
 \definecolor{darkgray}{RGB}{80, 80, 80}
 \definecolor{accentgray}{RGB}{180, 180, 180}
 
-% ── Estilos de seção ─────────────────────────────────────────────────────────
 \titleformat{\section}
-  {\large\bfseries\color{ballblue}}
-  {}
-  {0em}
-  {}[\color{ballblue}\titlerule]
-
+  {\large\bfseries\color{ballblue}}{}
+  {0em}{}[\color{ballblue}\titlerule]
 \titlespacing{\section}{0pt}{18pt}{8pt}
 
-% ── Ambiente destacado ────────────────────────────────────────────────────────
 \mdfdefinestyle{destaque}{
   backgroundcolor=lightgray,
-  linecolor=ballblue,
-  linewidth=1.2pt,
-  leftline=true,
-  rightline=false,
-  topline=false,
-  bottomline=false,
-  innerleftmargin=10pt,
-  innerrightmargin=10pt,
-  innertopmargin=6pt,
-  innerbottommargin=6pt,
-  skipabove=4pt,
-  skipbelow=4pt,
+  linecolor=ballblue, linewidth=1.2pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=4pt, skipbelow=4pt,
 }
 
 % =============================================================================
@@ -57,8 +44,6 @@
 \end{center}
 
 \vspace{10pt}
-
-% ── Índice temático rápido ────────────────────────────────────────────────────
 \begin{center}
   \small\color{darkgray}
   \textbf{1.~Modelo de minimiza\c{c}\~{a}o de custos}
@@ -73,23 +58,30 @@
   \enspace\textbullet\enspace
   \textbf{6.~Fun\c{c}\~{a}o Objetivo}
 \end{center}
-
 \vspace{4pt}
 {\color{accentgray}\rule{\linewidth}{0.5pt}}
 
 % ============================================================
 \section{Modelo de minimiza\c{c}\~{a}o de custos}
 
-O modelo busca \textbf{minimizar o custo total de opera\c{c}\~{a}o} da malha industrial da Ball Corporation, contemplando tr\^{e}s componentes de custo: produ\c{c}\~{a}o, estocagem e transfer\^{e}ncia log\'{i}stica entre plantas. O modelo \'{e} estritamente cont\'{i}nuo (sem vari\'{a}veis bin\'{a}rias ou inteiras) e cobre um horizonte de 15 dias.
+O modelo busca \textbf{minimizar o custo total de opera\c{c}\~{a}o} da malha industrial da Ball
+Corporation, contemplando tr\^{e}s componentes de custo: produ\c{c}\~{a}o, estocagem e transfer\^{e}ncia
+log\'{i}stica entre plantas. O modelo \'{e} estritamente cont\'{i}nuo (sem vari\'{a}veis bin\'{a}rias ou
+inteiras) e cobre um horizonte de 15 dias.
 
 \[
   \boxed{
-    \min \; Z =
-    \underbrace{\sum_{i \in I}\sum_{l \in L}\sum_{t \in T} k_{i,l} \cdot x_{i,l,t}}_{\text{custo de produ\c{c}\~{a}o}}
-    +\;
-    \underbrace{\sum_{i \in I}\sum_{l \in L}\sum_{t \in T} v_{i,l} \cdot e_{i,l,t}}_{\text{custo de estoque}}
-    +\;
-    \underbrace{\sum_{i \in I}\sum_{o \in P}\sum_{d \in P}\sum_{t \in T} ct_{o,d} \cdot \dfrac{f_{i,o,d,t}}{200{.}000}}_{\text{custo log\'{i}stico}}
+    \begin{aligned}
+      \min \; Z \;=\;\;
+      & \underbrace{\sum_{p \in P}\sum_{l \in L_p}\sum_{i \in I}\sum_{t \in T}
+          k_{i,p,l} \cdot x_{i,p,l,t}}_{\text{custo de produ\c{c}\~{a}o}}
+        \;+\;
+        \underbrace{\sum_{p \in P}\sum_{l \in L_p}\sum_{i \in I}\sum_{t \in T}
+          v_{i,p,l} \cdot e_{i,p,l,t}}_{\text{custo de estoque}} \\[14pt]
+      & +\;
+        \underbrace{\sum_{i \in I}\sum_{o \in P}\sum_{\substack{d \in P \\ d \neq o}}\sum_{t \in T}
+          ct_{o,d} \cdot \dfrac{f_{i,o,d,t}}{200{.}000}}_{\text{custo log\'{i}stico}}
+    \end{aligned}
   }
 \]
 
@@ -104,30 +96,30 @@ O modelo busca \textbf{minimizar o custo total de opera\c{c}\~{a}o} da malha ind
 
 \begin{center}
 \renewcommand{\arraystretch}{1.4}
-\begin{tabular}{>{\bfseries\color{ballblue}}c p{7cm} c r}
+\begin{tabular}{>{\bfseries\color{ballblue}}c p{8cm} c r}
   \toprule
   S\'{i}mbolo & Descri\c{c}\~{a}o & \'{I}ndice & Cardinalidade \\
   \midrule
-  $I$ & SKUs (produtos finais) & $i$ & 30 \\
-  $L$ & Linhas de produ\c{c}\~{a}o ativas & $l$ & 30 \\
-  $P$ & Plantas (f\'{a}bricas) & $o,\,d,\,p$ & 10 \\
-  $T$ & Per\'{i}odos cronol\'{o}gicos $(t_1, t_2, \ldots, t_{15})$ & $t$ & 15 dias \\
-  $F$ & Formatos de lata do portf\'{o}lio & $-$ & 3 \\
-  $\mathcal{C}$ & Pares cap\'{a}veis $(i, l)$: formato de $i$ coincide com o formato da linha $l$ & $(i,l)$ & $\subseteq I \times L$ \\
+  $I$       & SKUs (produtos finais) & $i$ & 30 \\
+  $P$       & Plantas (f\'{a}bricas) & $p,\,o,\,d$ & 10 \\
+  $L_p$     & Linhas da planta $p$ & $l$ & 3 por planta \\
+  $L$       & Todas as linhas ($L = \bigcup_{p \in P} L_p$) & $l$ & 30 \\
+  $T$       & Per\'{i}odos $(t_1, t_2, \ldots, t_{15})$ & $t$ & 15 dias \\
+  $F$       & Formatos de lata do portf\'{o}lio & $-$ & 3 \\
+  $\mathcal{C}$ & Pares cap\'{a}veis $(i,p,l)$: formato de $i$ = formato de $l \in L_p$ & $(i,p,l)$ & $\subseteq I \times L$ \\
   \bottomrule
 \end{tabular}
 \end{center}
 
 \vspace{6pt}
-
 \begin{mdframed}[style=destaque]
   \textbf{\color{ballblue}Conjunto $\mathcal{C}$ --- Capabilidade.}
-  Os tr\^{e}s formatos de lata s\~{a}o: \textit{9.1 Oz Sleek}, \textit{12 Oz Standard} e \textit{16 Oz Tall}.
-  Cada planta (e suas 3 linhas) opera exclusivamente com 1 formato. Um par $(i, l)$ pertence a $\mathcal{C}$
-  se e somente se o formato exigido pelo SKU $i$ coincide com o formato da linha $l$.
-  Fora de $\mathcal{C}$, a produ\c{c}\~{a}o \'{e} estritamente proibida ($x_{i,l,t} = 0$).
-  Os $\approx 10\%$ de pedidos alocados a linhas incompat\'{i}veis (ru\'{i}do comercial) s\~{a}o
-  resolvidos via transfer\^{e}ncia log\'{i}stica $f_{i,o,d,t}$ de uma planta apta.
+  Os tr\^{e}s formatos s\~{a}o: \textit{9.1 Oz Sleek}, \textit{12 Oz Standard} e \textit{16 Oz Tall}.
+  Cada planta $p$ (e todas as linhas $l \in L_p$) opera com exatamente 1 formato.
+  Uma tripla $(i,p,l)$ pertence a $\mathcal{C}$ se o formato do SKU $i$ coincide com o
+  formato da planta $p$. Fora de $\mathcal{C}$, a produ\c{c}\~{a}o \'{e} proibida ($x_{i,p,l,t} = 0$).
+  Os $\approx 10\%$ de pedidos incompat\'{i}veis s\~{a}o resolvidos via transfer\^{e}ncia $f_{i,o,d,t}$
+  de uma planta apta.
 \end{mdframed}
 
 % ============================================================
@@ -135,7 +127,7 @@ O modelo busca \textbf{minimizar o custo total de opera\c{c}\~{a}o} da malha ind
 
 \subsection*{Par\^{a}metros log\'{i}sticos \textnormal{\small(fonte: \texttt{input\_logistic\_costs\_artificial.csv})}}
 
-Seja o par $(o, d)$ representando origem $o$ e destino $d$, com $o, d \in P$:
+Seja o par $(o, d)$ com $o, d \in P$:
 
 \begin{align*}
   cb_{o,d} &: \text{custo de combust\'{i}vel da rota } o \to d \\
@@ -144,24 +136,24 @@ Seja o par $(o, d)$ representando origem $o$ e destino $d$, com $o, d \in P$:
   ct_{o,d} &= cb_{o,d} + cp_{o,d} + cl_{o,d} \qquad \text{(custo total do frete por caminh\~{a}o)}
 \end{align*}
 
-\textbf{Fluxo interno:} quando $o = d$, fixamos $ct_{o,d} = 0$ \quad (sem transfer\^{e}ncia, sem custo).
+\textbf{Fluxo interno:} quando $o = d$, fixamos $ct_{o,d} = 0$.
 
 \subsection*{Par\^{a}metros de produ\c{c}\~{a}o \textnormal{\small(fontes: \texttt{input\_production\_rate} e \texttt{input\_sku\_costs})}}
 
 \begin{align*}
-  r_{l,t}   &: \text{taxa de produ\c{c}\~{a}o da linha } l \text{ no dia } t \text{ (latas/hora)} \\
-             &\quad \text{\small N\~{a}o indexado por SKU --- a taxa depende do formato da linha.} \\
-             &\quad \text{\small Aus\^{e}ncia de registro implica produ\c{c}\~{a}o proibida naquele dia.} \\[6pt]
-  k_{i,l}   &: \text{custo de produ\c{c}\~{a}o do SKU } i \text{ na linha } l \text{ (R\$/lata)} \\
-  v_{i,l}   &: \text{custo de estocagem do SKU } i \text{ na linha } l \text{ (R\$/lata/dia)}
+  r_{p,l,t}   &: \text{taxa de produ\c{c}\~{a}o da linha } l \in L_p \text{ no dia } t \text{ (latas/hora)} \\
+               &\quad \text{\small N\~{a}o indexado por SKU --- a taxa depende do formato da planta.} \\
+               &\quad \text{\small Aus\^{e}ncia de registro implica produ\c{c}\~{a}o proibida naquele dia.} \\[6pt]
+  k_{i,p,l}   &: \text{custo de produ\c{c}\~{a}o do SKU } i \text{ na linha } l \in L_p \text{ (R\$/lata)} \\
+  v_{i,p,l}   &: \text{custo de estocagem do SKU } i \text{ na linha } l \in L_p \text{ (R\$/lata/dia)}
 \end{align*}
 
 \subsection*{Par\^{a}metros de demanda e armazenagem \textnormal{\small(fontes: \texttt{input\_production\_need} e \texttt{input\_line\_storage\_limit})}}
 
 \begin{align*}
-  \eta_{i,l,t}    &: \text{demanda do SKU } i \text{ alocada \`{a} linha } l \text{ com prazo no dia } t \text{ (latas)} \\
-                   &\quad \text{\small Pode ser incompat\'{i}vel com o formato da linha (ru\'{i}do de $\approx$10\%).}\\[6pt]
-  e^{\max}_{l}    &: \text{capacidade m\'{a}xima de armazenagem da linha } l \text{ (latas)} \\
+  \eta_{i,p,l,t}  &: \text{demanda do SKU } i \text{ alocada \`{a} linha } l \in L_p \text{ com prazo no dia } t \text{ (latas)} \\
+                   &\quad \text{\small Pode ser incompat\'{i}vel com o formato da planta (ru\'{i}do de $\approx$10\%).}\\[6pt]
+  e^{\max}_{p,l}  &: \text{capacidade m\'{a}xima de armazenagem da linha } l \in L_p \text{ (latas)} \\
                    &\quad \text{\small Limite f\'{i}sico fixo --- n\~{a}o varia por SKU nem por per\'{i}odo.}
 \end{align*}
 
@@ -169,10 +161,13 @@ Seja o par $(o, d)$ representando origem $o$ e destino $d$, com $o, d \in P$:
 \section{Fun\c{c}\~{a}o Auxiliar}
 
 \[
-  \phi : L \to P, \quad \phi(l) = p \qquad \text{(mapeamento hier\'{a}rquico: linha } l \mapsto \text{planta } p\text{)}
+  \phi : L \to P, \quad \phi(l) = p \qquad
+  \text{(mapeamento hier\'{a}rquico: linha } l \mapsto \text{planta } p = \phi(l)\text{)}
 \]
 
-Como cada planta tem exatamente 3 linhas, $\phi$ \'{e} sobrejetora e determina univocamente a origem de qualquer transfer\^{e}ncia.
+Como $L = \bigcup_{p \in P} L_p$ e $|L_p| = 3$ para todo $p$, a fun\c{c}\~{a}o $\phi$ \'{e} sobrejetora
+e determina univocamente a planta de origem de qualquer produ\c{c}\~{a}o ou transfer\^{e}ncia.
+Nos \'{i}ndices, sempre que aparecer $p$ e $l$ juntos, vale $p = \phi(l)$.
 
 % ============================================================
 \section{Vari\'{a}veis de Decis\~{a}o}
@@ -180,23 +175,22 @@ Como cada planta tem exatamente 3 linhas, $\phi$ \'{e} sobrejetora e determina u
 S\~{a}o tr\^{e}s vari\'{a}veis de decis\~{a}o, todas cont\'{i}nuas e n\~{a}o-negativas:
 
 \vspace{8pt}
-
 \begin{center}
 \renewcommand{\arraystretch}{1.6}
 \begin{tabular}{>{\bfseries\color{ballblue}}c p{9cm} l}
   \toprule
   Vari\'{a}vel & Descri\c{c}\~{a}o & Dom\'{i}nio \\
   \midrule
-  $x_{i,l,t}$
-    & Volume produzido do SKU $i$ na linha $l$ no dia $t$ (latas).
-      S\'{o} definida para $(i,l) \in \mathcal{C}$.
+  $x_{i,p,l,t}$
+    & Volume produzido do SKU $i$ na linha $l \in L_p$ da planta $p$, no dia $t$ (latas).
+      S\'{o} definida para $(i,p,l) \in \mathcal{C}$.
     & $\mathbb{R}_+$ \\[4pt]
-  $e_{i,l,t}$
-    & N\'{i}vel de estoque do SKU $i$ armazenado na linha $l$ ao final do dia $t$ (latas).
+  $e_{i,p,l,t}$
+    & N\'{i}vel de estoque do SKU $i$ na linha $l \in L_p$ ao final do dia $t$ (latas).
     & $\mathbb{R}_+$ \\[4pt]
   $f_{i,o,d,t}$
     & Volume do SKU $i$ transferido da planta $o$ para a planta $d$ no dia $t$ (latas).
-      Quando $o = d$, $f_{i,o,d,t} = 0$.
+      Definida para $o \neq d$.
     & $\mathbb{R}_+$ \\
   \bottomrule
 \end{tabular}
@@ -206,76 +200,82 @@ S\~{a}o tr\^{e}s vari\'{a}veis de decis\~{a}o, todas cont\'{i}nuas e n\~{a}o-neg
 
 % ── Justificativa de f ───────────────────────────────────────────────────────
 \begin{mdframed}[style=destaque]
-  \textbf{\color{ballblue}Por que $f_{i,o,d,t}$ e n\~{a}o simplesmente $x_{i,l,t}$ com destino?}
+  \textbf{\color{ballblue}Por que $f_{i,o,d,t}$ e n\~{a}o simplesmente $x_{i,p,l,t}$ com destino?}
 
   \medskip
-  O custo de frete \'{e} pago pelo \textbf{movimento f\'{i}sico de latas entre plantas} --- n\~{a}o pela produ\c{c}\~{a}o em si.
-  Um caminh\~{a}o s\'{o} \'{e} contratado quando latas \emph{saem} de uma planta e \emph{chegam} em outra.
-  Se a planta de Jacare\'{i} produz 1.000.000 de latas e guarda tudo no estoque local por 3 dias sem
-  transferir nada, nenhum caminh\~{a}o \'{e} usado --- custo log\'{i}stico zero.
+  O custo de frete \'{e} pago pelo \textbf{movimento f\'{i}sico de latas entre plantas} ---
+  n\~{a}o pela produ\c{c}\~{a}o em si. Um caminh\~{a}o s\'{o} \'{e} contratado quando latas
+  \emph{saem} de uma planta e \emph{chegam} em outra. Se a planta de Jacare\'{i} produz
+  1.000.000 de latas e guarda tudo no estoque local por 3 dias sem transferir nada,
+  nenhum caminh\~{a}o \'{e} usado --- custo log\'{i}stico zero.
 
   \medskip
   O caminho f\'{i}sico das latas \'{e}:
   \[
-    x_{i,l,t} \;\xrightarrow{\text{vai ao estoque}}\; e_{i,l,t}
-    \;\xrightarrow{\text{sai da planta}}\; f_{i,\,\phi(l),\,d,\,t}
-    \;\xrightarrow{\text{chega ao destino}}\; \text{atendimento}
+    x_{i,p,l,t}
+    \;\xrightarrow{\text{vai ao estoque}}\;
+    e_{i,p,l,t}
+    \;\xrightarrow{\text{sai da planta } p}\;
+    f_{i,\,p,\,d,\,t}
+    \;\xrightarrow{\text{chega em } d}\;
+    \text{atendimento}
   \]
 
-  Portanto, cada vari\'{a}vel carrega seu pr\'{o}prio custo:
-  $x$ paga $k_{i,l}$ (produ\c{c}\~{a}o), \;$e$ paga $v_{i,l}$ (estocagem), \;$f$ paga $ct_{o,d}$ (frete).
-  Unir tudo em uma s\'{o} vari\'{a}vel impediria o modelo de tomar decis\~{o}es como:
-  ``produzir agora e transferir depois'' ou ``estocar aqui e evitar frete''.
+  Cada vari\'{a}vel carrega seu pr\'{o}prio custo:
+  $x$ paga $k_{i,p,l}$ (produ\c{c}\~{a}o),\; $e$ paga $v_{i,p,l}$ (estocagem),\;
+  $f$ paga $ct_{o,d}$ (frete). Unir tudo em uma s\'{o} vari\'{a}vel impediria o modelo
+  de decidir entre ``produzir agora e transferir depois'' ou ``estocar e evitar frete''.
 \end{mdframed}
 
 \vspace{10pt}
 
 % ── Balanço de estoque ───────────────────────────────────────────────────────
 \begin{mdframed}[style=destaque]
-  \textbf{\color{ballblue}Como o estoque $e_{i,l,t}$ se forma --- intui\c{c}\~{a}o do balan\c{c}o}
+  \textbf{\color{ballblue}Como o estoque $e_{i,p,l,t}$ se forma --- intui\c{c}\~{a}o do balan\c{c}o}
 
   \medskip
-  O n\'{i}vel de estoque ao final do dia $t$ resulta de quatro fluxos:
+  O n\'{i}vel de estoque ao final do dia $t$ resulta de cinco fluxos:
 
   \[
     \begin{aligned}
-      e_{i,l,t} \;=\;\;
-      & \underbrace{e_{i,l,\,t-1}}_{\text{estoque anterior}}
-        \;+\; \underbrace{x_{i,l,t}}_{\text{produ\c{c}\~{a}o do dia}}
-        \;+\; \underbrace{\sum_{o \in P} f_{i,\,o,\,\phi(l),\,t}}_{\text{recebido de outras plantas}} \\[10pt]
-      & -\; \underbrace{\sum_{d \in P} f_{i,\,\phi(l),\,d,\,t}}_{\text{enviado a outras plantas}}
-        \;-\; \underbrace{a_{i,l,t}}_{\text{atendimento local}}
+      e_{i,p,l,t} \;=\;\;
+      & \underbrace{e_{i,p,l,\,t-1}}_{\text{estoque anterior}}
+        \;+\; \underbrace{x_{i,p,l,t}}_{\text{produ\c{c}\~{a}o do dia}}
+        \;+\; \underbrace{\sum_{o \in P} f_{i,\,o,\,p,\,t}}_{\text{recebido de outras plantas}} \\[10pt]
+      & -\; \underbrace{\sum_{d \in P} f_{i,\,p,\,d,\,t}}_{\text{enviado a outras plantas}}
+        \;-\; \underbrace{a_{i,p,l,t}}_{\text{atendimento local}}
     \end{aligned}
   \]
 
   \smallskip
-  \textit{Esta equa\c{c}\~{a}o ser\'{a} formalizada como restri\c{c}\~{a}o de igualdade no modelo. Aqui serve apenas
-  para interpretar o que cada vari\'{a}vel representa no balan\c{c}o f\'{i}sico do armazém.}
+  \textit{Esta equa\c{c}\~{a}o ser\'{a} formalizada como restri\c{c}\~{a}o de igualdade no modelo.
+  Aqui serve apenas para interpretar o que cada vari\'{a}vel representa no balan\c{c}o f\'{i}sico
+  do armazém.}
 \end{mdframed}
 
 \vspace{10pt}
 
 % ── Atendimento local ────────────────────────────────────────────────────────
 \begin{mdframed}[style=destaque]
-  \textbf{\color{ballblue}O que \'{e} o atendimento local $a_{i,l,t}$?}
+  \textbf{\color{ballblue}O que \'{e} o atendimento local $a_{i,p,l,t}$?}
 
   \medskip
-  $a_{i,l,t}$ representa as latas do SKU $i$ que \textbf{saem do estoque da linha $l$ para satisfazer
-  a demanda $\eta_{i,l,t}$} no dia $t$ --- sem sair da planta.
-  \'{E} uma sa\'{i}da interna: as latas foram produzidas (localmente ou recebidas via transfer\^{e}ncia),
-  ficaram no armazém da linha, e s\~{a}o consumidas para fechar o pedido daquela linha.
+  $a_{i,p,l,t}$ representa as latas do SKU $i$ que \textbf{saem do estoque da linha
+  $l \in L_p$ para satisfazer a demanda $\eta_{i,p,l,t}$} no dia $t$ --- sem sair da planta.
+  \'{E} uma sa\'{i}da interna: as latas foram produzidas (localmente ou recebidas via
+  transfer\^{e}ncia), ficaram no armazém, e s\~{a}o consumidas para fechar o pedido daquela linha.
 
   \medskip
-  A distin\c{c}\~{a}o entre $a_{i,l,t}$ e $f_{i,o,d,t}$ \'{e} fundamental:
+  A distin\c{c}\~{a}o entre $a_{i,p,l,t}$ e $f_{i,o,d,t}$ \'{e} fundamental:
   \begin{itemize}[leftmargin=1.5em, itemsep=2pt]
     \item $f_{i,o,d,t}$: latas que \textbf{viajam entre plantas} --- geram custo de frete.
-    \item $a_{i,l,t}$: latas que \textbf{saem do estoque para o cliente local} --- sem custo de frete.
+    \item $a_{i,p,l,t}$: latas que \textbf{saem do estoque para o cliente local} --- sem frete.
   \end{itemize}
 
   \medskip
-  O atendimento local tamb\'{e}m \'{e} o mecanismo pelo qual os \textbf{10\% de pedidos com ru\'{i}do de formato}
-  s\~{a}o resolvidos: a linha incompat\'{i}vel recebe $f$ de uma planta apta, armazena no estoque,
-  e depois usa $a_{i,l,t}$ para atender o pedido originalmente mal alocado.
+  O atendimento local tamb\'{e}m resolve os \textbf{10\% de pedidos com ru\'{i}do de formato}:
+  a linha incompat\'{i}vel recebe $f$ de uma planta apta, armazena no estoque, e usa
+  $a_{i,p,l,t}$ para atender o pedido mal alocado.
 \end{mdframed}
 
 % ============================================================
@@ -284,16 +284,20 @@ S\~{a}o tr\^{e}s vari\'{a}veis de decis\~{a}o, todas cont\'{i}nuas e n\~{a}o-neg
 Minimizar o custo total de opera\c{c}\~{a}o da malha, somando os tr\^{e}s termos:
 
 \[
-  \min \; Z =
-  \sum_{\substack{i \in I,\, l \in L \\ (i,l)\,\in\,\mathcal{C}}}\;\sum_{t \in T} k_{i,l} \cdot x_{i,l,t}
-  \;+\;
-  \sum_{i \in I}\sum_{l \in L}\sum_{t \in T} v_{i,l} \cdot e_{i,l,t}
-  \;+\;
-  \sum_{i \in I}\sum_{\substack{o \in P,\, d \in P \\ o \,\neq\, d}}\sum_{t \in T} ct_{o,d} \cdot \frac{f_{i,o,d,t}}{200{.}000}
+  \begin{aligned}
+    \min \; Z \;=\;\;
+    & \sum_{p \in P}\;\sum_{\substack{l \in L_p \\ (i,p,l)\,\in\,\mathcal{C}}}\;\sum_{i \in I}\;\sum_{t \in T}
+        k_{i,p,l} \cdot x_{i,p,l,t}
+      \;+\;
+      \sum_{p \in P}\sum_{l \in L_p}\sum_{i \in I}\sum_{t \in T}
+        v_{i,p,l} \cdot e_{i,p,l,t} \\[10pt]
+    & +\;
+      \sum_{i \in I}\sum_{o \in P}\sum_{\substack{d \in P \\ d \,\neq\, o}}\sum_{t \in T}
+        ct_{o,d} \cdot \frac{f_{i,o,d,t}}{200{.}000}
+  \end{aligned}
 \]
 
 \vspace{8pt}
-
 \begin{center}
 \renewcommand{\arraystretch}{1.3}
 \small
@@ -302,10 +306,10 @@ Minimizar o custo total de opera\c{c}\~{a}o da malha, somando os tr\^{e}s termos
   Termo & F\'{o}rmula & Interpreta\c{c}\~{a}o \\
   \midrule
   Produ\c{c}\~{a}o
-    & $k_{i,l} \cdot x_{i,l,t}$
-    & Custo unit\'{a}rio (R\$/lata) vezes volume produzido \\
+    & $k_{i,p,l} \cdot x_{i,p,l,t}$
+    & Custo unit\'{a}rio (R\$/lata) $\times$ volume produzido \\
   Estoque
-    & $v_{i,l} \cdot e_{i,l,t}$
+    & $v_{i,p,l} \cdot e_{i,p,l,t}$
     & Custo de carregar 1 lata no armazém por 1 dia \\
   Log\'{i}stica
     & $ct_{o,d} \cdot \dfrac{f_{i,o,d,t}}{200{.}000}$

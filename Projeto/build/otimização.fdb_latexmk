@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1782102546.84114 "c:/Unifesp/Programação Linear/Trabalho Programação Linear/Código/Projeto/otimização.tex" "build/otimização.pdf" "otimização" 1782102548.39045 0
+["pdflatex"] 1782179526.16058 "c:/Unifesp/Programação Linear/Trabalho Programação Linear/Código/Projeto/otimização.tex" "build/otimização.pdf" "otimização" 1782179527.73594 0
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1781139629 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1095.pk" 1781139638 28976 d547a8bece5456aebefb7d5cb6794593 ""
   "C:/Users/Guilherme/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1200.pk" 1781137921 31952 3342e375d6c012cf5a089f79e3950de2 ""
@@ -49,6 +49,7 @@
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1247596667 30251 6afa5cb1d0204815a708a080681d4674 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1247596667 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb" 1247596667 36741 0ee9e374ec3e30da87cdfb0ea3575226 ""
+  "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb" 1247596666 37166 8ab3487cbe3ab49ebce74c29ea2418db ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1247596666 35469 dcf3a5f2fc1862f5952e3ee5eb1d98c4 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1247596667 35752 024fb6c41858982481f6968b5fc26508 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1247596667 32722 d7379af29a190c3f453aba36302ff5a9 ""
@@ -102,9 +103,9 @@
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/tex/latex/zref/zref-abspage.sty" 1773584792 2269 91cd03da61ab1da00145ba8a81560051 ""
   "C:/Users/Guilherme/AppData/Local/Programs/MiKTeX/tex/latex/zref/zref-base.sty" 1773584792 20785 8db5f0a2b2ce96dda9fac87ccab29449 ""
-  "build/otimização.aux" 1782102548 746 394c39cfd9328310dfc0d2af26f7a648 "pdflatex"
-  "c:/Unifesp/Programação Linear/Trabalho Programação Linear/Código/Projeto/otimização.tex" 1782102546 14630 3ee41caaf7431cdeaa9b3a2735a64518 ""
-  "otimização.tex" 1782102546 14630 3ee41caaf7431cdeaa9b3a2735a64518 ""
+  "build/otimização.aux" 1782179527 746 394c39cfd9328310dfc0d2af26f7a648 "pdflatex"
+  "c:/Unifesp/Programação Linear/Trabalho Programação Linear/Código/Projeto/otimização.tex" 1782179525 14202 1a4dc72f7de3f67acbd98e4cf20e83e3 ""
+  "otimização.tex" 1782179525 14202 1a4dc72f7de3f67acbd98e4cf20e83e3 ""
   (generated)
   "build/otimização.aux"
   "build/otimização.log"
