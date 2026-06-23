@@ -432,8 +432,22 @@ na planta n\~{a}o entra neste c\'{o}mputo:
 \vspace{8pt}
 
 % ── R6 ───────────────────────────────────────────────────────────────────────
+
+
 \begin{mdframed}[style=destaque]
-\textbf{\color{ballblue}R6 --- N\~{a}o-negatividade.}
+\textbf{\color{ballblue}R6 e R7 --- Conserva\c{c}\~ao de Massa no Transbordo (Docas).}
+
+\medskip O porteiro da f\'abrica n\~ao permite a cria\c{c}\~ao nem o sumi\c{c}o de latas no p\'atio. Tudo o que os caminh\~oes descarregam deve ser exatamente igual ao que as empilhadeiras guardam (R7). E tudo o que as empilhadeiras tiram dos galp\~oes deve ser exatamente igual ao que os caminh\~oes levam embora (R8).
+
+\textbf{R6 (Doca de Entrada):}
+$$\sum_{l \in L_p} g_{i,p,l,t} = \sum_{\substack{o \in P \\ o \neq p}} f_{i,o,p,t} \qquad \forall\, i \in I,\; p \in P,\; t \in T$$
+
+\textbf{R7 (Doca de Sa\'ida):}
+$$\sum_{l \in L_p} s_{i,p,l,t} = \sum_{\substack{d \in P \\ d \neq p}} f_{i,p,d,t} \qquad \forall\, i \in I,\; p \in P,\; t \in T$$
+\end{mdframed}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R8 --- N\~{a}o-negatividade.}
 
 \medskip
 Todas as vari\'{a}veis de decis\~{a}o s\~{a}o cont\'{i}nuas e n\~{a}o-negativas:
@@ -444,18 +458,6 @@ Todas as vari\'{a}veis de decis\~{a}o s\~{a}o cont\'{i}nuas e n\~{a}o-negativas:
 \]
 \end{mdframed}
 
-
-\begin{mdframed}[style=destaque]
-\textbf{\color{ballblue}R7 e R8 --- Conserva\c{c}\~ao de Massa no Transbordo (Docas).}
-
-\medskip O porteiro da f\'abrica n\~ao permite a cria\c{c}\~ao nem o sumi\c{c}o de latas no p\'atio. Tudo o que os caminh\~oes descarregam deve ser exatamente igual ao que as empilhadeiras guardam (R7). E tudo o que as empilhadeiras tiram dos galp\~oes deve ser exatamente igual ao que os caminh\~oes levam embora (R8).
-
-\textbf{R7 (Doca de Entrada):}
-$$\sum_{l \in L_p} g_{i,p,l,t} = \sum_{\substack{o \in P \\ o \neq p}} f_{i,o,p,t} \qquad \forall\, i \in I,\; p \in P,\; t \in T$$
-
-\textbf{R8 (Doca de Sa\'ida):}
-$$\sum_{l \in L_p} s_{i,p,l,t} = \sum_{\substack{d \in P \\ d \neq p}} f_{i,p,d,t} \qquad \forall\, i \in I,\; p \in P,\; t \in T$$
-\end{mdframed}
 % ============================================================
 \newpage
 \section{Formula\c{c}\~{a}o Compacta do PL}
@@ -479,9 +481,9 @@ Z \;&=\; \sum_{p \in P}\sum_{\substack{l \in L_p \\ (i,p,l)\in\mathcal{C}}}\sum_
 & a_{i,p,l,t} \geq \eta_{i,p,l,t} && \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T \tag{R3} \\[10pt]
 & \sum_{i \in I} \frac{x_{i,p,l,t}}{r_{p,l,t}} \leq 24 && \forall\, p \in P,\; l \in L_p,\; t \in T \tag{R4} \\[10pt]
 & \sum_{i \in I} \sum_{\substack{d \in P \\ d \neq p}} \frac{f_{i,p,d,t}}{200{.}000} \leq 80 && \forall\, p \in P,\; t \in T \tag{R5} \\[10pt]
-& \sum_{l \in L_p} g_{i,p,l,t} = \sum_{\substack{o \in P \\ o \neq p}} f_{i,o,p,t} && \forall\, i \in I,\; p \in P,\; t \in T \tag{R7} \\[10pt]
-& \sum_{l \in L_p} s_{i,p,l,t} = \sum_{\substack{d \in P \\ d \neq p}} f_{i,p,d,t} && \forall\, i \in I,\; p \in P,\; t \in T \tag{R8} \\[10pt]
-& x_{i,p,l,t},\; e_{i,p,l,t},\; a_{i,p,l,t},\; f_{i,o,d,t},\; g_{i,p,l,t},\; s_{i,p,l,t} \geq 0 && \forall\, i, p, l, o, d, t \tag{R6}
+& \sum_{l \in L_p} g_{i,p,l,t} = \sum_{\substack{o \in P \\ o \neq p}} f_{i,o,p,t} && \forall\, i \in I,\; p \in P,\; t \in T \tag{R6} \\[10pt]
+& \sum_{l \in L_p} s_{i,p,l,t} = \sum_{\substack{d \in P \\ d \neq p}} f_{i,p,d,t} && \forall\, i \in I,\; p \in P,\; t \in T \tag{R7} \\[10pt]
+& x_{i,p,l,t},\; e_{i,p,l,t},\; a_{i,p,l,t},\; f_{i,o,d,t},\; g_{i,p,l,t},\; s_{i,p,l,t} \geq 0 && \forall\, i, p, l, o, d, t \tag{R8}
 \end{align}
 \end{mdframed}
 
