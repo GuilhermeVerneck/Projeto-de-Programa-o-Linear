@@ -172,31 +172,42 @@ Nos \'{i}ndices, sempre que aparecer $p$ e $l$ juntos, vale $p = \phi(l)$.
 % ============================================================
 \section{Vari\'{a}veis de Decis\~{a}o}
 
-S\~{a}o tr\^{e}s vari\'{a}veis de decis\~{a}o, todas cont\'{i}nuas e n\~{a}o-negativas:
+São cinco variáveis de decisão, todas contínuas e não-negativas, projetadas para mapear perfeitamente a física do chão de fábrica:
 
 \vspace{8pt}
 \begin{center}
 \renewcommand{\arraystretch}{1.6}
 \begin{tabular}{>{\bfseries\color{ballblue}}c p{9cm} l}
-  \toprule
-  Vari\'{a}vel & Descri\c{c}\~{a}o & Dom\'{i}nio \\
-  \midrule
-  $x_{i,p,l,t}$
-    & Volume produzido do SKU $i$ na linha $l \in L_p$ da planta $p$, no dia $t$ (latas).
-      S\'{o} definida para $(i,p,l) \in \mathcal{C}$.
-    & $\mathbb{R}_+$ \\[4pt]
-  $e_{i,p,l,t}$
-    & N\'{i}vel de estoque do SKU $i$ na linha $l \in L_p$ ao final do dia $t$ (latas).
-    & $\mathbb{R}_+$ \\[4pt]
-  $f_{i,o,d,t}$
-    & Volume do SKU $i$ transferido da planta $o$ para a planta $d$ no dia $t$ (latas).
-      Definida para $o \neq d$.
-    & $\mathbb{R}_+$ \\
-  \bottomrule
+\toprule
+Variável & Descrição & Domínio \\
+\midrule
+$x_{i,p,l,t}$ & Volume produzido do SKU $i$ na linha $l \in L_p$ da planta $p$, no dia $t$ (latas). & $\mathbb{R}_+$ \\[4pt]
+$e_{i,p,l,t}$ & Nível de estoque do SKU $i$ na linha $l \in L_p$ ao final do dia $t$ (latas). & $\mathbb{R}_+$ \\[4pt]
+$a_{i,p,l,t}$ & Volume de atendimento local do SKU $i$ a partir da linha $l \in L_p$ no dia $t$ (latas). & $\mathbb{R}_+$ \\[4pt]
+$f_{i,o,d,t}$ & Volume do SKU $i$ transferido da planta $o$ para a planta $d$ no dia $t$ (latas). & $\mathbb{R}_+$ \\[4pt]
+$g_{i,p,l,t}$ & Volume do SKU $i$ movimentado da doca de entrada da planta $p$ para o armazém da linha $l \in L_p$ no dia $t$ (latas). & $\mathbb{R}_+$ \\[4pt]
+$s_{i,p,l,t}$ & Volume do SKU $i$ retirado do armazém da linha $l \in L_p$ e movimentado para a doca de saída da planta $p$ no dia $t$ (latas). & $\mathbb{R}_+$ \\
+\bottomrule
 \end{tabular}
 \end{center}
 
 \vspace{10pt}
+
+
+% ── O nó de transbordo (Variáveis g e s) ──────────────────────────────────────
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}O que são as variáveis de transbordo $g_{i,p,l,t}$ e $s_{i,p,l,t}$?}
+
+\medskip Fisicamente, os caminhões de frete ($f$) chegam e saem pelo pátio principal da fábrica (a doca da planta $p$), e não diretamente na porta de cada linha de produção $l$. 
+
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+\item $g_{i,p,l,t}$ \textbf{(Entrada):} representa as ``empilhadeiras''. Elas pegam as latas descarregadas pelos caminhões no pátio e as distribuem para os armazéns internos das linhas.
+\item $s_{i,p,l,t}$ \textbf{(Saída):} representa as empilhadeiras fazendo o caminho inverso. Elas retiram as latas dos armazéns das linhas e as levam até a doca para encher os caminhões que vão para a estrada.
+\end{itemize}
+
+\medskip \textbf{Por que não usar $f$ direto no estoque?} 
+Se não separássemos esse transbordo, a matemática exigiria que a planta de origem ditasse a organização interna do armazém da planta de destino. Pior ainda: ao somarmos o frete que chega na planta $p$ diretamente na equação do armazém da linha $l$, o solver ``clonaria'' as latas recebidas para todos os armazéns simultaneamente. As variáveis $g$ e $s$ garantem o Princípio da Separação Logística, criando um nó de transbordo perfeito.
+\end{mdframed}
 
 % ── Justificativa de f ───────────────────────────────────────────────────────
 \begin{mdframed}[style=destaque]
@@ -349,23 +360,14 @@ de todos os produtos porque o espa\c{c}o \'{e} compartilhado:
 \begin{mdframed}[style=destaque]
 \textbf{\color{ballblue}R2 --- Balan\c{c}o de estoque.}
 
-\medskip
-O n\'{i}vel de estoque ao final do dia $t$ \'{e} determinado pelo que havia ontem, pelo
-que foi produzido hoje, pelo que chegou de outras plantas, pelo que foi enviado a
-outras plantas e pelo que foi entregue ao cliente local:
+\medskip O n\'ivel de estoque ao final do dia $t$ \'e determinado pelo que havia ontem, pelo que a m\'aquina produziu hoje, pelo que as empilhadeiras trouxeram do p\'atio para a linha ($g$), subtraindo o que as empilhadeiras levaram para o p\'atio ($s$) e o que foi entregue diretamente ao cliente local ($a$):
 
-\[
-  e_{i,p,l,t} = e_{i,p,l,t-1} + x_{i,p,l,t}
-  + \sum_{o \in P} f_{i,o,p,t}
-  - \sum_{d \in P} f_{i,p,d,t}
-  - a_{i,p,l,t}
-  \qquad \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T
-\]
+$$e_{i,p,l,t} = e_{i,p,l,t-1} + x_{i,p,l,t} + g_{i,p,l,t} - s_{i,p,l,t} - a_{i,p,l,t}$$
+$$\qquad \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T$$
 
-Esta \'{e} uma restri\c{c}\~{a}o de \textbf{igualdade} --- o balan\c{c}o f\'{i}sico deve fechar
-exatamente. Ela acopla os 15 per\'{i}odos entre si: o estoque de hoje \'{e} condi\c{c}\~{a}o
-inicial de amanh\~{a}.
+\medskip Esta \'e uma restri\c{c}\~ao de \textbf{igualdade} --- o balan\c{c}o f\'isico deve fechar exatamente. Ela acopla os 15 per\'iodos entre si: o estoque de hoje \'e condi\c{c}\~ao inicial de amanh\~a.
 \end{mdframed}
+
 
 \vspace{8pt}
 
@@ -442,69 +444,45 @@ Todas as vari\'{a}veis de decis\~{a}o s\~{a}o cont\'{i}nuas e n\~{a}o-negativas:
 \]
 \end{mdframed}
 
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R7 e R8 --- Conserva\c{c}\~ao de Massa no Transbordo (Docas).}
+
+\medskip O porteiro da f\'abrica n\~ao permite a cria\c{c}\~ao nem o sumi\c{c}o de latas no p\'atio. Tudo o que os caminh\~oes descarregam deve ser exatamente igual ao que as empilhadeiras guardam (R7). E tudo o que as empilhadeiras tiram dos galp\~oes deve ser exatamente igual ao que os caminh\~oes levam embora (R8).
+
+\textbf{R7 (Doca de Entrada):}
+$$\sum_{l \in L_p} g_{i,p,l,t} = \sum_{\substack{o \in P \\ o \neq p}} f_{i,o,p,t} \qquad \forall\, i \in I,\; p \in P,\; t \in T$$
+
+\textbf{R8 (Doca de Sa\'ida):}
+$$\sum_{l \in L_p} s_{i,p,l,t} = \sum_{\substack{d \in P \\ d \neq p}} f_{i,p,d,t} \qquad \forall\, i \in I,\; p \in P,\; t \in T$$
+\end{mdframed}
 % ============================================================
 \newpage
 \section{Formula\c{c}\~{a}o Compacta do PL}
 
 \vspace{6pt}
 
-\begin{mdframed}[
-  backgroundcolor=white,
-  linecolor=ballblue, linewidth=1.5pt,
-  innerleftmargin=16pt, innerrightmargin=16pt,
-  innertopmargin=14pt, innerbottommargin=14pt,
-]
+\begin{mdframed}[backgroundcolor=blue!5, linecolor=ballblue, linewidth=2pt, roundcorner=5pt, innertopmargin=15pt, innerbottommargin=15pt]
+\textbf{min}
+\vspace{-10pt}
+\begin{align*}
+Z \;&=\; \sum_{p \in P}\sum_{\substack{l \in L_p \\ (i,p,l)\in\mathcal{C}}}\sum_{i \in I}\sum_{t \in T} k_{i,p,l} \cdot x_{i,p,l,t} 
+\;+\; \sum_{p \in P}\sum_{l \in L_p}\sum_{i \in I}\sum_{t \in T} v_{i,p,l} \cdot e_{i,p,l,t} \\[10pt]
+&\quad +\; \sum_{i \in I}\sum_{o \in P}\sum_{\substack{d \in P \\ d \neq o}}\sum_{t \in T} ct_{o,d} \cdot \frac{f_{i,o,d,t}}{200{.}000}
+\end{align*}
 
-\textbf{\color{ballblue}min}
-\[
-  \begin{aligned}
-    Z \;=\;\;
-    & \sum_{p \in P}\sum_{\substack{l \in L_p \\ (i,p,l)\in\mathcal{C}}}\sum_{i \in I}\sum_{t \in T}
-        k_{i,p,l} \cdot x_{i,p,l,t}
-      \;+\;
-      \sum_{p \in P}\sum_{l \in L_p}\sum_{i \in I}\sum_{t \in T}
-        v_{i,p,l} \cdot e_{i,p,l,t} \\[8pt]
-    & +\;
-      \sum_{i \in I}\sum_{o \in P}\sum_{\substack{d \in P \\ d \neq o}}\sum_{t \in T}
-        ct_{o,d} \cdot \frac{f_{i,o,d,t}}{200{.}000}
-  \end{aligned}
-\]
-
-\vspace{4pt}
-\textbf{\color{ballblue}s.a.}
-
-\vspace{6pt}
-\begin{alignat}{3}
-  &\sum_{i \in I} e_{i,p,l,t}
-    &&\;\leq\; e^{\max}_{p,l}
-    &&\quad \forall\, p \in P,\; l \in L_p,\; t \in T
-    \tag{R1}\\[8pt]
-  &\begin{aligned}[t]
-    e_{i,p,l,t} =\; & e_{i,p,l,t-1} + x_{i,p,l,t}
-    + \sum_{o \in P} f_{i,o,p,t} \\
-    & - \sum_{d \in P} f_{i,p,d,t} - a_{i,p,l,t}
-   \end{aligned}
-    &&
-    &&\quad \forall\, i,\, p,\, l \in L_p,\, t
-    \tag{R2}\\[8pt]
-  &a_{i,p,l,t}
-    &&\;\geq\; \eta_{i,p,l,t}
-    &&\quad \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T
-    \tag{R3}\\[8pt]
-  &\sum_{i \in I} \frac{x_{i,p,l,t}}{r_{p,l,t}}
-    &&\;\leq\; 24
-    &&\quad \forall\, p \in P,\; l \in L_p,\; t \in T
-    \tag{R4}\\[8pt]
-  &\sum_{i \in I}\sum_{\substack{d \in P \\ d \neq p}} \frac{f_{i,p,d,t}}{200{.}000}
-    &&\;\leq\; 80
-    &&\quad \forall\, p \in P,\; t \in T
-    \tag{R5}\\[8pt]
-  &x_{i,p,l,t},\; e_{i,p,l,t},\; f_{i,o,d,t},\; a_{i,p,l,t}
-    &&\;\geq\; 0
-    &&\quad \forall\, i,\, p,\, l \in L_p,\, o,\, d,\, t
-    \tag{R6}
-\end{alignat}
-
+\textbf{s.a.}
+\vspace{-5pt}
+\begin{align}
+& \sum_{i \in I} e_{i,p,l,t} \leq e^{\max}_{p,l} && \forall\, p \in P,\; l \in L_p,\; t \in T \tag{R1} \\[10pt]
+& e_{i,p,l,t} = e_{i,p,l,t-1} + x_{i,p,l,t} + g_{i,p,l,t} - s_{i,p,l,t} - a_{i,p,l,t} && \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T \tag{R2} \\[10pt]
+& a_{i,p,l,t} \geq \eta_{i,p,l,t} && \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T \tag{R3} \\[10pt]
+& \sum_{i \in I} \frac{x_{i,p,l,t}}{r_{p,l,t}} \leq 24 && \forall\, p \in P,\; l \in L_p,\; t \in T \tag{R4} \\[10pt]
+& \sum_{i \in I} \sum_{\substack{d \in P \\ d \neq p}} \frac{f_{i,p,d,t}}{200{.}000} \leq 80 && \forall\, p \in P,\; t \in T \tag{R5} \\[10pt]
+& \sum_{l \in L_p} g_{i,p,l,t} = \sum_{\substack{o \in P \\ o \neq p}} f_{i,o,p,t} && \forall\, i \in I,\; p \in P,\; t \in T \tag{R7} \\[10pt]
+& \sum_{l \in L_p} s_{i,p,l,t} = \sum_{\substack{d \in P \\ d \neq p}} f_{i,p,d,t} && \forall\, i \in I,\; p \in P,\; t \in T \tag{R8} \\[10pt]
+& x_{i,p,l,t},\; e_{i,p,l,t},\; a_{i,p,l,t},\; f_{i,o,d,t},\; g_{i,p,l,t},\; s_{i,p,l,t} \geq 0 && \forall\, i, p, l, o, d, t \tag{R6}
+\end{align}
 \end{mdframed}
 
 \vspace{10pt}
