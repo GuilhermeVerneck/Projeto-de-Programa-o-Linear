@@ -324,17 +324,196 @@ Minimizar o custo total de opera\c{c}\~{a}o da malha, somando os tr\^{e}s termos
   Capacidade do caminh\~{a}o: $25\text{ pallets} \times 8{.}000\text{ latas} = 200{.}000\text{ latas/caminh\~{a}o}$
 \end{center}
 
+% ============================================================
+\newpage
+\section{Restri\c{c}\~{o}es}
+
+% ── R1 ───────────────────────────────────────────────────────────────────────
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R1 --- Limite de armazenagem.}
+
+\medskip
+O armazém de cada linha tem uma capacidade f\'{i}sica $e^{\max}_{p,l}$ que n\~{a}o pode ser
+ultrapassada em nenhum dia, independentemente do SKU. A restri\c{c}\~{a}o soma o estoque
+de todos os produtos porque o espa\c{c}o \'{e} compartilhado:
+
+\[
+  \sum_{i \in I} e_{i,p,l,t} \;\leq\; e^{\max}_{p,l}
+  \qquad \forall\, p \in P,\; l \in L_p,\; t \in T
+\]
+\end{mdframed}
+
 \vspace{8pt}
+
+% ── R2 ───────────────────────────────────────────────────────────────────────
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R2 --- Balan\c{c}o de estoque.}
+
+\medskip
+O n\'{i}vel de estoque ao final do dia $t$ \'{e} determinado pelo que havia ontem, pelo
+que foi produzido hoje, pelo que chegou de outras plantas, pelo que foi enviado a
+outras plantas e pelo que foi entregue ao cliente local:
+
+\[
+  e_{i,p,l,t} = e_{i,p,l,t-1} + x_{i,p,l,t}
+  + \sum_{o \in P} f_{i,o,p,t}
+  - \sum_{d \in P} f_{i,p,d,t}
+  - a_{i,p,l,t}
+  \qquad \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T
+\]
+
+Esta \'{e} uma restri\c{c}\~{a}o de \textbf{igualdade} --- o balan\c{c}o f\'{i}sico deve fechar
+exatamente. Ela acopla os 15 per\'{i}odos entre si: o estoque de hoje \'{e} condi\c{c}\~{a}o
+inicial de amanh\~{a}.
+\end{mdframed}
+
+\vspace{8pt}
+
+% ── R3 ───────────────────────────────────────────────────────────────────────
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R3 --- Atendimento \`{a} demanda.}
+
+\medskip
+O atendimento local $a_{i,p,l,t}$ deve cobrir integralmente a demanda $\eta_{i,p,l,t}$
+no dia do prazo:
+
+\[
+  a_{i,p,l,t} \;\geq\; \eta_{i,p,l,t}
+  \qquad \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T
+\]
+
+A produ\c{c}\~{a}o e as transfer\^{e}ncias recebidas \textbf{n\~{a}o aparecem aqui explicitamente}
+porque j\'{a} est\~{a}o capturadas em R2: o solver s\'{o} consegue ter $a_{i,p,l,t}$ grande
+o suficiente se o balan\c{c}o de estoque (R2) tiver sido alimentado por produ\c{c}\~{a}o
+local ou transfer\^{e}ncia recebida. Incluir $x$ e $f$ nesta restri\c{c}\~{a}o seria
+cont\'{a}-los duas vezes.
+\end{mdframed}
+
+\vspace{8pt}
+
+% ── R4 ───────────────────────────────────────────────────────────────────────
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R4 --- Capacidade produtiva (turno de 24\,h).}
+
+\medskip
+A soma das horas consumidas por todos os SKUs numa linha n\~{a}o pode ultrapassar o
+turno di\'{a}rio. O tempo gasto para produzir $x_{i,p,l,t}$ latas \'{e}
+$x_{i,p,l,t} / r_{p,l,t}$ horas:
+
+\[
+  \sum_{i \in I} \frac{x_{i,p,l,t}}{r_{p,l,t}} \;\leq\; 24
+  \qquad \forall\, p \in P,\; l \in L_p,\; t \in T
+\]
+
+Se $(i,p,l) \notin \mathcal{C}$, ent\~{a}o $x_{i,p,l,t} = 0$ e o termo correspondente
+n\~{a}o contribui para a soma.
+\end{mdframed}
+
+\vspace{8pt}
+
+% ── R5 ───────────────────────────────────────────────────────────────────────
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R5 --- Capacidade log\'{i}stica de expedi\c{c}\~{a}o (80 caminh\~{o}es/dia).}
+
+\medskip
+Cada planta pode expedir no m\'{a}ximo 80 caminh\~{o}es por dia, somando todos os SKUs
+e todos os destinos poss\'{i}veis. O limite \'{e} de \textbf{sa\'{i}da} --- o que chega
+na planta n\~{a}o entra neste c\'{o}mputo:
+
+\[
+  \sum_{i \in I} \sum_{\substack{d \in P \\ d \neq p}}
+  \frac{f_{i,p,d,t}}{200{.}000} \;\leq\; 80
+  \qquad \forall\, p \in P,\; t \in T
+\]
+\end{mdframed}
+
+\vspace{8pt}
+
+% ── R6 ───────────────────────────────────────────────────────────────────────
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R6 --- N\~{a}o-negatividade.}
+
+\medskip
+Todas as vari\'{a}veis de decis\~{a}o s\~{a}o cont\'{i}nuas e n\~{a}o-negativas:
+
+\[
+  x_{i,p,l,t},\; e_{i,p,l,t},\; f_{i,o,d,t},\; a_{i,p,l,t} \;\geq\; 0
+  \qquad \forall\, i,\, p,\, l,\, o,\, d,\, t
+\]
+\end{mdframed}
+
+% ============================================================
+\newpage
+\section{Formula\c{c}\~{a}o Compacta do PL}
+
+\vspace{6pt}
+
+\begin{mdframed}[
+  backgroundcolor=white,
+  linecolor=ballblue, linewidth=1.5pt,
+  innerleftmargin=16pt, innerrightmargin=16pt,
+  innertopmargin=14pt, innerbottommargin=14pt,
+]
+
+\textbf{\color{ballblue}min}
+\[
+  \begin{aligned}
+    Z \;=\;\;
+    & \sum_{p \in P}\sum_{\substack{l \in L_p \\ (i,p,l)\in\mathcal{C}}}\sum_{i \in I}\sum_{t \in T}
+        k_{i,p,l} \cdot x_{i,p,l,t}
+      \;+\;
+      \sum_{p \in P}\sum_{l \in L_p}\sum_{i \in I}\sum_{t \in T}
+        v_{i,p,l} \cdot e_{i,p,l,t} \\[8pt]
+    & +\;
+      \sum_{i \in I}\sum_{o \in P}\sum_{\substack{d \in P \\ d \neq o}}\sum_{t \in T}
+        ct_{o,d} \cdot \frac{f_{i,o,d,t}}{200{.}000}
+  \end{aligned}
+\]
+
+\vspace{4pt}
+\textbf{\color{ballblue}s.a.}
+
+\vspace{6pt}
+\begin{alignat}{3}
+  &\sum_{i \in I} e_{i,p,l,t}
+    &&\;\leq\; e^{\max}_{p,l}
+    &&\quad \forall\, p \in P,\; l \in L_p,\; t \in T
+    \tag{R1}\\[8pt]
+  &\begin{aligned}[t]
+    e_{i,p,l,t} =\; & e_{i,p,l,t-1} + x_{i,p,l,t}
+    + \sum_{o \in P} f_{i,o,p,t} \\
+    & - \sum_{d \in P} f_{i,p,d,t} - a_{i,p,l,t}
+   \end{aligned}
+    &&
+    &&\quad \forall\, i,\, p,\, l \in L_p,\, t
+    \tag{R2}\\[8pt]
+  &a_{i,p,l,t}
+    &&\;\geq\; \eta_{i,p,l,t}
+    &&\quad \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T
+    \tag{R3}\\[8pt]
+  &\sum_{i \in I} \frac{x_{i,p,l,t}}{r_{p,l,t}}
+    &&\;\leq\; 24
+    &&\quad \forall\, p \in P,\; l \in L_p,\; t \in T
+    \tag{R4}\\[8pt]
+  &\sum_{i \in I}\sum_{\substack{d \in P \\ d \neq p}} \frac{f_{i,p,d,t}}{200{.}000}
+    &&\;\leq\; 80
+    &&\quad \forall\, p \in P,\; t \in T
+    \tag{R5}\\[8pt]
+  &x_{i,p,l,t},\; e_{i,p,l,t},\; f_{i,o,d,t},\; a_{i,p,l,t}
+    &&\;\geq\; 0
+    &&\quad \forall\, i,\, p,\, l \in L_p,\, o,\, d,\, t
+    \tag{R6}
+\end{alignat}
+
+\end{mdframed}
+
+\vspace{10pt}
 {\color{accentgray}\rule{\linewidth}{0.5pt}}
 \begin{center}
   \small\color{darkgray}
-  Restri\c{c}\~{o}es a serem detalhadas na pr\'{o}xima vers\~{a}o:
-  capabilidade de formato $\cdot$
-  balan\c{c}o de estoque $\cdot$
-  atendimento \`{a} demanda $\cdot$
-  capacidade produtiva (24\,h) $\cdot$
-  limite de armazenagem $\cdot$
-  n\~{a}o-negatividade
+  Dimens\~{a}o do problema: $|I| \times |P| \times |L_p| \times |T|
+  = 30 \times 10 \times 3 \times 15 = \mathbf{13{.}500}$ vari\'{a}veis base\,
+  $+\; |I| \times |P|^2 \times |T| = 30 \times 100 \times 15 = \mathbf{45{.}000}$ vari\'{a}veis de transfer\^{e}ncia.
 \end{center}
 
 \end{document}
