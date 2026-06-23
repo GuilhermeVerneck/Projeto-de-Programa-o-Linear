@@ -10,6 +10,8 @@
 \usepackage{enumitem}
 \usepackage{array}
 \usepackage{parskip}
+\usepackage{listings}
+\usepackage{courier}
 
 \geometry{margin=2.5cm, top=3cm, bottom=3cm}
 
@@ -17,20 +19,56 @@
 \definecolor{lightgray}{RGB}{245, 245, 245}
 \definecolor{darkgray}{RGB}{80, 80, 80}
 \definecolor{accentgray}{RGB}{180, 180, 180}
+\definecolor{codegreen}{RGB}{40, 120, 40}
+\definecolor{codegray}{RGB}{100, 100, 100}
+\definecolor{codebg}{RGB}{250, 250, 250}
+\definecolor{codeblue}{RGB}{0, 60, 180}
+\definecolor{codeorange}{RGB}{180, 80, 0}
 
 \titleformat{\section}
   {\large\bfseries\color{ballblue}}{}
   {0em}{}[\color{ballblue}\titlerule]
 \titlespacing{\section}{0pt}{18pt}{8pt}
 
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{darkgray}}{}
+  {0em}{}
+\titlespacing{\subsection}{0pt}{12pt}{4pt}
+
 \mdfdefinestyle{destaque}{
   backgroundcolor=lightgray,
   linecolor=ballblue, linewidth=1.2pt,
   leftline=true, rightline=false, topline=false, bottomline=false,
   innerleftmargin=10pt, innerrightmargin=10pt,
-  innertopmargin=6pt, innerbottommargin=6pt,
-  skipabove=4pt, skipbelow=4pt,
+  innertopmargin=8pt, innerbottommargin=8pt,
+  skipabove=6pt, skipbelow=6pt,
+  nobreak=true,
 }
+
+\mdfdefinestyle{codigo}{
+  backgroundcolor=codebg,
+  linecolor=accentgray, linewidth=0.8pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  linecolor=codegreen,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=8pt, innerbottommargin=8pt,
+  skipabove=6pt, skipbelow=6pt,
+  nobreak=true,
+}
+
+\lstdefinelanguage{Julia}{
+  keywords={using, function, for, in, if, end, return, true, false, @variable, @constraint, @objective, Model, optimize, Min},
+  keywordstyle=\color{codeblue}\bfseries,
+  comment=[l]{\#},
+  commentstyle=\color{codegray}\itshape,
+  stringstyle=\color{codeorange},
+  morestring=[b]",
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  showstringspaces=false,
+}
+
+\lstset{language=Julia}
 
 % =============================================================================
 \begin{document}
@@ -46,7 +84,7 @@
 \vspace{10pt}
 \begin{center}
   \small\color{darkgray}
-  \textbf{1.~Modelo de minimiza\c{c}\~{a}o de custos}
+  \textbf{1.~Minimiza\c{c}\~{a}o de custos}
   \enspace\textbullet\enspace
   \textbf{2.~Conjuntos}
   \enspace\textbullet\enspace
@@ -54,9 +92,17 @@
   \enspace\textbullet\enspace
   \textbf{4.~Fun\c{c}\~{a}o Auxiliar}
   \enspace\textbullet\enspace
-  \textbf{5.~Vari\'{a}veis de Decis\~{a}o}
+  \textbf{5.~Vari\'{a}veis}
   \enspace\textbullet\enspace
   \textbf{6.~Fun\c{c}\~{a}o Objetivo}
+  \enspace\textbullet\enspace
+  \textbf{7.~Restri\c{c}\~{o}es}
+  \enspace\textbullet\enspace
+  \textbf{8.~Formulac\c{c}\~{a}o Compacta}
+  \enspace\textbullet\enspace
+  \textbf{9.~Implementa\c{c}\~{a}o}
+  \enspace\textbullet\enspace
+  \textbf{10.~An\'{a}lise de Sensibilidade}
 \end{center}
 \vspace{4pt}
 {\color{accentgray}\rule{\linewidth}{0.5pt}}
@@ -65,9 +111,9 @@
 \section{Modelo de minimiza\c{c}\~{a}o de custos}
 
 O modelo busca \textbf{minimizar o custo total de opera\c{c}\~{a}o} da malha industrial da Ball
-Corporation, contemplando tr\^{e}s componentes de custo: produ\c{c}\~{a}o, estocagem e transfer\^{e}ncia
-log\'{i}stica entre plantas. O modelo \'{e} estritamente cont\'{i}nuo (sem vari\'{a}veis bin\'{a}rias ou
-inteiras) e cobre um horizonte de 15 dias.
+Corporation, contemplando quatro componentes: produ\c{c}\~{a}o, estocagem, transfer\^{e}ncia
+log\'{i}stica e penalidade por demanda n\~{a}o atendida. O modelo \'{e} estritamente cont\'{i}nuo
+(sem vari\'{a}veis bin\'{a}rias ou inteiras) e cobre um horizonte de 15 dias.
 
 \[
   \boxed{
@@ -81,14 +127,16 @@ inteiras) e cobre um horizonte de 15 dias.
       & +\;
         \underbrace{\sum_{i \in I}\sum_{o \in P}\sum_{\substack{d \in P \\ d \neq o}}\sum_{t \in T}
           ct_{o,d} \cdot \dfrac{f_{i,o,d,t}}{200{.}000}}_{\text{custo log\'{i}stico}}
+        \;+\;
+        \underbrace{\sum_{p \in P}\sum_{l \in L_p}\sum_{i \in I}\sum_{t \in T}
+          M \cdot w_{i,p,l,t}}_{\text{penalidade por venda perdida}}
     \end{aligned}
   }
 \]
 
 \begin{center}
   \small\color{darkgray}
-  Sujeito \`{a}s restri\c{c}\~{o}es de capabilidade, balan\c{c}o de estoque, atendimento \`{a} demanda,\\
-  capacidade produtiva, limite de armazenagem e n\~{a}o-negatividade.
+  Sujeito \`{a}s restri\c{c}\~{o}es R1--R9 detalhadas na Se\c{c}\~{a}o 7.
 \end{center}
 
 % ============================================================
@@ -100,13 +148,13 @@ inteiras) e cobre um horizonte de 15 dias.
   \toprule
   S\'{i}mbolo & Descri\c{c}\~{a}o & \'{I}ndice & Cardinalidade \\
   \midrule
-  $I$       & SKUs (produtos finais) & $i$ & 30 \\
-  $P$       & Plantas (f\'{a}bricas) & $p,\,o,\,d$ & 10 \\
-  $L_p$     & Linhas da planta $p$ & $l$ & 3 por planta \\
-  $L$       & Todas as linhas ($L = \bigcup_{p \in P} L_p$) & $l$ & 30 \\
-  $T$       & Per\'{i}odos $(t_1, t_2, \ldots, t_{15})$ & $t$ & 15 dias \\
-  $F$       & Formatos de lata do portf\'{o}lio & $-$ & 3 \\
-  $\mathcal{C}$ & Pares cap\'{a}veis $(i,p,l)$: formato de $i$ = formato de $l \in L_p$ & $(i,p,l)$ & $\subseteq I \times L$ \\
+  $I$           & SKUs (produtos finais) & $i$ & 30 \\
+  $P$           & Plantas (f\'{a}bricas) & $p,\,o,\,d$ & 10 \\
+  $L_p$         & Linhas da planta $p$ & $l$ & 3 por planta \\
+  $L$           & Todas as linhas ($L = \bigcup_{p \in P} L_p$) & $l$ & 30 \\
+  $T$           & Per\'{i}odos $(t_1, \ldots, t_{15})$ & $t$ & 15 dias \\
+  $F$           & Formatos de lata do portf\'{o}lio & $-$ & 3 \\
+  $\mathcal{C}$ & Triplas cap\'{a}veis $(i,p,l)$: formato de $i$ = formato de $l \in L_p$ & $(i,p,l)$ & $\subseteq I \times L$ \\
   \bottomrule
 \end{tabular}
 \end{center}
@@ -115,46 +163,40 @@ inteiras) e cobre um horizonte de 15 dias.
 \begin{mdframed}[style=destaque]
   \textbf{\color{ballblue}Conjunto $\mathcal{C}$ --- Capabilidade.}
   Os tr\^{e}s formatos s\~{a}o: \textit{9.1 Oz Sleek}, \textit{12 Oz Standard} e \textit{16 Oz Tall}.
-  Cada planta $p$ (e todas as linhas $l \in L_p$) opera com exatamente 1 formato.
-  Uma tripla $(i,p,l)$ pertence a $\mathcal{C}$ se o formato do SKU $i$ coincide com o
-  formato da planta $p$. Fora de $\mathcal{C}$, a produ\c{c}\~{a}o \'{e} proibida ($x_{i,p,l,t} = 0$).
+  Cada planta $p$ opera com exatamente 1 formato. Uma tripla $(i,p,l)$ pertence a $\mathcal{C}$
+  se o formato do SKU $i$ coincide com o formato da planta $p$.
+  Fora de $\mathcal{C}$, a produ\c{c}\~{a}o \'{e} proibida ($x_{i,p,l,t} = 0$ via R8).
   Os $\approx 10\%$ de pedidos incompat\'{i}veis s\~{a}o resolvidos via transfer\^{e}ncia $f_{i,o,d,t}$
-  de uma planta apta.
+  de uma planta apta, seguida de redistribui\c{c}\~{a}o interna $g_{i,p,l,t}$.
 \end{mdframed}
 
 % ============================================================
 \section{Par\^{a}metros}
 
-\subsection*{Par\^{a}metros log\'{i}sticos \textnormal{\small(fonte: \texttt{input\_logistic\_costs\_artificial.csv})}}
-
-Seja o par $(o, d)$ com $o, d \in P$:
+\subsection*{Log\'{i}sticos \textnormal{\small(\texttt{input\_logistic\_costs\_artificial.csv})}}
 
 \begin{align*}
-  cb_{o,d} &: \text{custo de combust\'{i}vel da rota } o \to d \\
-  cp_{o,d} &: \text{custo de ped\'{a}gio da rota } o \to d \\
-  cl_{o,d} &: \text{custo de m\~{a}o de obra da rota } o \to d \\
-  ct_{o,d} &= cb_{o,d} + cp_{o,d} + cl_{o,d} \qquad \text{(custo total do frete por caminh\~{a}o)}
+  cb_{o,d},\; cp_{o,d},\; cl_{o,d} &: \text{custos de combust\'{i}vel, ped\'{a}gio e m\~{a}o de obra da rota } o \to d \\
+  ct_{o,d} &= cb_{o,d} + cp_{o,d} + cl_{o,d} \quad \text{(custo total por caminh\~{a}o)} \quad ct_{o,o} = 0
 \end{align*}
 
-\textbf{Fluxo interno:} quando $o = d$, fixamos $ct_{o,d} = 0$.
-
-\subsection*{Par\^{a}metros de produ\c{c}\~{a}o \textnormal{\small(fontes: \texttt{input\_production\_rate} e \texttt{input\_sku\_costs})}}
+\subsection*{Produ\c{c}\~{a}o \textnormal{\small(\texttt{input\_production\_rate} e \texttt{input\_sku\_costs})}}
 
 \begin{align*}
   r_{p,l,t}   &: \text{taxa de produ\c{c}\~{a}o da linha } l \in L_p \text{ no dia } t \text{ (latas/hora)} \\
-               &\quad \text{\small N\~{a}o indexado por SKU --- a taxa depende do formato da planta.} \\
-               &\quad \text{\small Aus\^{e}ncia de registro implica produ\c{c}\~{a}o proibida naquele dia.} \\[6pt]
+               &\quad \text{\small Indexado por linha e dia --- n\~{a}o por SKU. Aus\^{e}ncia de registro implica produ\c{c}\~{a}o proibida.} \\[4pt]
   k_{i,p,l}   &: \text{custo de produ\c{c}\~{a}o do SKU } i \text{ na linha } l \in L_p \text{ (R\$/lata)} \\
   v_{i,p,l}   &: \text{custo de estocagem do SKU } i \text{ na linha } l \in L_p \text{ (R\$/lata/dia)}
 \end{align*}
 
-\subsection*{Par\^{a}metros de demanda e armazenagem \textnormal{\small(fontes: \texttt{input\_production\_need} e \texttt{input\_line\_storage\_limit})}}
+\subsection*{Demanda e armazenagem \textnormal{\small(\texttt{input\_production\_need} e \texttt{input\_line\_storage\_limit})}}
 
 \begin{align*}
-  \eta_{i,p,l,t}  &: \text{demanda do SKU } i \text{ alocada \`{a} linha } l \in L_p \text{ com prazo no dia } t \text{ (latas)} \\
-                   &\quad \text{\small Pode ser incompat\'{i}vel com o formato da planta (ru\'{i}do de $\approx$10\%).}\\[6pt]
-  e^{\max}_{p,l}  &: \text{capacidade m\'{a}xima de armazenagem da linha } l \in L_p \text{ (latas)} \\
-                   &\quad \text{\small Limite f\'{i}sico fixo --- n\~{a}o varia por SKU nem por per\'{i}odo.}
+  \eta_{i,p,l,t}  &: \text{demanda do SKU } i \text{ na linha } l \in L_p \text{ com prazo no dia } t \text{ (latas)} \\
+                   &\quad \text{\small Pode ser incompat\'{i}vel com o formato da planta (ru\'{i}do de $\approx$10\%).} \\[4pt]
+  e^{\max}_{p,l}  &: \text{capacidade m\'{a}xima de armazenagem da linha } l \in L_p \text{ (latas) --- fixo.} \\
+  e^{0}_{i,p,l}   &: \text{estoque inicial do SKU } i \text{ na linha } l \in L_p. \quad
+                      \text{Neste estudo: } e^{0}_{i,p,l} = 0 \;\forall\, i,p,l.
 \end{align*}
 
 % ============================================================
@@ -162,142 +204,128 @@ Seja o par $(o, d)$ com $o, d \in P$:
 
 \[
   \phi : L \to P, \quad \phi(l) = p \qquad
-  \text{(mapeamento hier\'{a}rquico: linha } l \mapsto \text{planta } p = \phi(l)\text{)}
+  \text{(linha } l \mapsto \text{planta } p\text{)}
 \]
 
-Como $L = \bigcup_{p \in P} L_p$ e $|L_p| = 3$ para todo $p$, a fun\c{c}\~{a}o $\phi$ \'{e} sobrejetora
-e determina univocamente a planta de origem de qualquer produ\c{c}\~{a}o ou transfer\^{e}ncia.
-Nos \'{i}ndices, sempre que aparecer $p$ e $l$ juntos, vale $p = \phi(l)$.
+Como $|L_p| = 3$ para todo $p$, a fun\c{c}\~{a}o $\phi$ \'{e} sobrejetora.
+Sempre que $p$ e $l$ aparecem juntos nos \'{i}ndices, vale $p = \phi(l)$.
 
 % ============================================================
 \section{Vari\'{a}veis de Decis\~{a}o}
 
-São cinco variáveis de decisão, todas contínuas e não-negativas, projetadas para mapear perfeitamente a física do chão de fábrica:
+S\~{a}o sete vari\'{a}veis de decis\~{a}o, todas cont\'{i}nuas e n\~{a}o-negativas:
 
-\vspace{8pt}
+\vspace{6pt}
 \begin{center}
 \renewcommand{\arraystretch}{1.6}
-\begin{tabular}{>{\bfseries\color{ballblue}}c p{9cm} l}
-\toprule
-Variável & Descrição & Domínio \\
-\midrule
-$x_{i,p,l,t}$ & Volume produzido do SKU $i$ na linha $l \in L_p$ da planta $p$, no dia $t$ (latas). & $\mathbb{R}_+$ \\[4pt]
-$e_{i,p,l,t}$ & Nível de estoque do SKU $i$ na linha $l \in L_p$ ao final do dia $t$ (latas). & $\mathbb{R}_+$ \\[4pt]
-$a_{i,p,l,t}$ & Volume de atendimento local do SKU $i$ a partir da linha $l \in L_p$ no dia $t$ (latas). & $\mathbb{R}_+$ \\[4pt]
-$f_{i,o,d,t}$ & Volume do SKU $i$ transferido da planta $o$ para a planta $d$ no dia $t$ (latas). & $\mathbb{R}_+$ \\[4pt]
-$g_{i,p,l,t}$ & Volume do SKU $i$ movimentado da doca de entrada da planta $p$ para o armazém da linha $l \in L_p$ no dia $t$ (latas). & $\mathbb{R}_+$ \\[4pt]
-$s_{i,p,l,t}$ & Volume do SKU $i$ retirado do armazém da linha $l \in L_p$ e movimentado para a doca de saída da planta $p$ no dia $t$ (latas). & $\mathbb{R}_+$ \\
-\bottomrule
+\begin{tabular}{>{\bfseries\color{ballblue}}c p{9.5cm} l}
+  \toprule
+  Vari\'{a}vel & Descri\c{c}\~{a}o & Dom\'{i}nio \\
+  \midrule
+  $x_{i,p,l,t}$ & Volume \textbf{produzido} do SKU $i$ na linha $l \in L_p$, no dia $t$. S\'{o} definida para $(i,p,l) \in \mathcal{C}$. & $\mathbb{R}_+$ \\[4pt]
+  $e_{i,p,l,t}$ & N\'{i}vel de \textbf{estoque} do SKU $i$ na linha $l \in L_p$ ao final do dia $t$. & $\mathbb{R}_+$ \\[4pt]
+  $a_{i,p,l,t}$ & Volume de \textbf{atendimento local} do SKU $i$ a partir da linha $l \in L_p$ no dia $t$. & $\mathbb{R}_+$ \\[4pt]
+  $f_{i,o,d,t}$ & Volume \textbf{transferido} do SKU $i$ da planta $o$ para a planta $d \neq o$, no dia $t$. & $\mathbb{R}_+$ \\[4pt]
+  $g_{i,p,l,t}$ & Volume \textbf{redistribu\'{i}do internamente} da doca de entrada da planta $p$ para o armazém da linha $l$, no dia $t$. & $\mathbb{R}_+$ \\[4pt]
+  $s_{i,p,l,t}$ & Volume \textbf{retirado do armazém} da linha $l \in L_p$ para a doca de sa\'{i}da da planta $p$, no dia $t$. & $\mathbb{R}_+$ \\[4pt]
+  $w_{i,p,l,t}$ & Volume de \textbf{demanda n\~{a}o atendida} (venda perdida) do SKU $i$ na linha $l \in L_p$, no dia $t$. Vari\'{a}vel artificial de folga. & $\mathbb{R}_+$ \\
+  \bottomrule
 \end{tabular}
 \end{center}
 
 \vspace{10pt}
 
-
-% ── O nó de transbordo (Variáveis g e s) ──────────────────────────────────────
 \begin{mdframed}[style=destaque]
-\textbf{\color{ballblue}O que são as variáveis de transbordo $g_{i,p,l,t}$ e $s_{i,p,l,t}$?}
-
-\medskip Fisicamente, os caminhões de frete ($f$) chegam e saem pelo pátio principal da fábrica (a doca da planta $p$), e não diretamente na porta de cada linha de produção $l$. 
-
-\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
-\item $g_{i,p,l,t}$ \textbf{(Entrada):} representa as ``empilhadeiras''. Elas pegam as latas descarregadas pelos caminhões no pátio e as distribuem para os armazéns internos das linhas.
-\item $s_{i,p,l,t}$ \textbf{(Saída):} representa as empilhadeiras fazendo o caminho inverso. Elas retiram as latas dos armazéns das linhas e as levam até a doca para encher os caminhões que vão para a estrada.
-\end{itemize}
-
-\medskip \textbf{Por que não usar $f$ direto no estoque?} 
-Se não separássemos esse transbordo, a matemática exigiria que a planta de origem ditasse a organização interna do armazém da planta de destino. Pior ainda: ao somarmos o frete que chega na planta $p$ diretamente na equação do armazém da linha $l$, o solver ``clonaria'' as latas recebidas para todos os armazéns simultaneamente. As variáveis $g$ e $s$ garantem o Princípio da Separação Logística, criando um nó de transbordo perfeito.
-\end{mdframed}
-
-% ── Justificativa de f ───────────────────────────────────────────────────────
-\begin{mdframed}[style=destaque]
-  \textbf{\color{ballblue}Por que $f_{i,o,d,t}$ e n\~{a}o simplesmente $x_{i,p,l,t}$ com destino?}
+  \textbf{\color{ballblue}Por que $f_{i,o,d,t}$ e n\~{a}o $x$ com destino?}
 
   \medskip
-  O custo de frete \'{e} pago pelo \textbf{movimento f\'{i}sico de latas entre plantas} ---
-  n\~{a}o pela produ\c{c}\~{a}o em si. Um caminh\~{a}o s\'{o} \'{e} contratado quando latas
-  \emph{saem} de uma planta e \emph{chegam} em outra. Se a planta de Jacare\'{i} produz
-  1.000.000 de latas e guarda tudo no estoque local por 3 dias sem transferir nada,
+  O frete \'{e} pago pelo \textbf{movimento f\'{i}sico entre plantas}, n\~{a}o pela produ\c{c}\~{a}o.
+  Se Jacare\'{i} produz 1.000.000 de latas e guarda tudo localmente por 3 dias,
   nenhum caminh\~{a}o \'{e} usado --- custo log\'{i}stico zero.
-
-  \medskip
   O caminho f\'{i}sico das latas \'{e}:
   \[
     x_{i,p,l,t}
-    \;\xrightarrow{\text{vai ao estoque}}\;
+    \xrightarrow{\text{estoque}}
     e_{i,p,l,t}
-    \;\xrightarrow{\text{sai da planta } p}\;
-    f_{i,\,p,\,d,\,t}
-    \;\xrightarrow{\text{chega em } d}\;
-    \text{atendimento}
+    \xrightarrow{s: \text{ doca de sa\'{i}da}}
+    f_{i,p,d,t}
+    \xrightarrow{g: \text{ doca de entrada}}
+    e_{i,d,l',t}
+    \xrightarrow{a}
+    \text{cliente}
   \]
-
   Cada vari\'{a}vel carrega seu pr\'{o}prio custo:
-  $x$ paga $k_{i,p,l}$ (produ\c{c}\~{a}o),\; $e$ paga $v_{i,p,l}$ (estocagem),\;
-  $f$ paga $ct_{o,d}$ (frete). Unir tudo em uma s\'{o} vari\'{a}vel impediria o modelo
-  de decidir entre ``produzir agora e transferir depois'' ou ``estocar e evitar frete''.
+  $x \to k_{i,p,l}$,\quad $e \to v_{i,p,l}$,\quad $f \to ct_{o,d}$.
 \end{mdframed}
 
-\vspace{10pt}
+\vspace{8pt}
 
-% ── Balanço de estoque ───────────────────────────────────────────────────────
 \begin{mdframed}[style=destaque]
-  \textbf{\color{ballblue}Como o estoque $e_{i,p,l,t}$ se forma --- intui\c{c}\~{a}o do balan\c{c}o}
+  \textbf{\color{ballblue}O n\'{o} de transbordo: por que $g$ e $s$?}
 
   \medskip
-  O n\'{i}vel de estoque ao final do dia $t$ resulta de cinco fluxos:
+  Caminh\~{o}es chegam e saem pelo p\'{a}tio da f\'{a}brica (a doca da planta $p$),
+  n\~{a}o diretamente na porta de cada linha. As vari\'{a}veis $g$ e $s$ modelam
+  as \textbf{empilhadeiras} que fazem a distribui\c{c}\~{a}o interna:
 
+  \begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item $g_{i,p,l,t}$: caminh\~{a}o descarrega no p\'{a}tio $\to$ empilhadeira leva ao armazém da linha $l$.
+    \item $s_{i,p,l,t}$: empilhadeira retira do armazém da linha $l$ $\to$ leva \`{a} doca para encher caminh\~{a}o.
+  \end{itemize}
+
+  \medskip
+  \textbf{Por que n\~{a}o usar $f$ direto no balan\c{c}o de estoque?}
+  Se sum\'{a}ssemos $\sum_o f_{i,o,p,t}$ direto na equa\c{c}\~{a}o de cada linha $l$,
+  o solver \textit{clonaria} as latas recebidas para todos os armazéns simultaneamente.
+  As restri\c{c}\~{o}es R6 e R7 garantem o \textbf{Princ\'{i}pio da Conserva\c{c}\~{a}o de Massa}
+  no transbordo: o que entra no p\'{a}tio sai exatamente para os armazéns, e vice-versa.
+\end{mdframed}
+
+\vspace{8pt}
+
+\begin{mdframed}[style=destaque]
+  \textbf{\color{ballblue}Como o estoque $e_{i,p,l,t}$ se forma --- balan\c{c}o intuitivo}
+
+  \medskip
   \[
     \begin{aligned}
       e_{i,p,l,t} \;=\;\;
       & \underbrace{e_{i,p,l,\,t-1}}_{\text{estoque anterior}}
-        \;+\; \underbrace{x_{i,p,l,t}}_{\text{produ\c{c}\~{a}o do dia}}
-        \;+\; \underbrace{\sum_{o \in P} f_{i,\,o,\,p,\,t}}_{\text{recebido de outras plantas}} \\[10pt]
-      & -\; \underbrace{\sum_{d \in P} f_{i,\,p,\,d,\,t}}_{\text{enviado a outras plantas}}
+        \;+\; \underbrace{x_{i,p,l,t}}_{\text{produ\c{c}\~{a}o}}
+        \;+\; \underbrace{g_{i,p,l,t}}_{\text{entrada da doca}} \\[10pt]
+      & -\; \underbrace{s_{i,p,l,t}}_{\text{sa\'{i}da para doca}}
         \;-\; \underbrace{a_{i,p,l,t}}_{\text{atendimento local}}
     \end{aligned}
   \]
-
-  \smallskip
-  \textit{Esta equa\c{c}\~{a}o ser\'{a} formalizada como restri\c{c}\~{a}o de igualdade no modelo.
-  Aqui serve apenas para interpretar o que cada vari\'{a}vel representa no balan\c{c}o f\'{i}sico
-  do armazém.}
+  \textit{Formalizado como restri\c{c}\~{a}o de igualdade em R2, com condi\c{c}\~{a}o inicial $e_{i,p,l,0} = e^0_{i,p,l} = 0$.}
 \end{mdframed}
 
-\vspace{10pt}
+\vspace{8pt}
 
-% ── Atendimento local ────────────────────────────────────────────────────────
 \begin{mdframed}[style=destaque]
-  \textbf{\color{ballblue}O que \'{e} o atendimento local $a_{i,p,l,t}$?}
+  \textbf{\color{ballblue}O que \'{e} $w_{i,p,l,t}$ e por que ela existe? --- A l\'{o}gica do Big-$M$}
 
   \medskip
-  $a_{i,p,l,t}$ representa as latas do SKU $i$ que \textbf{saem do estoque da linha
-  $l \in L_p$ para satisfazer a demanda $\eta_{i,p,l,t}$} no dia $t$ --- sem sair da planta.
-  \'{E} uma sa\'{i}da interna: as latas foram produzidas (localmente ou recebidas via
-  transfer\^{e}ncia), ficaram no armazém, e s\~{a}o consumidas para fechar o pedido daquela linha.
+  No mundo real, quando a demanda excede a capacidade f\'{i}sica, ocorre \textbf{venda perdida}
+  --- n\~{a}o o colapso do universo. Para evitar que o modelo declare \textit{infeasible}
+  em cen\'{a}rios de estresse (ex: $150\%$ de ocupa\c{c}\~{a}o), introduzimos $w$ como
+  uma \textbf{vari\'{a}vel artificial de folga}.
 
   \medskip
-  A distin\c{c}\~{a}o entre $a_{i,p,l,t}$ e $f_{i,o,d,t}$ \'{e} fundamental:
-  \begin{itemize}[leftmargin=1.5em, itemsep=2pt]
-    \item $f_{i,o,d,t}$: latas que \textbf{viajam entre plantas} --- geram custo de frete.
-    \item $a_{i,p,l,t}$: latas que \textbf{saem do estoque para o cliente local} --- sem frete.
-  \end{itemize}
-
-  \medskip
-  O atendimento local tamb\'{e}m resolve os \textbf{10\% de pedidos com ru\'{i}do de formato}:
-  a linha incompat\'{i}vel recebe $f$ de uma planta apta, armazena no estoque, e usa
-  $a_{i,p,l,t}$ para atender o pedido mal alocado.
+  \textbf{O balan\c{c}o econ\^{o}mico (Big-$M$):} Se $w$ custasse zero, o solver
+  \textit{deixaria de produzir} e jogaria toda a demanda em $w$ (pois produzir custa dinheiro).
+  Punimos $w$ com um custo $M = R\$\,1.000.000$ por lata n\~{a}o entregue --- t\~{a}o alto que
+  o modelo s\'{o} recorre a $w$ quando esgota todas as possibilidades f\'{i}sicas.
+  Esse mecanismo \'{e} conhecido em Pesquisa Operacional como \textbf{penalidade Big-$M$}.
 \end{mdframed}
 
 % ============================================================
 \section{Fun\c{c}\~{a}o Objetivo}
 
-Minimizar o custo total de opera\c{c}\~{a}o da malha, somando os tr\^{e}s termos:
-
 \[
   \begin{aligned}
     \min \; Z \;=\;\;
-    & \sum_{p \in P}\;\sum_{\substack{l \in L_p \\ (i,p,l)\,\in\,\mathcal{C}}}\;\sum_{i \in I}\;\sum_{t \in T}
+    & \sum_{p \in P}\sum_{\substack{l \in L_p \\ (i,p,l)\,\in\,\mathcal{C}}}\sum_{i \in I}\sum_{t \in T}
         k_{i,p,l} \cdot x_{i,p,l,t}
       \;+\;
       \sum_{p \in P}\sum_{l \in L_p}\sum_{i \in I}\sum_{t \in T}
@@ -305,10 +333,12 @@ Minimizar o custo total de opera\c{c}\~{a}o da malha, somando os tr\^{e}s termos
     & +\;
       \sum_{i \in I}\sum_{o \in P}\sum_{\substack{d \in P \\ d \,\neq\, o}}\sum_{t \in T}
         ct_{o,d} \cdot \frac{f_{i,o,d,t}}{200{.}000}
+      \;+\;
+      \sum_{p \in P}\sum_{l \in L_p}\sum_{i \in I}\sum_{t \in T}
+        M \cdot w_{i,p,l,t}
   \end{aligned}
 \]
 
-\vspace{8pt}
 \begin{center}
 \renewcommand{\arraystretch}{1.3}
 \small
@@ -316,38 +346,29 @@ Minimizar o custo total de opera\c{c}\~{a}o da malha, somando os tr\^{e}s termos
   \toprule
   Termo & F\'{o}rmula & Interpreta\c{c}\~{a}o \\
   \midrule
-  Produ\c{c}\~{a}o
-    & $k_{i,p,l} \cdot x_{i,p,l,t}$
-    & Custo unit\'{a}rio (R\$/lata) $\times$ volume produzido \\
-  Estoque
-    & $v_{i,p,l} \cdot e_{i,p,l,t}$
-    & Custo de carregar 1 lata no armazém por 1 dia \\
-  Log\'{i}stica
-    & $ct_{o,d} \cdot \dfrac{f_{i,o,d,t}}{200{.}000}$
-    & Custo por caminh\~{a}o $\times$ n\'{u}mero de caminh\~{o}es \\
+  Produ\c{c}\~{a}o  & $k_{i,p,l} \cdot x_{i,p,l,t}$                     & Custo unit\'{a}rio (R\$/lata) $\times$ volume produzido \\
+  Estoque        & $v_{i,p,l} \cdot e_{i,p,l,t}$                     & Custo de carregar 1 lata no armazém por 1 dia \\
+  Log\'{i}stica  & $ct_{o,d} \cdot \frac{f_{i,o,d,t}}{200{.}000}$   & Custo por caminh\~{a}o $\times$ n\'{u}mero de caminh\~{o}es \\
+  Venda perdida  & $M \cdot w_{i,p,l,t}$                              & Penalidade Big-$M$ por demanda n\~{a}o atendida \\
   \bottomrule
 \end{tabular}
 \end{center}
 
-\vspace{6pt}
 \begin{center}
   \small\color{darkgray}
-  Capacidade do caminh\~{a}o: $25\text{ pallets} \times 8{.}000\text{ latas} = 200{.}000\text{ latas/caminh\~{a}o}$
+  Capacidade do caminh\~{a}o: $25\text{ pallets} \times 8.000\text{ latas} = 200.000\text{ latas/caminh\~{a}o}$
 \end{center}
 
 % ============================================================
 \newpage
 \section{Restri\c{c}\~{o}es}
 
-% ── R1 ───────────────────────────────────────────────────────────────────────
 \begin{mdframed}[style=destaque]
 \textbf{\color{ballblue}R1 --- Limite de armazenagem.}
-
 \medskip
-O armazém de cada linha tem uma capacidade f\'{i}sica $e^{\max}_{p,l}$ que n\~{a}o pode ser
-ultrapassada em nenhum dia, independentemente do SKU. A restri\c{c}\~{a}o soma o estoque
-de todos os produtos porque o espa\c{c}o \'{e} compartilhado:
 
+O espa\c{c}o f\'{i}sico do armazém \'{e} compartilhado entre todos os SKUs.
+A soma do estoque de todos os produtos n\~{a}o pode ultrapassar a capacidade da linha:
 \[
   \sum_{i \in I} e_{i,p,l,t} \;\leq\; e^{\max}_{p,l}
   \qquad \forall\, p \in P,\; l \in L_p,\; t \in T
@@ -356,72 +377,62 @@ de todos os produtos porque o espa\c{c}o \'{e} compartilhado:
 
 \vspace{8pt}
 
-% ── R2 ───────────────────────────────────────────────────────────────────────
 \begin{mdframed}[style=destaque]
 \textbf{\color{ballblue}R2 --- Balan\c{c}o de estoque.}
-
-\medskip O n\'ivel de estoque ao final do dia $t$ \'e determinado pelo que havia ontem, pelo que a m\'aquina produziu hoje, pelo que as empilhadeiras trouxeram do p\'atio para a linha ($g$), subtraindo o que as empilhadeiras levaram para o p\'atio ($s$) e o que foi entregue diretamente ao cliente local ($a$):
-
-$$e_{i,p,l,t} = e_{i,p,l,t-1} + x_{i,p,l,t} + g_{i,p,l,t} - s_{i,p,l,t} - a_{i,p,l,t}$$
-$$\qquad \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T$$
-
-\medskip Esta \'e uma restri\c{c}\~ao de \textbf{igualdade} --- o balan\c{c}o f\'isico deve fechar exatamente. Ela acopla os 15 per\'iodos entre si: o estoque de hoje \'e condi\c{c}\~ao inicial de amanh\~a.
-\end{mdframed}
-
-
-\vspace{8pt}
-
-% ── R3 ───────────────────────────────────────────────────────────────────────
-\begin{mdframed}[style=destaque]
-\textbf{\color{ballblue}R3 --- Atendimento \`{a} demanda.}
-
 \medskip
-O atendimento local $a_{i,p,l,t}$ deve cobrir integralmente a demanda $\eta_{i,p,l,t}$
-no dia do prazo:
 
+Equa\c{c}\~{a}o de conserva\c{c}\~{a}o de massa do armazém da linha. Unificada usando
+$e_{i,p,l,0} = e^0_{i,p,l} = 0$:
 \[
-  a_{i,p,l,t} \;\geq\; \eta_{i,p,l,t}
+  e_{i,p,l,t} = e_{i,p,l,t-1} + x_{i,p,l,t} + g_{i,p,l,t} - s_{i,p,l,t} - a_{i,p,l,t}
   \qquad \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T
 \]
-
-A produ\c{c}\~{a}o e as transfer\^{e}ncias recebidas \textbf{n\~{a}o aparecem aqui explicitamente}
-porque j\'{a} est\~{a}o capturadas em R2: o solver s\'{o} consegue ter $a_{i,p,l,t}$ grande
-o suficiente se o balan\c{c}o de estoque (R2) tiver sido alimentado por produ\c{c}\~{a}o
-local ou transfer\^{e}ncia recebida. Incluir $x$ e $f$ nesta restri\c{c}\~{a}o seria
-cont\'{a}-los duas vezes.
+Esta \'{e} uma igualdade estrita que \textbf{acopla os 15 per\'{i}odos}: o estoque de hoje
+\'{e} a condi\c{c}\~{a}o inicial de amanh\~{a}. O frete ($f$) n\~{a}o aparece aqui
+diretamente --- ele entra via $g$ (entrada) e sai via $s$ (sa\'{i}da), garantindo
+que a redistribui\c{c}\~{a}o interna \'{e} tratada pelas docas (R6 e R7).
 \end{mdframed}
 
 \vspace{8pt}
 
-% ── R4 ───────────────────────────────────────────────────────────────────────
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R3 --- Atendimento \`{a} demanda.}
+\medskip
+
+O atendimento local $a$ somado \`{a} venda perdida $w$ deve igualar exatamente a demanda:
+\[
+  a_{i,p,l,t} + w_{i,p,l,t} = \eta_{i,p,l,t}
+  \qquad \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T
+\]
+O frete e a produ\c{c}\~{a}o \textbf{n\~{a}o aparecem aqui} para evitar dupla contagem:
+eles j\'{a} alimentaram o estoque via R2, e o estoque alimenta $a$.
+O solver s\'{o} aciona $w$ quando esgota os 24\,h produtivos de todas as linhas.
+\end{mdframed}
+
+\vspace{8pt}
+
 \begin{mdframed}[style=destaque]
 \textbf{\color{ballblue}R4 --- Capacidade produtiva (turno de 24\,h).}
-
 \medskip
-A soma das horas consumidas por todos os SKUs numa linha n\~{a}o pode ultrapassar o
-turno di\'{a}rio. O tempo gasto para produzir $x_{i,p,l,t}$ latas \'{e}
-$x_{i,p,l,t} / r_{p,l,t}$ horas:
 
+A soma das horas consumidas por todos os SKUs na linha $l$ n\~{a}o pode ultrapassar 24\,h.
+O tempo para produzir $x_{i,p,l,t}$ latas \'{e} $x_{i,p,l,t} / r_{p,l,t}$ horas:
 \[
   \sum_{i \in I} \frac{x_{i,p,l,t}}{r_{p,l,t}} \;\leq\; 24
   \qquad \forall\, p \in P,\; l \in L_p,\; t \in T
 \]
-
-Se $(i,p,l) \notin \mathcal{C}$, ent\~{a}o $x_{i,p,l,t} = 0$ e o termo correspondente
-n\~{a}o contribui para a soma.
+Para $(i,p,l) \notin \mathcal{C}$, temos $x_{i,p,l,t} = 0$ por R8, logo esses
+termos n\~{a}o contribuem para a soma.
 \end{mdframed}
 
 \vspace{8pt}
 
-% ── R5 ───────────────────────────────────────────────────────────────────────
 \begin{mdframed}[style=destaque]
-\textbf{\color{ballblue}R5 --- Capacidade log\'{i}stica de expedi\c{c}\~{a}o (80 caminh\~{o}es/dia).}
-
+\textbf{\color{ballblue}R5 --- Capacidade log\'{i}stica de expedi\c{c}\~{a}o.}
 \medskip
-Cada planta pode expedir no m\'{a}ximo 80 caminh\~{o}es por dia, somando todos os SKUs
-e todos os destinos poss\'{i}veis. O limite \'{e} de \textbf{sa\'{i}da} --- o que chega
-na planta n\~{a}o entra neste c\'{o}mputo:
 
+Cada planta pode expedir no m\'{a}ximo 80 caminh\~{o}es por dia (sa\'{i}da),
+somando todos os SKUs e destinos:
 \[
   \sum_{i \in I} \sum_{\substack{d \in P \\ d \neq p}}
   \frac{f_{i,p,d,t}}{200{.}000} \;\leq\; 80
@@ -431,30 +442,43 @@ na planta n\~{a}o entra neste c\'{o}mputo:
 
 \vspace{8pt}
 
-% ── R6 ───────────────────────────────────────────────────────────────────────
-
-
 \begin{mdframed}[style=destaque]
-\textbf{\color{ballblue}R6 e R7 --- Conserva\c{c}\~ao de Massa no Transbordo (Docas).}
-
-\medskip O porteiro da f\'abrica n\~ao permite a cria\c{c}\~ao nem o sumi\c{c}o de latas no p\'atio. Tudo o que os caminh\~oes descarregam deve ser exatamente igual ao que as empilhadeiras guardam (R7). E tudo o que as empilhadeiras tiram dos galp\~oes deve ser exatamente igual ao que os caminh\~oes levam embora (R8).
-
-\textbf{R6 (Doca de Entrada):}
-$$\sum_{l \in L_p} g_{i,p,l,t} = \sum_{\substack{o \in P \\ o \neq p}} f_{i,o,p,t} \qquad \forall\, i \in I,\; p \in P,\; t \in T$$
-
-\textbf{R7 (Doca de Sa\'ida):}
-$$\sum_{l \in L_p} s_{i,p,l,t} = \sum_{\substack{d \in P \\ d \neq p}} f_{i,p,d,t} \qquad \forall\, i \in I,\; p \in P,\; t \in T$$
-\end{mdframed}
-
-\begin{mdframed}[style=destaque]
-\textbf{\color{ballblue}R8 --- N\~{a}o-negatividade.}
-
+\textbf{\color{ballblue}R6 e R7 --- Conserva\c{c}\~{a}o de massa no transbordo (docas).}
 \medskip
-Todas as vari\'{a}veis de decis\~{a}o s\~{a}o cont\'{i}nuas e n\~{a}o-negativas:
+
+Tudo que os caminh\~{o}es descarregam no p\'{a}tio deve ser exatamente distribu\'{i}do
+pelos armazéns das linhas (R6), e tudo que os armazéns enviam ao p\'{a}tio deve
+ser exatamente carregado nos caminh\~{o}es (R7):
 
 \[
-  x_{i,p,l,t},\; e_{i,p,l,t},\; f_{i,o,d,t},\; a_{i,p,l,t} \;\geq\; 0
-  \qquad \forall\, i,\, p,\, l,\, o,\, d,\, t
+  \sum_{l \in L_p} g_{i,p,l,t} = \sum_{\substack{o \in P \\ o \neq p}} f_{i,o,p,t}
+  \qquad \forall\, i \in I,\; p \in P,\; t \in T \tag{R6}
+\]
+\[
+  \sum_{l \in L_p} s_{i,p,l,t} = \sum_{\substack{d \in P \\ d \neq p}} f_{i,p,d,t}
+  \qquad \forall\, i \in I,\; p \in P,\; t \in T \tag{R7}
+\]
+\end{mdframed}
+
+\vspace{8pt}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R8 --- Capabilidade de formato.}
+\medskip
+
+Linhas s\'{o} podem produzir SKUs compat\'{i}veis com seu formato:
+\[
+  x_{i,p,l,t} = 0 \qquad \forall\, (i,p,l) \notin \mathcal{C},\; t \in T
+\]
+\end{mdframed}
+
+\vspace{8pt}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R9 --- N\~{a}o-negatividade.}
+\[
+  x_{i,p,l,t},\; e_{i,p,l,t},\; a_{i,p,l,t},\; f_{i,o,d,t},\;
+  g_{i,p,l,t},\; s_{i,p,l,t},\; w_{i,p,l,t} \;\geq\; 0
 \]
 \end{mdframed}
 
@@ -462,38 +486,371 @@ Todas as vari\'{a}veis de decis\~{a}o s\~{a}o cont\'{i}nuas e n\~{a}o-negativas:
 \newpage
 \section{Formula\c{c}\~{a}o Compacta do PL}
 
-\vspace{6pt}
+\begin{mdframed}[backgroundcolor=blue!5, linecolor=ballblue, linewidth=2pt,
+  innertopmargin=14pt, innerbottommargin=14pt,
+  innerleftmargin=14pt, innerrightmargin=14pt]
 
-\begin{mdframed}[backgroundcolor=blue!5, linecolor=ballblue, linewidth=2pt, roundcorner=5pt, innertopmargin=15pt, innerbottommargin=15pt]
-\textbf{min}
-\vspace{-10pt}
-\begin{align*}
-Z \;&=\; \sum_{p \in P}\sum_{\substack{l \in L_p \\ (i,p,l)\in\mathcal{C}}}\sum_{i \in I}\sum_{t \in T} k_{i,p,l} \cdot x_{i,p,l,t} 
-\;+\; \sum_{p \in P}\sum_{l \in L_p}\sum_{i \in I}\sum_{t \in T} v_{i,p,l} \cdot e_{i,p,l,t} \\[10pt]
-&\quad +\; \sum_{i \in I}\sum_{o \in P}\sum_{\substack{d \in P \\ d \neq o}}\sum_{t \in T} ct_{o,d} \cdot \frac{f_{i,o,d,t}}{200{.}000}
-\end{align*}
+\textbf{\color{ballblue}min}
+\[
+  \begin{aligned}
+    Z \;=\;\;
+    & \sum_{p,l,i,t} k_{i,p,l} \cdot x_{i,p,l,t}
+      \;+\; \sum_{p,l,i,t} v_{i,p,l} \cdot e_{i,p,l,t}
+      \;+\; \sum_{i,o,d,t} ct_{o,d} \cdot \tfrac{f_{i,o,d,t}}{200{.}000}
+      \;+\; \sum_{p,l,i,t} M \cdot w_{i,p,l,t}
+  \end{aligned}
+\]
 
-\textbf{s.a.}
-\vspace{-5pt}
-\begin{align}
-& \sum_{i \in I} e_{i,p,l,t} \leq e^{\max}_{p,l} && \forall\, p \in P,\; l \in L_p,\; t \in T \tag{R1} \\[10pt]
-& e_{i,p,l,t} = e_{i,p,l,t-1} + x_{i,p,l,t} + g_{i,p,l,t} - s_{i,p,l,t} - a_{i,p,l,t} && \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T \tag{R2} \\[10pt]
-& a_{i,p,l,t} \geq \eta_{i,p,l,t} && \forall\, i \in I,\; p \in P,\; l \in L_p,\; t \in T \tag{R3} \\[10pt]
-& \sum_{i \in I} \frac{x_{i,p,l,t}}{r_{p,l,t}} \leq 24 && \forall\, p \in P,\; l \in L_p,\; t \in T \tag{R4} \\[10pt]
-& \sum_{i \in I} \sum_{\substack{d \in P \\ d \neq p}} \frac{f_{i,p,d,t}}{200{.}000} \leq 80 && \forall\, p \in P,\; t \in T \tag{R5} \\[10pt]
-& \sum_{l \in L_p} g_{i,p,l,t} = \sum_{\substack{o \in P \\ o \neq p}} f_{i,o,p,t} && \forall\, i \in I,\; p \in P,\; t \in T \tag{R6} \\[10pt]
-& \sum_{l \in L_p} s_{i,p,l,t} = \sum_{\substack{d \in P \\ d \neq p}} f_{i,p,d,t} && \forall\, i \in I,\; p \in P,\; t \in T \tag{R7} \\[10pt]
-& x_{i,p,l,t},\; e_{i,p,l,t},\; a_{i,p,l,t},\; f_{i,o,d,t},\; g_{i,p,l,t},\; s_{i,p,l,t} \geq 0 && \forall\, i, p, l, o, d, t \tag{R8}
-\end{align}
+\textbf{\color{ballblue}s.a.}
+\begin{alignat}{3}
+  &\textstyle\sum_{i} e_{i,p,l,t}
+    &&\leq e^{\max}_{p,l}
+    &&\quad\forall\,p,l,t \tag{R1}\\[6pt]
+  &e_{i,p,l,t} = e_{i,p,l,t-1} + x_{i,p,l,t} + g_{i,p,l,t} - s_{i,p,l,t} - a_{i,p,l,t}
+    &&
+    &&\quad\forall\,i,p,l,t \tag{R2}\\[6pt]
+  &a_{i,p,l,t} + w_{i,p,l,t}
+    &&= \eta_{i,p,l,t}
+    &&\quad\forall\,i,p,l,t \tag{R3}\\[6pt]
+  &\textstyle\sum_{i} \tfrac{x_{i,p,l,t}}{r_{p,l,t}}
+    &&\leq 24
+    &&\quad\forall\,p,l,t \tag{R4}\\[6pt]
+  &\textstyle\sum_{i,d\neq p} \tfrac{f_{i,p,d,t}}{200{.}000}
+    &&\leq 80
+    &&\quad\forall\,p,t \tag{R5}\\[6pt]
+  &\textstyle\sum_{l \in L_p} g_{i,p,l,t}
+    &&= \textstyle\sum_{o \neq p} f_{i,o,p,t}
+    &&\quad\forall\,i,p,t \tag{R6}\\[6pt]
+  &\textstyle\sum_{l \in L_p} s_{i,p,l,t}
+    &&= \textstyle\sum_{d \neq p} f_{i,p,d,t}
+    &&\quad\forall\,i,p,t \tag{R7}\\[6pt]
+  &x_{i,p,l,t} = 0
+    &&
+    &&\quad\forall\,(i,p,l)\notin\mathcal{C},\,t \tag{R8}\\[6pt]
+  &x,e,a,f,g,s,w \geq 0
+    &&
+    &&\quad\forall\,i,p,l,o,d,t \tag{R9}
+\end{alignat}
 \end{mdframed}
 
-\vspace{10pt}
+\vspace{8pt}
 {\color{accentgray}\rule{\linewidth}{0.5pt}}
 \begin{center}
   \small\color{darkgray}
-  Dimens\~{a}o do problema: $|I| \times |P| \times |L_p| \times |T|
-  = 30 \times 10 \times 3 \times 15 = \mathbf{13{.}500}$ vari\'{a}veis base\,
-  $+\; |I| \times |P|^2 \times |T| = 30 \times 100 \times 15 = \mathbf{45{.}000}$ vari\'{a}veis de transfer\^{e}ncia.
+  $6 \times 30 \times 10 \times 3 \times 15 = \mathbf{81{.}000}$ vari\'{a}veis operacionais
+  $+\; 30 \times 100 \times 15 = \mathbf{45{.}000}$ vari\'{a}veis de transfer\^{e}ncia
+  $= \approx \mathbf{126{.}000}$ vari\'{a}veis no total.
+\end{center}
+
+% ============================================================
+\newpage
+\section{Implementa\c{c}\~{a}o em Julia/JuMP}
+
+Esta se\c{c}\~{a}o explica como o modelo matem\'{a}tico se traduz em c\'{o}digo, passo a passo.
+O objetivo \'{e} que mesmo quem nunca programou em Julia consiga entender a l\'{o}gica por tr\'{a}s de cada bloco.
+
+% ── 9.1 ─────────────────────────────────────────────────────────────────────
+\subsection*{9.1 Pacotes utilizados}
+
+\begin{mdframed}[style=codigo]
+\begin{lstlisting}
+using JuMP      # linguagem de modelagem matematica (escreve o LP)
+using Gurobi    # solver comercial que resolve o LP
+using CSV       # leitura de arquivos .csv
+using DataFrames  # estrutura de tabela (como um Excel no codigo)
+using Printf    # formatacao de numeros no terminal
+using Dates     # data/hora para nomear os arquivos de saida
+\end{lstlisting}
+\end{mdframed}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}O que \'{e} JuMP?} JuMP \'{e} uma linguagem de modelagem embutida no Julia.
+Em vez de implementar o simplex manualmente, voc\^{e} \textbf{descreve} o modelo
+(vari\'{a}veis, restri\c{c}\~{o}es, objetivo) e o JuMP monta a matriz LP e entrega ao solver.
+O Gurobi \'{e} o solver --- o motor matem\'{a}tico que de fato encontra a solu\c{c}\~{a}o \'{o}tima.
+\end{mdframed}
+
+% ── 9.2 ─────────────────────────────────────────────────────────────────────
+\subsection*{9.2 Leitura e prepara\c{c}\~{a}o dos dados}
+
+\begin{mdframed}[style=codigo]
+\begin{lstlisting}
+# Extrai o dia da string de data (ex: "2024-01-05" -> 5)
+function extrair_dia(data_str::String)
+    return parse(Int, string(data_str)[9:10])
+end
+
+# Converte numero brasileiro "1.234,56" para Float64 1234.56
+function parse_br_float(val)
+    ismissing(val) || val == "" && return 0.0
+    return parse(Float64, replace(String(val), "," => "."))
+end
+\end{lstlisting}
+\end{mdframed}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}Por que essas fun\c{c}\~{o}es?}
+Os CSVs usam o padr\~{a}o brasileiro de n\'{u}meros (v\'{i}rgula como decimal).
+O Julia espera ponto. Sem a convers\~{a}o, \texttt{parse} lan\c{c}aria um erro.
+A extra\c{c}\~{a}o do dia resolve o fato de que o campo \texttt{deadline} vem
+como data completa (\texttt{"2024-01-05"}), mas o modelo usa $t \in \{1,\ldots,15\}$.
+\end{mdframed}
+
+% ── 9.3 ─────────────────────────────────────────────────────────────────────
+\subsection*{9.3 Extra\c{c}\~{a}o dos conjuntos}
+
+\begin{mdframed}[style=codigo]
+\begin{lstlisting}
+I   = unique(df_need.product_id)   # conjunto I: 30 SKUs
+P   = unique(df_rate.plant)        # conjunto P: 10 plantas
+T   = 1:15                         # conjunto T: dias 1 a 15
+
+# L_p: dicionario planta -> lista de linhas daquela planta
+# Exemplo: L_p["Jacarei"] = ["JAC_L1", "JAC_L2", "JAC_L3"]
+L_p = Dict(p => unique(df_rate[df_rate.plant .== p,
+           :production_line]) for p in P)
+\end{lstlisting}
+\end{mdframed}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}O \texttt{Dict} como $L_p$:}
+O dicion\'{a}rio \texttt{L\_p} \'{e} a implementa\c{c}\~{a}o direta do conjunto $L_p$
+do modelo matem\'{a}tico. Ao iterar com \texttt{for p in P, l in L\_p[p]},
+estamos fazendo exatamente $\sum_{p \in P}\sum_{l \in L_p}$.
+\end{mdframed}
+
+% ── 9.4 ─────────────────────────────────────────────────────────────────────
+\subsection*{9.4 Constru\c{c}\~{a}o dos par\^{a}metros}
+
+\begin{mdframed}[style=codigo]
+\begin{lstlisting}
+# Custo de producao e estoque: k e v indexados por (SKU, planta, linha)
+k = Dict((r.product_id, r.plant, r.production_line) => r.production_cost
+         for r in eachrow(df_costs))
+v = Dict((r.product_id, r.plant, r.production_line) => r.inventory_cost
+         for r in eachrow(df_costs))
+
+# Demanda: inicializa com 0 e preenche com os pedidos reais
+eta = Dict((i,p,l,t) => 0.0 for i in I, p in P, l in L_p[p], t in T)
+for r in eachrow(df_need)
+    t = extrair_dia(string(r.deadline))
+    chave = (r.product_id, r.plant, r.production_line, t)
+    haskey(eta, chave) && (eta[chave] += r.prod_need)
+end
+\end{lstlisting}
+\end{mdframed}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}Por que inicializar \texttt{eta} com zeros antes?}
+O CSV de demanda s\'{o} cont\'{e}m linhas onde h\'{a} pedidos.
+Se uma combina\c{c}\~{a}o $(i,p,l,t)$ n\~{a}o aparece no CSV, a demanda \'{e} zero.
+Inicializar com zeros garante que \texttt{eta} existe para todos os \'{i}ndices
+necess\'{a}rios na restri\c{c}\~{a}o R3, sem erros de chave ausente.
+O \texttt{+=} permite acumular m\'{u}ltiplos pedidos no mesmo dia.
+\end{mdframed}
+
+% ── 9.5 ─────────────────────────────────────────────────────────────────────
+\subsection*{9.5 Vari\'{a}veis de decis\~{a}o no JuMP}
+
+\begin{mdframed}[style=codigo]
+\begin{lstlisting}
+modelo = Model(Gurobi.Optimizer)
+set_silent(modelo)  # suprime o log do Gurobi
+
+@variable(modelo, x[i in I, p in P, l in L_p[p], t in T] >= 0)
+@variable(modelo, e[i in I, p in P, l in L_p[p], t in T] >= 0)
+@variable(modelo, a[i in I, p in P, l in L_p[p], t in T] >= 0)
+@variable(modelo, f[i in I, o in P, d in P, t in T; o != d] >= 0)
+@variable(modelo, g[i in I, p in P, l in L_p[p], t in T] >= 0)
+@variable(modelo, s[i in I, p in P, l in L_p[p], t in T] >= 0)
+@variable(modelo, w[i in I, p in P, l in L_p[p], t in T] >= 0)
+\end{lstlisting}
+\end{mdframed}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}Como ler \texttt{@variable}:}
+Cada \texttt{@variable} cria automaticamente \textbf{uma vari\'{a}vel por combina\c{c}\~{a}o}
+de \'{i}ndices. Por exemplo, \texttt{x[i in I, p in P, l in L\_p[p], t in T]}
+cria $30 \times 10 \times 3 \times 15 = 13.500$ vari\'{a}veis.
+O \texttt{o != d} em \texttt{f} garante que transferência para a mesma planta n\~{a}o existe ---
+implementando diretamente a condi\c{c}\~{a}o $o \neq d$ do modelo.
+O \texttt{>= 0} implementa R9 automaticamente.
+\end{mdframed}
+
+% ── 9.6 ─────────────────────────────────────────────────────────────────────
+\subsection*{9.6 Fun\c{c}\~{a}o objetivo}
+
+\begin{mdframed}[style=codigo]
+\begin{lstlisting}
+@objective(modelo, Min,
+    sum(k[i,p,l] * x[i,p,l,t]
+        for p in P, l in L_p[p], i in I, t in T
+        if haskey(k,(i,p,l))) +
+    sum(v[i,p,l] * e[i,p,l,t]
+        for p in P, l in L_p[p], i in I, t in T
+        if haskey(v,(i,p,l))) +
+    sum(ct[o,d] * (f[i,o,d,t] / 200_000)
+        for i in I, o in P, d in P, t in T if o != d) +
+    sum(1_000_000 * w[i,p,l,t]
+        for p in P, l in L_p[p], i in I, t in T)
+)
+\end{lstlisting}
+\end{mdframed}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}O \texttt{if haskey} e o Big-$M$:}
+O \texttt{if haskey(k,(i,p,l))} implementa o conjunto $\mathcal{C}$: s\'{o} pares
+$(i,p,l)$ que existem no dicion\'{a}rio $k$ (ou seja, que t\^{e}m custo cadastrado)
+entram na soma de produ\c{c}\~{a}o. Pares fora de $\mathcal{C}$ simplesmente n\~{a}o
+aparecem na fun\c{c}\~{a}o objetivo.
+O valor \texttt{1\_000\_000} \'{e} o Big-$M$ --- a penalidade por lata n\~{a}o entregue.
+\end{mdframed}
+
+% ── 9.7 ─────────────────────────────────────────────────────────────────────
+\subsection*{9.7 Restri\c{c}\~{o}es}
+
+\begin{mdframed}[style=codigo]
+\begin{lstlisting}
+# R1: limite de armazenagem
+@constraint(modelo, R1[p in P, l in L_p[p], t in T],
+    sum(e[i,p,l,t] for i in I) <= e_max[(p,l)])
+
+# R2: balanco de estoque (e[...,0] = 0 pelo condicional)
+@constraint(modelo, R2[i in I, p in P, l in L_p[p], t in T],
+    e[i,p,l,t] == (t == 1 ? 0.0 : e[i,p,l,t-1]) +
+                  x[i,p,l,t] + g[i,p,l,t] - s[i,p,l,t] - a[i,p,l,t])
+
+# R3: atendimento a demanda com folga w
+@constraint(modelo, R3[i in I, p in P, l in L_p[p], t in T],
+    a[i,p,l,t] + w[i,p,l,t] == eta[(i,p,l,t)] * fator_demanda)
+
+# R4: capacidade produtiva (so conta SKUs compativeis)
+@constraint(modelo, R4[p in P, l in L_p[p], t in T],
+    sum(x[i,p,l,t] / r_taxa[(p,l,t)]
+        for i in I if haskey(k,(i,p,l)) && r_taxa[(p,l,t)] > 0) <=
+    (p == fabrica_quebrada ? 0.0 : 24.0))
+
+# R5: capacidade logistica de saida
+@constraint(modelo, R5[p in P, t in T],
+    sum(f[i,p,d,t] / 200_000
+        for i in I, d in P if d != p) <= limite_caminhoes)
+
+# R6: doca de entrada (f chegando -> g distribuindo)
+@constraint(modelo, R6[i in I, p in P, t in T],
+    sum(g[i,p,l,t] for l in L_p[p]) ==
+    sum(f[i,o,p,t] for o in P if o != p))
+
+# R7: doca de saida (s coletando -> f saindo)
+@constraint(modelo, R7[i in I, p in P, t in T],
+    sum(s[i,p,l,t] for l in L_p[p]) ==
+    sum(f[i,p,d,t] for d in P if d != p))
+
+# R8: capabilidade de formato
+@constraint(modelo, R8[i in I, p in P, l in L_p[p], t in T;
+                       !haskey(k,(i,p,l))],
+    x[i,p,l,t] == 0)
+\end{lstlisting}
+\end{mdframed}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}Notas sobre as restri\c{c}\~{o}es:}
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+  \item \textbf{R2 com \texttt{t == 1}:} o operador tern\'{a}rio \texttt{(t == 1 ? 0.0 : e[...])}
+    implementa a condi\c{c}\~{a}o inicial $e^0 = 0$ sem precisar separar em dois blocos.
+  \item \textbf{R4 com fábrica quebrada:} o \texttt{p == fabrica\_quebrada ? 0.0 : 24.0}
+    reduz o limite de horas para zero, desligando completamente a planta escolhida
+    no Painel de Controle.
+  \item \textbf{R8 com \texttt{!haskey}:} se a chave $(i,p,l)$ n\~{a}o existe no dicion\'{a}rio
+    $k$ (ou seja, $(i,p,l) \notin \mathcal{C}$), a produ\c{c}\~{a}o \'{e} for\c{c}ada a zero.
+    Isso implementa a capabilidade de formato diretamente pela aus\^{e}ncia de dados.
+\end{itemize}
+\end{mdframed}
+
+% ============================================================
+\newpage
+\section{Painel de Controle e An\'{a}lise de Sensibilidade}
+
+\subsection*{10.1 O que \'{e} An\'{a}lise de Sensibilidade em Pesquisa Operacional?}
+
+\begin{mdframed}[style=destaque]
+Um modelo de otimiza\c{c}\~{a}o resolve um problema para um conjunto \textbf{fixo} de par\^{a}metros.
+Mas no mundo real, os par\^{a}metros mudam: a demanda cresce, equipamentos quebram,
+caminhões entram em greve. A \textbf{An\'{a}lise de Sensibilidade} responde:
+
+\begin{center}
+  \textit{``At\'{e} quanto posso apertar um par\^{a}metro antes de a solu\c{c}\~{a}o \'{o}tima mudar drasticamente?''}
+\end{center}
+
+Em vez de refazer o modelo do zero, variamos os par\^{a}metros de controle e observamos
+como o custo \'{o}timo, a taxa de atendimento e o uso log\'{i}stico respondem.
+Essa \'{e} a base do \textbf{Painel de Controle} implementado no c\'{o}digo.
+\end{mdframed}
+
+\subsection*{10.2 Os tr\^{e}s eixos de perturba\c{c}\~{a}o}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{>{\bfseries\color{ballblue}}p{3.5cm} p{5cm} p{5cm}}
+  \toprule
+  Par\^{a}metro & O que representa & Como perturbar \\
+  \midrule
+  \texttt{fator\_demanda} &
+    Multiplica toda a demanda $\eta_{i,p,l,t}$ por um fator. \newline
+    $1.0$ = normal, $2.0$ = dobra a demanda. &
+    Simula choques de mercado ou promo\c{c}\~{o}es. Combinado com \texttt{ocupacao\_100},
+    equivale a testar ocupa\c{c}\~{o}es al\'{e}m dos 150\% dos dados. \\[4pt]
+  \texttt{fabrica\_quebrada} &
+    Reduz o limite de horas da planta escolhida de 24\,h para 0\,h em R4. &
+    Simula parada de manuten\c{c}\~{a}o, greve ou desastre. Revela quais plantas
+    s\~{a}o cr\'{i}ticas para a malha. \\[4pt]
+  \texttt{limite\_caminhoes} &
+    Substitui o valor 80 na restri\c{c}\~{a}o R5. &
+    Simula greve de transportadores ou escassez de ve\'{i}culos.
+    Revela o quanto a rede depende do frete interplanta. \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{10.3 Estrat\'{e}gia de experimenta\c{c}\~{a}o sugerida}
+
+O script roda os 21 cen\'{a}rios (\texttt{ocupacao\_50} a \texttt{ocupacao\_150}) com a
+configura\c{c}\~{a}o fixa do painel. Para uma an\'{a}lise completa, sugere-se rodar em seq\^{u}encia:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{c c c c p{5.5cm}}
+  \toprule
+  Rodada & \texttt{fator} & \texttt{fabrica} & \texttt{limite} & Objetivo \\
+  \midrule
+  1 & 1.0 & Nenhuma & 80 & Baseline --- comportamento normal da malha \\
+  2 & 2.0 & Nenhuma & 80 & Choque de demanda --- onde aparece $w$? \\
+  3 & 1.0 & Extrema & 80 & Planta cr\'{i}tica --- impacto no custo? \\
+  4 & 1.0 & Nenhuma & 10 & Colapso log\'{i}stico --- a rede suporta? \\
+  5 & 2.0 & Extrema & 10 & Cen\'{a}rio catastrófico --- at\'{e} onde vai $w$? \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{10.4 Lendo o output}
+
+Cada rodada exporta um CSV nomeado automaticamente com a configura\c{c}\~{a}o usada,
+contendo uma linha por cen\'{a}rio de ocupa\c{c}\~{a}o. Colunas-chave:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+  \item \textbf{custo\_producao, custo\_estoque, custo\_logistica}: decomposi\c{c}\~{a}o do custo real
+    --- identifica qual componente cresce mais com a ocupa\c{c}\~{a}o.
+  \item \textbf{custo\_penalidade}: valor total pago em Big-$M$.
+    Zero = 100\% de atendimento. Positivo = venda perdida.
+  \item \textbf{taxa\_atendimento}: percentual da demanda efetivamente entregue ($a / \eta$).
+  \item \textbf{caminhoes}: total de caminh\~{o}es despachados. Se atingir
+    $80 \times 10 \times 15 = 12.000$, R5 est\'{a} saturada.
+\end{itemize}
+
+{\color{accentgray}\rule{\linewidth}{0.5pt}}
+\begin{center}
+  \small\color{darkgray}
+  O c\'{o}digo completo est\'{a} no arquivo \texttt{analise\_cenarios.jl}.
+  Ajuste apenas \texttt{caminho\_base} e as tr\^{e}s vari\'{a}veis do Painel de Controle antes de rodar.
 \end{center}
 
 \end{document}
