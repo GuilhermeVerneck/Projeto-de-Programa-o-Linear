@@ -1,0 +1,538 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{listings}
+\usepackage{courier}
+
+\geometry{margin=2.5cm, top=3cm, bottom=3cm}
+
+\definecolor{ballblue}{RGB}{0, 82, 147}
+\definecolor{lightgray}{RGB}{245, 245, 245}
+\definecolor{darkgray}{RGB}{80, 80, 80}
+\definecolor{accentgray}{RGB}{180, 180, 180}
+\definecolor{codegreen}{RGB}{40, 120, 40}
+\definecolor{codegray}{RGB}{100, 100, 100}
+\definecolor{codebg}{RGB}{250, 250, 250}
+\definecolor{codeblue}{RGB}{0, 60, 180}
+\definecolor{codeorange}{RGB}{180, 80, 0}
+
+\titleformat{\section}
+  {\large\bfseries\color{ballblue}}{}
+  {0em}{}[\color{ballblue}\titlerule]
+\titlespacing{\section}{0pt}{18pt}{8pt}
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{darkgray}}{}
+  {0em}{}
+\titlespacing{\subsection}{0pt}{12pt}{4pt}
+
+\mdfdefinestyle{destaque}{
+  backgroundcolor=lightgray,
+  linecolor=ballblue, linewidth=1.2pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=8pt, innerbottommargin=8pt,
+  skipabove=6pt, skipbelow=6pt,
+  nobreak=true,
+}
+
+\mdfdefinestyle{codigo}{
+  backgroundcolor=codebg,
+  linecolor=accentgray, linewidth=0.8pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  linecolor=codegreen,
+  innerleftmargin=10pt, innerrightmargin=10pt,
+  innertopmargin=8pt, innerbottommargin=8pt,
+  skipabove=6pt, skipbelow=6pt,
+  nobreak=true,
+}
+
+\lstdefinelanguage{Julia}{
+  keywords={using, function, for, in, if, else, end, return, true, false, @variable, @constraint, @objective, Model, optimize!, Min},
+  keywordstyle=\color{codeblue}\bfseries,
+  comment=[l]{\#},
+  commentstyle=\color{codegray}\itshape,
+  stringstyle=\color{codeorange},
+  morestring=[b]",
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  showstringspaces=false,
+}
+
+\lstset{language=Julia}
+
+% =============================================================================
+\begin{document}
+
+% ── Capa ─────────────────────────────────────────────────────────────────────
+\begin{center}
+  {\color{ballblue}\rule{\linewidth}{2pt}}\\[8pt]
+  {\LARGE\bfseries Modelo de Programa\c{c}\~{a}o Linear Estoc\'{a}stica}\\[4pt]
+  {\large\color{darkgray} Planejamento Macrosc\'{o}pico --- Ball Corporation}\\[8pt]
+  {\color{ballblue}\rule{\linewidth}{2pt}}
+\end{center}
+
+\vspace{10pt}
+\begin{center}
+  \small\color{darkgray}
+  \textbf{1.~Minimiza\c{c}\~{a}o de custos}
+  \enspace\textbullet\enspace
+  \textbf{2.~Conjuntos}
+  \enspace\textbullet\enspace
+  \textbf{3.~Par\^{a}metros}
+  \enspace\textbullet\enspace
+  \textbf{4.~Vari\'{a}veis}
+  \enspace\textbullet\enspace
+  \textbf{5.~A F\'{i}sica do Modelo}
+  \enspace\textbullet\enspace
+  \textbf{6.~Fun\c{c}\~{a}o Objetivo}
+  \enspace\textbullet\enspace
+  \textbf{7.~Restri\c{c}\~{o}es}
+  \enspace\textbullet\enspace
+  \textbf{8.~Formulac\c{c}\~{a}o Compacta}
+  \enspace\textbullet\enspace
+  \textbf{9.~Implementa\c{c}\~{a}o}
+\end{center}
+\vspace{4pt}
+{\color{accentgray}\rule{\linewidth}{0.5pt}}
+
+% ============================================================
+\section{Modelo de minimiza\c{c}\~{a}o de custos}
+
+O modelo busca \textbf{minimizar o custo total de opera\c{c}\~{a}o} da malha industrial da Ball
+Corporation. Al\'{e}m de contemplar os custos de produ\c{c}\~{a}o, estocagem e transfer\^{e}ncia,
+o modelo incorpora penalidades de risco: a multa por quebra de N\'{i}vel de Servi\c{c}o (venda perdida)
+e a penalidade por opera\c{c}\~{a}o abaixo do Estoque de Seguran\c{c}a. O modelo \'{e} estritamente cont\'{i}nuo
+e cobre um horizonte de 15 dias.
+
+\[
+  \boxed{
+    \begin{aligned}
+      \min \; Z \;=\;\;
+      & \underbrace{\sum_{p,l,i,t} k_{i,p,l} \cdot x_{i,p,l,t}}_{\text{produ\c{c}\~{a}o}}
+        \;+\;
+        \underbrace{\sum_{p,l,i,t} v_{i,p,l} \cdot e_{i,p,l,t}}_{\text{estoque}} 
+        \;+\;
+        \underbrace{\sum_{i,o,d,t} ct_{o,d} \cdot \dfrac{f_{i,o,d,t}}{200{.}000}}_{\text{log\'{i}stica}}
+      \\[12pt]
+      & +\;
+        \underbrace{\sum_{p,l,i,t} M \cdot w_{i,p,l,t}}_{\text{venda perdida}}
+        \;+\;
+        \underbrace{\sum_{p,l,i,t} c_{ss} \cdot \text{falta\_ss}_{i,p,l,t}}_{\text{risco de estoque}}
+    \end{aligned}
+  }
+\]
+
+\begin{center}
+  \small\color{darkgray}
+  Sujeito \`{a}s restri\c{c}\~{o}es f\'{i}sicas e operacionais R1--R10 detalhadas na Se\c{c}\~{a}o 7.
+\end{center}
+
+% ============================================================
+\section{Conjuntos (\'Indices)}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{>{\bfseries\color{ballblue}}c p{8cm} c r}
+  \toprule
+  S\'{i}mbolo & Descri\c{c}\~{a}o & \'{I}ndice & Cardinalidade \\
+  \midrule
+  $I$           & SKUs (produtos finais) & $i$ & 30 \\
+  $P$           & Plantas (f\'{a}bricas) & $p,\,o,\,d$ & 10 \\
+  $L_p$         & Linhas da planta $p$ & $l$ & 3 por planta \\
+  $T$           & Per\'{i}odos $(t_1, \ldots, t_{15})$ & $t$ & 15 dias \\
+  $\mathcal{C}$ & Triplas cap\'{a}veis $(i,p,l)$: formato de $i$ = formato de $l \in L_p$ & $(i,p,l)$ & $\subseteq I \times L$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+% ============================================================
+\section{Par\^{a}metros e Fatores de Risco}
+
+As bases estruturais (custos, demandas $\eta_{i,p,l,t}$, limites $e^{\max}_{p,l}$ e taxas de produ\c{c}\~{a}o de placa $r_{p,l,t}$) mant\^{e}m-se conforme a extra\c{c}\~{a}o dos arquivos \texttt{CSV}. Para aproximar a matem\'{a}tica do ch\~{a}o de f\'{a}brica, introduzimos:
+
+\begin{align*}
+  \text{OEE}  &: \text{Fator de Efici\^{e}ncia Global do Equipamento (Assumido: 85\%).} \\
+  DM_{i,p,l}  &: \text{Demanda m\'{e}dia di\'{a}ria do SKU } i \text{ na linha } l \text{ durante o horizonte de 15 dias.} \\
+  Dias_{ss}   &: \text{Meta de cobertura para Estoque de Seguran\c{c}a (Assumido: 1 dia de } DM \text{).}
+\end{align*}
+
+% ============================================================
+\section{Vari\'{a}veis de Decis\~{a}o}
+
+S\~{a}o oito vari\'{a}veis de decis\~{a}o, todas cont\'{i}nuas e n\~{a}o-negativas:
+
+\vspace{6pt}
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{>{\bfseries\color{ballblue}}c p{9.5cm} l}
+  \toprule
+  Vari\'{a}vel & Descri\c{c}\~{a}o & Dom\'{i}nio \\
+  \midrule
+  $x_{i,p,l,t}$ & Volume \textbf{produzido} do SKU $i$ na linha $l \in L_p$, no dia $t$. & $\mathbb{R}_+$ \\[4pt]
+  $e_{i,p,l,t}$ & N\'{i}vel de \textbf{estoque} do SKU $i$ na linha $l \in L_p$ ao final do dia $t$. & $\mathbb{R}_+$ \\[4pt]
+  $a_{i,p,l,t}$ & Volume de \textbf{atendimento local} do pedido do SKU $i$ no dia $t$. & $\mathbb{R}_+$ \\[4pt]
+  $f_{i,o,d,t}$ & Volume \textbf{transferido log\'{i}sticamente} da planta $o$ para a planta $d$. & $\mathbb{R}_+$ \\[4pt]
+  $g_{i,p,l,t}$ & Volume \textbf{recebido internamente} pela empilhadeira da doca para o armazém. & $\mathbb{R}_+$ \\[4pt]
+  $s_{i,p,l,t}$ & Volume \textbf{expedido internamente} do armazém para a doca de carregamento. & $\mathbb{R}_+$ \\[4pt]
+  $w_{i,p,l,t}$ & Volume de \textbf{venda perdida} (demanda n\~{a}o atendida). & $\mathbb{R}_+$ \\[4pt]
+  $\text{falta\_ss}_{i,p,l,t}$ & Volume \textbf{abaixo da meta} de Estoque de Seguran\c{c}a. & $\mathbb{R}_+$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+% ============================================================
+\section{A F\'{i}sica do Modelo: Modelando o Mundo Real}
+
+Modelos de Programa\c{c}\~{a}o Linear puros sofrem do que chamamos de \textit{A Fal\'{a}cia da M\'{e}dia}. O algoritmo otimizador tende a ser ingenuamente otimista: ele enxerga o tempo como blocos perfeitos e as m\'{a}quinas como rochas inquebr\'{a}veis. Para garantir validade t\'{a}tica, inserimos duas restri\c{c}\~{o}es avan\c{c}adas:
+
+\vspace{6pt}
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}1. A Ilus\~{a}o da M\'{a}quina Perfeita (O Fator OEE na restri\c{c}\~{a}o R4)}
+
+\medskip
+Se a taxa manual de uma m\'{a}quina \'{e} de 1.000 latas/hora, um solver cl\'{a}ssico assumir\'{a} que entregar\'{a} 24.000 latas amanh\~{a}. Na vida real, a f\'{a}brica enfrenta a troca de turno dos operadores, limpezas, trocas de bobina e falhas el\'{e}tricas. Ao multiplicar a taxa m\'{a}xima por um $\text{OEE} = 0.85$ na restri\c{c}\~{a}o R4, for\c{c}amos a matem\'{a}tica a prever que a m\'{a}quina perder\'{a} 15\% do dia. Se n\~{a}o ensin\'{a}ssemos isso ao solver, ele venderia uma capacidade fantasma, colidindo com a Teoria das Filas no ch\~{a}o de f\'{a}brica.
+\end{mdframed}
+
+\vspace{8pt}
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}2. O Medo do Imprevisto (Estoque de Seguran\c{c}a como Soft Constraint)}
+
+\medskip
+A equa\c{c}\~{a}o f\'{i}sica R2 decreta que a f\'{a}brica inicie com os galp\~{o}es inteiramente vazios ($e^0 = 0$). Queremos que o algoritmo atue como um gerente de f\'{a}brica prudente, que constr\'{o}i um Estoque de Seguran\c{c}a ao longo do tempo para se blindar da vari\^{a}ncia de pedidos.
+
+No entanto, se impusermos uma \textbf{Restri\c{c}\~{a}o R\'{i}gida} (Hard Constraint) como $e \ge DM$, o modelo ir\'{a} colapsar (\textit{Infeasible}) no dia $t=1$, pois \'{e} f\'{i}sicamente imposs\'{i}vel nascer com latas no estoque inicial zero.
+
+\medskip
+\textbf{A solu\c{c}\~{a}o (Restri\c{c}\~{a}o R10):} Injetamos a vari\'{a}vel de risco $\text{falta\_ss}$. 
+\[ e_{i,p,l,t} + \text{falta\_ss}_{i,p,l,t} \geq \text{Meta de Seguran\c{c}a} \]
+Isso d\'{a} empatia ao modelo: se ele n\~{a}o tiver estoque, a equa\c{c}\~{a}o n\~{a}o quebra, mas a vari\'{a}vel $\text{falta\_ss}$ assume o risco e paga uma pequena multa.
+\end{mdframed}
+
+% ============================================================
+\section{Fun\c{c}\~{a}o Objetivo}
+
+\[
+  \begin{aligned}
+    \min \; Z \;=\;\;
+    & \sum_{p \in P}\sum_{\substack{l \in L_p \\ (i,p,l)\,\in\,\mathcal{C}}}\sum_{i \in I}\sum_{t \in T}
+        k_{i,p,l} \cdot x_{i,p,l,t}
+      \;+\;
+      \sum_{p \in P}\sum_{l \in L_p}\sum_{i \in I}\sum_{t \in T}
+        v_{i,p,l} \cdot e_{i,p,l,t} \\[10pt]
+    & +\;
+      \sum_{i \in I}\sum_{o \in P}\sum_{\substack{d \in P \\ d \,\neq\, o}}\sum_{t \in T}
+        ct_{o,d} \cdot \frac{f_{i,o,d,t}}{200{.}000}
+      \;+\;
+      \sum_{p,l,i,t} 1.000.000 \cdot w_{i,p,l,t}
+      \;+\;
+      \sum_{p,l,i,t} 5 \cdot \text{falta\_ss}_{i,p,l,t}
+  \end{aligned}
+\]
+
+\textbf{O Comportamento do Otimizador:} Ao precificarmos o cancelamento do pedido ($w$) em R\$ 1.000.000 e a viola\c{c}\~{a}o do estoque de seguran\c{c}a ($\text{falta\_ss}$) em meros R\$ 5, ensinamos a intelig\^{e}ncia algor\'{i}tmica a ter \textbf{empatia comercial}: O cliente sempre vem primeiro, mas, havendo folga fabril, encha o armazém para n\~{a}o pagar a taxa de risco.
+
+% ============================================================
+\newpage
+\section{Restri\c{c}\~{o}es F\'{i}sicas}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R1 --- Limite de armazenagem.}
+\medskip
+
+O espa\c{c}o f\'{i}sico do armazém \'{e} compartilhado entre todos os SKUs:
+\[
+  \sum_{i \in I} e_{i,p,l,t} \;\leq\; e^{\max}_{p,l}
+  \qquad \forall\, p \in P,\; l \in L_p,\; t \in T
+\]
+\end{mdframed}
+
+\vspace{8pt}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R2 --- Balan\c{c}o de estoque.}
+\medskip
+
+Conserva\c{c}\~{a}o de massa do armazém acoplada no tempo ($e_{i,p,l,0} = 0$):
+\[
+  e_{i,p,l,t} = e_{i,p,l,t-1} + x_{i,p,l,t} + g_{i,p,l,t} - s_{i,p,l,t} - a_{i,p,l,t}
+  \qquad \forall\, i, p, l, t \in T
+\]
+\end{mdframed}
+
+\vspace{8pt}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R3 --- Atendimento \`{a} demanda.}
+\medskip
+
+O atendimento local $a$ somado \`{a} venda perdida $w$ iguala a demanda $\eta$:
+\[
+  a_{i,p,l,t} + w_{i,p,l,t} = \eta_{i,p,l,t}
+  \qquad \forall\, i, p, l, t \in T
+\]
+\end{mdframed}
+
+\vspace{8pt}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R4 --- Capacidade produtiva (Ajustada com OEE).}
+\medskip
+
+A soma das horas consumidas por todos os SKUs na linha $l$ sofre a a\c{c}\~{a}o da inefici\^{e}ncia mec\^{a}nica global antes de bater no teto do turno de 24 horas:
+\[
+  \sum_{i \in I} \frac{x_{i,p,l,t}}{r_{p,l,t} \cdot \text{OEE}} \;\leq\; 24
+  \qquad \forall\, p \in P,\; l \in L_p,\; t \in T
+\]
+\end{mdframed}
+
+\vspace{8pt}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R5 --- Capacidade log\'{i}stica de expedi\c{c}\~{a}o.}
+\medskip
+
+Cada planta expede no m\'{a}ximo 80 caminh\~{o}es por dia (sa\'{i}da):
+\[
+  \sum_{i \in I} \sum_{\substack{d \in P \\ d \neq p}}
+  \frac{f_{i,p,d,t}}{200{.}000} \;\leq\; 80
+  \qquad \forall\, p \in P,\; t \in T
+\]
+\end{mdframed}
+
+\vspace{8pt}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R6 e R7 --- N\'{o} de transbordo da f\'{a}brica (docas).}
+\medskip
+
+O frete n\~{a}o entra m\'{a}gicamente no estoque; ele \'{e} balizado pelas docas ($g$ e $s$):
+\[
+  \sum_{l \in L_p} g_{i,p,l,t} = \sum_{\substack{o \in P \\ o \neq p}} f_{i,o,p,t} \tag{R6}
+\]
+\[
+  \sum_{l \in L_p} s_{i,p,l,t} = \sum_{\substack{d \in P \\ d \neq p}} f_{i,p,d,t} \tag{R7}
+\]
+\end{mdframed}
+
+\vspace{8pt}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R8 --- Capabilidade de formato e R9 --- N\~{a}o-negatividade.}
+\[
+  x_{i,p,l,t} = 0 \qquad \forall\, (i,p,l) \notin \mathcal{C},\; t \in T \tag{R8}
+\]
+Todas as 8 matrizes de vari\'{a}veis adotam $Var \geq 0$ (R9).
+\end{mdframed}
+
+\vspace{8pt}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}R10 --- Soft Constraint de Estoque de Seguran\c{c}a.}
+\medskip
+
+O estoque de final de dia mais a complac\^{e}ncia do risco s\~{a}o cobrados:
+\[
+  e_{i,p,l,t} + \text{falta\_ss}_{i,p,l,t} \geq DM_{i,p,l} \cdot Dias_{ss} \qquad \forall\, (i,p,l) \in \mathcal{C},\; t \in T
+\]
+\end{mdframed}
+
+% ============================================================
+\newpage
+\section{Formula\c{c}\~{a}o Compacta do PL}
+
+\begin{mdframed}[backgroundcolor=blue!5, linecolor=ballblue, linewidth=2pt,
+  innertopmargin=14pt, innerbottommargin=14pt,
+  innerleftmargin=14pt, innerrightmargin=14pt]
+
+\textbf{\color{ballblue}min}
+\vspace{-5pt}
+\[
+  \begin{aligned}
+    Z \;=\;\;
+    & \sum_{p,l,i,t} k_{i,p,l} \cdot x_{i,p,l,t}
+      \;+\; \sum_{p,l,i,t} v_{i,p,l} \cdot e_{i,p,l,t}
+      \;+\; \sum_{i,o,d,t} ct_{o,d} \cdot \tfrac{f_{i,o,d,t}}{200{.}000} \\
+      & +\; \sum_{p,l,i,t} M \cdot w_{i,p,l,t}
+      \;+\; \sum_{p,l,i,t} c_{ss} \cdot \text{falta\_ss}_{i,p,l,t}
+  \end{aligned}
+\]
+
+\textbf{\color{ballblue}s.a.}
+\vspace{-15pt}
+\begin{alignat}{3}
+  &\textstyle\sum_{i} e_{i,p,l,t}
+    &&\leq e^{\max}_{p,l}
+    &&\quad\forall\,p,l,t \tag{R1}\\[4pt]
+  &e_{i,p,l,t} = e_{i,p,l,t-1} + x_{i,p,l,t} + g_{i,p,l,t} - s_{i,p,l,t} - a_{i,p,l,t}
+    &&
+    &&\quad\forall\,i,p,l,t \tag{R2}\\[4pt]
+  &a_{i,p,l,t} + w_{i,p,l,t}
+    &&= \eta_{i,p,l,t}
+    &&\quad\forall\,i,p,l,t \tag{R3}\\[4pt]
+  &\textstyle\sum_{i} \tfrac{x_{i,p,l,t}}{r_{p,l,t}\cdot \text{OEE}}
+    &&\leq 24
+    &&\quad\forall\,p,l,t \tag{R4}\\[4pt]
+  &\textstyle\sum_{i,d\neq p} \tfrac{f_{i,p,d,t}}{200{.}000}
+    &&\leq 80
+    &&\quad\forall\,p,t \tag{R5}\\[4pt]
+  &\textstyle\sum_{l \in L_p} g_{i,p,l,t}
+    &&= \textstyle\sum_{o \neq p} f_{i,o,p,t}
+    &&\quad\forall\,i,p,t \tag{R6}\\[4pt]
+  &\textstyle\sum_{l \in L_p} s_{i,p,l,t}
+    &&= \textstyle\sum_{d \neq p} f_{i,p,d,t}
+    &&\quad\forall\,i,p,t \tag{R7}\\[4pt]
+  &x_{i,p,l,t} = 0
+    &&
+    &&\quad\forall\,(i,p,l)\notin\mathcal{C},\,t \tag{R8}\\[4pt]
+  &e_{i,p,l,t} + \text{falta\_ss}_{i,p,l,t}
+    &&\geq DM_{i,p,l} \cdot Dias_{ss}
+    &&\quad\forall\,(i,p,l)\in\mathcal{C},\,t \tag{R10}\\[4pt]
+  &x,e,a,f,g,s,w,\text{falta\_ss} \geq 0
+    &&
+    &&\quad\forall\,i,p,l,o,d,t \tag{R9}
+\end{alignat}
+\end{mdframed}
+
+\vspace{8pt}
+{\color{accentgray}\rule{\linewidth}{0.5pt}}
+\begin{center}
+  \small\color{darkgray}
+  Aproximadamente $\mathbf{139{.}500}$ vari\'{a}veis cont\'{i}nuas no total.
+\end{center}
+
+% ============================================================
+\newpage
+\section{Implementa\c{c}\~{a}o em Julia/JuMP}
+
+O c\'{o}digo abaixo mapeia a l\'{o}gica estoc\'{a}stica. Note o uso de \texttt{mapa\_tempo} para blindar o solver contra saltos cronol\'{o}gicos de final de m\^{e}s, garantindo o balan\c{c}o perfeito de R2.
+
+\begin{mdframed}[style=codigo]
+\begin{lstlisting}
+using JuMP, Gurobi, CSV, DataFrames, Printf, Dates
+
+# ================= PAINEL =================
+fator_oee      = 0.85  # <--- Meta de Eficiencia (Gargalo f\'isico)
+dias_seguranca = 1.0   # <--- Meta de Cobertura de Estoque
+
+const GRB_ENV = Gurobi.Env()
+
+function resolver_cenario(cenario, df_log)
+    caminho = "C:\\Dados\\ocupacao_" * cenario * "\\"
+    df_need = CSV.read(caminho * "input_production_need_artificial.csv", DataFrame)
+    df_rate = CSV.read(caminho * "input_production_rate_artificial.csv", DataFrame)
+    df_costs = CSV.read(caminho * "input_sku_costs_artificial.csv", DataFrame)
+    df_limit = CSV.read(caminho * "input_line_storage_limit_artificial.csv", DataFrame)
+
+    # ---> MAPEAMENTO CRONOLOGICO (Previne erros em viradas de mes)
+    datas_demanda = [split(string(d), " ")[1] for d in df_need.deadline if !ismissing(d)]
+    datas_taxa    = [split(string(d), " ")[1] for d in df_rate.ref_date if !ismissing(d)]
+    datas_unicas  = sort(unique(vcat(datas_demanda, datas_taxa)))
+    mapa_tempo    = Dict(data => t for (t, data) in enumerate(datas_unicas))
+    
+    function get_t(data_str)
+        d_limpa = split(string(data_str), " ")[1]
+        return get(mapa_tempo, d_limpa, -1)
+    end
+
+    df_need.prod_need = parse_br_float.(df_need.prod_need)
+
+    I = unique(df_need.product_id)
+    P = unique(df_rate.plant)
+    T = 1:length(datas_unicas)
+    L_p = Dict(p => unique(df_rate[df_rate.plant .== p, :production_line]) for p in P)
+
+    k = Dict((r.product_id, r.plant, r.production_line) => parse_br_float(r.production_cost) for r in eachrow(df_costs))
+    v = Dict((r.product_id, r.plant, r.production_line) => parse_br_float(r.inventory_cost) for r in eachrow(df_costs))
+    ct = Dict((r.origem, r.destino) => parse_br_float(r.custo_total_frete) for r in eachrow(df_log))
+    e_max = Dict((r.plant, r.production_line) => parse_br_float(r.storage_limit) for r in eachrow(df_limit))
+
+    eta = Dict((i,p,l,t) => 0.0 for i in I for p in P for l in L_p[p] for t in T)
+    for r in eachrow(df_need)
+        t = get_t(r.deadline)
+        chave = (r.product_id, r.plant, r.production_line, t)
+        haskey(eta, chave) && (eta[chave] += r.prod_need)
+    end
+
+    r_taxa = Dict((p,l,t) => 0.0 for p in P for l in L_p[p] for t in T)
+    for r in eachrow(df_rate)
+        t = get_t(r.ref_date)
+        r_taxa[(r.plant, r.production_line, t)] = parse_br_float(r.rate)
+    end
+        
+    format_linha = Dict(r.production_line => strip(lowercase(string(r.sku_size_shape))) for r in eachrow(df_rate))
+    format_sku   = Dict(r.product_id => strip(lowercase(string(r.sku_size_shape))) for r in eachrow(df_need))
+
+    C = Set((i, p, l) for i in I, p in P, l in L_p[p] 
+        if get(format_sku, i, "none") == get(format_linha, l, "none_L"))
+
+    # DM (Demanda Media Diaria)
+    demanda_media = Dict((i,p,l) => sum(get(eta, (i,p,l,t), 0.0) for t in T) / 15.0 for i in I for p in P for l in L_p[p])
+
+    modelo = Model(() -> Gurobi.Optimizer(GRB_ENV))
+    set_silent(modelo)
+
+    @variable(modelo, x[i in I, p in P, l in L_p[p], t in T] >= 0)
+    @variable(modelo, e[i in I, p in P, l in L_p[p], t in T] >= 0)
+    @variable(modelo, a[i in I, p in P, l in L_p[p], t in T] >= 0)
+    @variable(modelo, f[i in I, o in P, d in P, t in T; o != d] >= 0)
+    @variable(modelo, g[i in I, p in P, l in L_p[p], t in T] >= 0)
+    @variable(modelo, s[i in I, p in P, l in L_p[p], t in T] >= 0)
+    @variable(modelo, w[i in I, p in P, l in L_p[p], t in T] >= 0)
+    @variable(modelo, falta_ss[i in I, p in P, l in L_p[p], t in T] >= 0) # <--- NOVO (R10)
+
+    @objective(modelo, Min,
+        sum(get(k,(i,p,l),99.0) * x[i,p,l,t] for p in P for l in L_p[p] for i in I for t in T if (i,p,l) in C) +
+        sum(get(v,(i,p,l),99.0) * e[i,p,l,t] for p in P for l in L_p[p] for i in I for t in T) +
+        sum(get(ct,(o,d),99999.0) * (f[i,o,d,t] / 200_000) for i in I for o in P for d in P for t in T if o != d) +
+        sum(1_000_000 * w[i,p,l,t] for p in P for l in L_p[p] for i in I for t in T) +
+        sum(5.0 * falta_ss[i,p,l,t] for p in P for l in L_p[p] for i in I for t in T)
+    )
+
+    @constraint(modelo, R1[p in P, l in L_p[p], t in T],
+        sum(e[i,p,l,t] for i in I) <= get(e_max, (p,l), 0.0))
+
+    @constraint(modelo, R2[i in I, p in P, l in L_p[p], t in T],
+        e[i,p,l,t] == (t == 1 ? 0.0 : e[i,p,l,t-1]) + x[i,p,l,t] + g[i,p,l,t] - s[i,p,l,t] - a[i,p,l,t])
+
+    @constraint(modelo, R3[i in I, p in P, l in L_p[p], t in T],
+        a[i,p,l,t] + w[i,p,l,t] == get(eta, (i,p,l,t), 0.0))
+
+    # ---> R4 ajustada pelo OEE
+    @constraint(modelo, R4[p in P, l in L_p[p], t in T],
+        sum(x[i,p,l,t] / (get(r_taxa, (p,l,t), 0.001) * fator_oee)
+        for i in I if (i,p,l) in C && get(r_taxa, (p,l,t), 0.0) > 0) <= 24.0)
+
+    @constraint(modelo, R5[p in P, t in T],
+        sum(f[i,p,d,t] / 200_000 for i in I, d in P if d != p) <= 80)
+
+    @constraint(modelo, R6[i in I, p in P, t in T],
+        sum(g[i,p,l,t] for l in L_p[p]) == sum(f[i,o,p,t] for o in P if o != p))
+
+    @constraint(modelo, R7[i in I, p in P, t in T],
+        sum(s[i,p,l,t] for l in L_p[p]) == sum(f[i,p,d,t] for d in P if d != p))
+
+    @constraint(modelo, R8[i in I, p in P, l in L_p[p], t in T; (i,p,l) not-in C], 
+        x[i,p,l,t] == 0)
+
+    # ---> R10 Soft Constraint de Seguranca
+    @constraint(modelo, R10[i in I, p in P, l in L_p[p], t in T; (i,p,l) in C],
+        e[i,p,l,t] + falta_ss[i,p,l,t] >= demanda_media[(i,p,l)] * dias_seguranca)
+
+    optimize!(modelo)
+    
+    # [...] (Processamento e Destruicao de Memoria GC.gc())
+end
+\end{lstlisting}
+\end{mdframed}
+
+\end{document}
