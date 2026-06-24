@@ -320,6 +320,165 @@ S\~{a}o sete vari\'{a}veis de decis\~{a}o, todas cont\'{i}nuas e n\~{a}o-negativ
 \end{mdframed}
 
 % ============================================================
+\section{Guia das Vari\'{a}veis: o que cada uma representa fisicamente}
+
+Esta se\c{c}\~{a}o \'{e} destinada a quem conhece Programa\c{c}\~{a}o Linear mas n\~{a}o
+conhece a opera\c{c}\~{a}o de uma malha de f\'{a}bricas de latas. O objetivo \'{e} tornar
+claro \textbf{por que} cada vari\'{a}vel existe e o que ela representa no ch\~{a}o de f\'{a}brica
+--- antes de v\^{e}-la numa equa\c{c}\~{a}o.
+
+% ── a ────────────────────────────────────────────────────────────────────────
+\vspace{6pt}
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}$a_{i,p,l,t}$ --- Atendimento local: a \'{u}nica vari\'{a}vel que toca o cliente}
+
+\medskip
+No modelo, \textbf{nenhuma outra vari\'{a}vel entrega lata na m\~{a}o do cliente}.
+$x$ produz, $e$ guarda, $f$ transporta, $g$ distribui internamente, $s$ coleta para expedir ---
+mas nenhuma delas encerra o pedido. Quem encerra \'{e} $a_{i,p,l,t}$.
+
+\medskip
+Pense assim: um pedido chega na linha JAC\_L2 exigindo 50.000 latas de Brahma\_Lata at\'{e}
+o dia 5. O pedido s\'{o} \'{e} considerado atendido quando $a_{\text{Brahma},\text{JAC},\text{JAC\_L2},5}
+\geq 50.000$. O caminho que essas latas percorreram at\'{e} chegar l\'{a} --- produzidas
+localmente, chegadas de Extrema via transfer\^{e}ncia, ou acumuladas desde o dia 3 ---
+n\~{a}o importa para o cliente. Importa que $a$ seja suficiente.
+
+\medskip
+\textbf{Por que $a$ \'{e} indexado por linha e n\~{a}o por planta?}
+Porque a demanda $\eta_{i,p,l,t}$ chegou amarrada a uma linha espec\'{i}fica
+(campo \texttt{production\_line} no CSV). O atendimento precisa ser rastreado
+na mesma granularidade do pedido para que a restri\c{c}\~{a}o R3 ($a + w = \eta$)
+fa\c{c}a sentido f\'{i}sico.
+
+\medskip
+\textbf{O que $a$ n\~{a}o \'{e}:} $a$ n\~{a}o \'{e} produ\c{c}\~{a}o. Uma linha pode atender
+um pedido inteiramente com latas que vieram de outra planta via $f \to g$,
+sem produzir nada localmente ($x = 0$). Nesse caso, $a > 0$ mas $x = 0$ --- algo
+imposs\'{i}vel de modelar se confundirmos as duas vari\'{a}veis.
+\end{mdframed}
+
+% ── e ────────────────────────────────────────────────────────────────────────
+\vspace{8pt}
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}$e_{i,p,l,t}$ --- Por que o estoque \'{e} da \textbf{linha}, n\~{a}o da planta?}
+
+\medskip
+Quem conhece modelos de rede esperaria que o estoque fosse indexado pela planta $p$
+--- afinal, o armazém \'{e} f\'{i}sico e pertence \`{a} f\'{a}brica. Mas aqui o estoque
+\'{e} indexado pela \textbf{linha} $l$, e h\'{a} uma raz\~{a}o precisa para isso.
+
+\medskip
+A demanda $\eta_{i,p,l,t}$ chega amarrada a uma linha espec\'{i}fica. O atendimento
+$a_{i,p,l,t}$ tamb\'{e}m \'{e} por linha. Para que o balan\c{c}o de estoque R2 feche
+corretamente ($e_{t} = e_{t-1} + x + g - s - a$), o estoque precisa estar
+na mesma granularidade de $a$ e $x$ --- ou seja, por linha.
+
+\medskip
+\textbf{Analogia:} imagine que cada linha \'{e} um corredor separado de supermercado.
+O cliente que pediu latas no corredor A n\~{a}o aceita receber do corredor B sem
+antes algum funcion\'{a}rio transferir a mercadoria entre corredores
+(isso \'{e} o $g$ --- a redistribui\c{c}\~{a}o interna).
+\end{mdframed}
+
+% ── g e s ────────────────────────────────────────────────────────────────────
+\vspace{8pt}
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}$g_{i,p,l,t}$ e $s_{i,p,l,t}$ --- As empilhadeiras que ningu\'{e}m vê}
+
+\medskip
+Essas s\~{a}o as vari\'{a}veis mais ``escondidas'' do modelo. Elas existem por uma
+necessidade matem\'{a}tica clara: $f$ \'{e} indexado por \textbf{planta} ($o \to d$),
+mas o estoque \'{e} indexado por \textbf{linha} ($l$ dentro de $p$). Precisa haver
+algo que faça a ponte entre os dois n\'{i}veis hier\'{a}rquicos.
+
+\medskip
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{>{\bfseries\color{ballblue}}c p{4cm} p{5.5cm}}
+  \toprule
+  Vari\'{a}vel & O que representa & O que aconteceria sem ela \\
+  \midrule
+  $g_{i,p,l,t}$ &
+    Latas descarregadas no p\'{a}tio de $p$ levadas ao armazém da linha $l$ &
+    O solver ``clonaria'' o frete recebido para \textbf{todas} as linhas ao mesmo
+    tempo, multiplicando latas do nada \\[6pt]
+  $s_{i,p,l,t}$ &
+    Latas retiradas do armazém da linha $l$ levadas \`{a} doca de expedi\c{c}\~{a}o de $p$ &
+    N\~{a}o haveria como saber \textbf{de qual linha} sa\'{i}ram as latas expedidas,
+    impossibilitando o balan\c{c}o por linha \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+As restri\c{c}\~{o}es R6 e R7 s\~{a}o as ``cancelas'' que garantem conserva\c{c}\~{a}o de massa:
+tudo que chega via $f$ deve sair via $g$; tudo que sai via $f$ deve ter sido coletado via $s$.
+Sem essas cancelas, o modelo poderia \textit{criar} ou \textit{destruir} latas no transbordo.
+\end{mdframed}
+
+% ── f ────────────────────────────────────────────────────────────────────────
+\vspace{8pt}
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}$f_{i,o,d,t}$ --- Transfer\^{e}ncia: quando e por que o modelo decide usá-la?}
+
+\medskip
+$f$ existe para resolver dois problemas do mundo real:
+
+\begin{enumerate}[leftmargin=1.5em, itemsep=4pt]
+  \item \textbf{O ru\'{i}do de formato ($\approx 10\%$ dos pedidos):}
+    quando um pedido chega a uma linha que n\~{a}o sabe produzir aquele formato
+    (ex: pedido de \textit{9.1 Oz Sleek} para uma linha de \textit{12 Oz Standard}),
+    a \'{u}nica sa\'{i}da do modelo \'{e} buscar outra planta apta e transferir.
+    O solver descobre isso sozinho: $x = 0$ por R8, ent\~{a}o para atender $a \geq \eta$
+    via R3, precisa de $g > 0$, que exige $f > 0$ via R6.
+
+  \item \textbf{Arbitragem de capacidade:}
+    mesmo sem ru\'{i}do, pode ser \'{o}timo produzir num lugar mais barato e transferir.
+    Se a planta de Extrema tem custo de produ\c{c}\~{a}o menor e folga produtiva,
+    o modelo pode decidir produzir l\'{a} e mandar caminh\~{o}es para Jacare\'{i},
+    desde que o custo do frete ($ct_{o,d}$) n\~{a}o anule a economia.
+\end{enumerate}
+
+\medskip
+\textbf{Por que $f$ n\~{a}o \'{e} indexado por linha?}
+O caminh\~{a}o n\~{a}o sabe (nem precisa saber) para qual linha dentro da planta destino
+as latas v\~{a}o. Ele descarrega no p\'{a}tio e as empilhadeiras ($g$) decidem.
+Indexar $f$ por linha forçaria a origem a conhecer a organiza\c{c}\~{a}o interna do destino
+--- uma informa\c{c}\~{a}o desnecessária e acoplamento errado entre plantas.
+\end{mdframed}
+
+% ── w ────────────────────────────────────────────────────────────────────────
+\vspace{8pt}
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}$w_{i,p,l,t}$ --- Venda perdida: a vari\'{a}vel que evita o \textit{infeasible}}
+
+\medskip
+Em cen\'{a}rios onde a demanda excede a capacidade f\'{i}sica total da malha,
+um modelo sem $w$ simplesmente \textbf{n\~{a}o tem solu\c{c}\~{a}o} --- ele declara
+\textit{infeasible} e para. Isso \'{e} um problema porque:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+  \item A inviabilidade n\~{a}o diz \textit{o quanto} a malha ficou devendo.
+  \item N\~{a}o \'{e} poss\'{i}vel comparar cen\'{a}rios: um cen\'{a}rio invi\'{a}vel
+        n\~{a}o tem custo \'{o}timo para comparar com outro.
+  \item N\~{a}o \'{e} poss\'{i}vel fazer an\'{a}lise de sensibilidade.
+\end{itemize}
+
+\medskip
+$w$ transforma o problema invi\'{a}vel em \textbf{sempre vi\'{a}vel}: qualquer demanda
+pode ser ``atendida'' por $a$ ou ``absorvida'' por $w$. O truque \'{e} a penalidade
+Big-$M = R\$\,10^6$ por lata em $w$ --- t\~{a}o cara que o solver s\'{o} recorre a
+ela quando esgota todo o potencial produtivo e log\'{i}stico da rede.
+
+\medskip
+\textbf{Como ler os resultados:} se \texttt{custo\_penalidade} = 0 no output,
+a malha atendeu 100\% da demanda. Se for positivo, $w > 0$ em alguma linha/dia
+--- a raz\~{a}o \'{e} f\'{i}sica (capacidade insuficiente), n\~{a}o matem\'{a}tica.
+\end{mdframed}
+
+% ============================================================
 \section{Fun\c{c}\~{a}o Objetivo}
 
 \[
@@ -606,17 +765,29 @@ P   = unique(df_rate.plant)        # conjunto P: 10 plantas
 T   = 1:15                         # conjunto T: dias 1 a 15
 
 # L_p: dicionario planta -> lista de linhas daquela planta
-# Exemplo: L_p["Jacarei"] = ["JAC_L1", "JAC_L2", "JAC_L3"]
 L_p = Dict(p => unique(df_rate[df_rate.plant .== p,
            :production_line]) for p in P)
+
+# Conjunto C: triplas (i, p, l) onde o formato do SKU bate
+# com o formato que a linha sabe produzir
+formatos_da_linha = Dict(r.production_line => r.sku_size_shape
+                         for r in eachrow(df_rate))
+C = Set(
+    (r.product_id, r.plant, r.production_line)
+    for r in eachrow(df_need)
+    if haskey(formatos_da_linha, r.production_line) &&
+       r.sku_size_shape == formatos_da_linha[r.production_line]
+)
 \end{lstlisting}
 \end{mdframed}
 
 \begin{mdframed}[style=destaque]
-\textbf{\color{ballblue}O \texttt{Dict} como $L_p$:}
-O dicion\'{a}rio \texttt{L\_p} \'{e} a implementa\c{c}\~{a}o direta do conjunto $L_p$
-do modelo matem\'{a}tico. Ao iterar com \texttt{for p in P, l in L\_p[p]},
-estamos fazendo exatamente $\sum_{p \in P}\sum_{l \in L_p}$.
+\textbf{\color{ballblue}O \texttt{Dict} como $L_p$ e o \texttt{Set} como $\mathcal{C}$:}
+O dicion\'{a}rio \texttt{L\_p} implementa $L_p$ diretamente --- iterar
+\texttt{for p in P, l in L\_p[p]} \'{e} exatamente $\sum_{p \in P}\sum_{l \in L_p}$.
+O \texttt{Set} $C$ armazena as triplas cap\'{a}veis e permite verifica\c{c}\~{a}o
+\texttt{(i,p,l) \ensuremath{\in} C} em tempo $O(1)$ por hash, cr\'{i}tico dado que ocorre
+em cada itera\c{c}\~{a}o dos somatórios.
 \end{mdframed}
 
 % ── 9.4 ─────────────────────────────────────────────────────────────────────
@@ -624,14 +795,21 @@ estamos fazendo exatamente $\sum_{p \in P}\sum_{l \in L_p}$.
 
 \begin{mdframed}[style=codigo]
 \begin{lstlisting}
-# Custo de producao e estoque: k e v indexados por (SKU, planta, linha)
-k = Dict((r.product_id, r.plant, r.production_line) => r.production_cost
-         for r in eachrow(df_costs))
-v = Dict((r.product_id, r.plant, r.production_line) => r.inventory_cost
-         for r in eachrow(df_costs))
+# parse_br_float aplicado em TODOS os campos numericos dos CSVs
+k     = Dict((r.product_id, r.plant, r.production_line) =>
+             parse_br_float(r.production_cost) for r in eachrow(df_costs))
+v     = Dict((r.product_id, r.plant, r.production_line) =>
+             parse_br_float(r.inventory_cost)  for r in eachrow(df_costs))
+ct    = Dict((r.origem, r.destino) =>
+             parse_br_float(r.custo_total_frete) for r in eachrow(df_log))
+e_max = Dict((r.plant, r.production_line) =>
+             parse_br_float(r.storage_limit) for r in eachrow(df_limit))
 
-# Demanda: inicializa com 0 e preenche com os pedidos reais
-eta = Dict((i,p,l,t) => 0.0 for i in I, p in P, l in L_p[p], t in T)
+# Demanda: inicializa com 0 para cobrir combinacoes sem pedido no CSV
+eta = Dict{Tuple{Any,Any,Any,Int}, Float64}()
+for i in I, p in P, l in L_p[p], t in T
+    eta[(i, p, l, t)] = 0.0
+end
 for r in eachrow(df_need)
     t = extrair_dia(string(r.deadline))
     chave = (r.product_id, r.plant, r.production_line, t)
@@ -641,12 +819,12 @@ end
 \end{mdframed}
 
 \begin{mdframed}[style=destaque]
-\textbf{\color{ballblue}Por que inicializar \texttt{eta} com zeros antes?}
-O CSV de demanda s\'{o} cont\'{e}m linhas onde h\'{a} pedidos.
-Se uma combina\c{c}\~{a}o $(i,p,l,t)$ n\~{a}o aparece no CSV, a demanda \'{e} zero.
-Inicializar com zeros garante que \texttt{eta} existe para todos os \'{i}ndices
-necess\'{a}rios na restri\c{c}\~{a}o R3, sem erros de chave ausente.
-O \texttt{+=} permite acumular m\'{u}ltiplos pedidos no mesmo dia.
+\textbf{\color{ballblue}Por que \texttt{parse\_br\_float} em todos os par\^{a}metros?}
+A vers\~{a}o anterior s\'{o} convertia a coluna \texttt{prod\_need}.
+Os campos \texttt{production\_cost}, \texttt{inventory\_cost}, \texttt{custo\_total\_frete}
+e \texttt{storage\_limit} tamb\'{e}m podem usar v\'{i}rgula decimal nos CSVs brasileiros.
+Sem a convers\~{a}o, esses valores seriam lidos como \texttt{String} e causariam erros
+silenciosos ou crash na montagem do modelo.
 \end{mdframed}
 
 % ── 9.5 ─────────────────────────────────────────────────────────────────────
@@ -678,19 +856,23 @@ O \texttt{>= 0} implementa R9 automaticamente.
 \end{mdframed}
 
 % ── 9.6 ─────────────────────────────────────────────────────────────────────
-\subsection*{9.6 Fun\c{c}\~{a}o objetivo}
+\subsection*{9.6 Fun\c{c}\~{a}o objetivo (com $\mathcal{C}$ expl\'{i}cito)}
 
 \begin{mdframed}[style=codigo]
 \begin{lstlisting}
 @objective(modelo, Min,
-    sum(k[i,p,l] * x[i,p,l,t]
+    # Producao: so triplas em C contribuem
+    sum(k[(i,p,l)] * x[i,p,l,t]
         for p in P, l in L_p[p], i in I, t in T
-        if haskey(k,(i,p,l))) +
-    sum(v[i,p,l] * e[i,p,l,t]
+        if (i,p,l) in C) +
+    # Estoque: todos os armazens
+    sum(v[(i,p,l)] * e[i,p,l,t]
         for p in P, l in L_p[p], i in I, t in T
         if haskey(v,(i,p,l))) +
-    sum(ct[o,d] * (f[i,o,d,t] / 200_000)
+    # Logistica: custo por caminhao
+    sum(ct[(o,d)] * (f[i,o,d,t] / 200_000)
         for i in I, o in P, d in P, t in T if o != d) +
+    # Big-M: penalidade por venda perdida
     sum(1_000_000 * w[i,p,l,t]
         for p in P, l in L_p[p], i in I, t in T)
 )
@@ -698,12 +880,13 @@ O \texttt{>= 0} implementa R9 automaticamente.
 \end{mdframed}
 
 \begin{mdframed}[style=destaque]
-\textbf{\color{ballblue}O \texttt{if haskey} e o Big-$M$:}
-O \texttt{if haskey(k,(i,p,l))} implementa o conjunto $\mathcal{C}$: s\'{o} pares
-$(i,p,l)$ que existem no dicion\'{a}rio $k$ (ou seja, que t\^{e}m custo cadastrado)
-entram na soma de produ\c{c}\~{a}o. Pares fora de $\mathcal{C}$ simplesmente n\~{a}o
-aparecem na fun\c{c}\~{a}o objetivo.
-O valor \texttt{1\_000\_000} \'{e} o Big-$M$ --- a penalidade por lata n\~{a}o entregue.
+\textbf{\color{ballblue}Conjunto $\mathcal{C}$ vs \texttt{haskey}:}
+A vers\~{a}o anterior usava \texttt{haskey(k,(i,p,l))} como proxy para $\mathcal{C}$.
+O c\'{o}digo correto usa \texttt{(i,p,l) in C}, onde $C$ foi constru\'{i}do
+explicitamente comparando formatos. Isso \'{e} mais correto: um par $(i,p,l)$ pode
+existir no dicion\'{a}rio $k$ sem ser compat\'{i}vel em formato.
+O Big-$M = 10^6$ garante que $w$ s\'{o} \'{e} acionado quando a f\'{a}brica esgota
+toda capacidade f\'{i}sica.
 \end{mdframed}
 
 % ── 9.7 ─────────────────────────────────────────────────────────────────────
@@ -711,43 +894,43 @@ O valor \texttt{1\_000\_000} \'{e} o Big-$M$ --- a penalidade por lata n\~{a}o e
 
 \begin{mdframed}[style=codigo]
 \begin{lstlisting}
-# R1: limite de armazenagem
+# R1: limite de armazenagem (espaco compartilhado entre SKUs)
 @constraint(modelo, R1[p in P, l in L_p[p], t in T],
     sum(e[i,p,l,t] for i in I) <= e_max[(p,l)])
 
-# R2: balanco de estoque (e[...,0] = 0 pelo condicional)
+# R2: balanco de estoque (e[t=0] = 0 via operador ternario)
 @constraint(modelo, R2[i in I, p in P, l in L_p[p], t in T],
     e[i,p,l,t] == (t == 1 ? 0.0 : e[i,p,l,t-1]) +
                   x[i,p,l,t] + g[i,p,l,t] - s[i,p,l,t] - a[i,p,l,t])
 
-# R3: atendimento a demanda com folga w
+# R3: atendimento a demanda com fator de escalonamento
 @constraint(modelo, R3[i in I, p in P, l in L_p[p], t in T],
     a[i,p,l,t] + w[i,p,l,t] == eta[(i,p,l,t)] * fator_demanda)
 
-# R4: capacidade produtiva (so conta SKUs compativeis)
+# R4: capacidade produtiva (planta quebrada => limite 0h)
 @constraint(modelo, R4[p in P, l in L_p[p], t in T],
     sum(x[i,p,l,t] / r_taxa[(p,l,t)]
-        for i in I if haskey(k,(i,p,l)) && r_taxa[(p,l,t)] > 0) <=
+        for i in I if (i,p,l) in C && r_taxa[(p,l,t)] > 0) <=
     (p == fabrica_quebrada ? 0.0 : 24.0))
 
-# R5: capacidade logistica de saida
+# R5: caminhoes de saida por planta por dia
 @constraint(modelo, R5[p in P, t in T],
     sum(f[i,p,d,t] / 200_000
         for i in I, d in P if d != p) <= limite_caminhoes)
 
-# R6: doca de entrada (f chegando -> g distribuindo)
+# R6: doca de ENTRADA (frete chegando -> g redistribuindo pelas linhas)
 @constraint(modelo, R6[i in I, p in P, t in T],
     sum(g[i,p,l,t] for l in L_p[p]) ==
     sum(f[i,o,p,t] for o in P if o != p))
 
-# R7: doca de saida (s coletando -> f saindo)
+# R7: doca de SAIDA (s coletando das linhas -> frete saindo)
 @constraint(modelo, R7[i in I, p in P, t in T],
     sum(s[i,p,l,t] for l in L_p[p]) ==
     sum(f[i,p,d,t] for d in P if d != p))
 
-# R8: capabilidade de formato
+# R8: capabilidade de formato (usa conjunto C, nao haskey)
 @constraint(modelo, R8[i in I, p in P, l in L_p[p], t in T;
-                       !haskey(k,(i,p,l))],
+                        (i,p,l) not-in C],
     x[i,p,l,t] == 0)
 \end{lstlisting}
 \end{mdframed}
@@ -755,14 +938,18 @@ O valor \texttt{1\_000\_000} \'{e} o Big-$M$ --- a penalidade por lata n\~{a}o e
 \begin{mdframed}[style=destaque]
 \textbf{\color{ballblue}Notas sobre as restri\c{c}\~{o}es:}
 \begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-  \item \textbf{R2 com \texttt{t == 1}:} o operador tern\'{a}rio \texttt{(t == 1 ? 0.0 : e[...])}
-    implementa a condi\c{c}\~{a}o inicial $e^0 = 0$ sem precisar separar em dois blocos.
-  \item \textbf{R4 com fábrica quebrada:} o \texttt{p == fabrica\_quebrada ? 0.0 : 24.0}
-    reduz o limite de horas para zero, desligando completamente a planta escolhida
-    no Painel de Controle.
-  \item \textbf{R8 com \texttt{!haskey}:} se a chave $(i,p,l)$ n\~{a}o existe no dicion\'{a}rio
-    $k$ (ou seja, $(i,p,l) \notin \mathcal{C}$), a produ\c{c}\~{a}o \'{e} for\c{c}ada a zero.
-    Isso implementa a capabilidade de formato diretamente pela aus\^{e}ncia de dados.
+  \item \textbf{R2 com \texttt{t == 1}:} o operador tern\'{a}rio implementa $e^0 = 0$
+    sem separar em dois blocos de constraint.
+  \item \textbf{R4 com \texttt{(i,p,l) in C}:} a vers\~{a}o anterior usava
+    \texttt{haskey(k,(i,p,l))}. O c\'{o}digo correto usa o conjunto $\mathcal{C}$
+    expl\'{i}cito baseado em formato.
+  \item \textbf{R4 planta quebrada:} \texttt{p == fabrica\_quebrada ? 0.0 : 24.0}
+    zera o limite de horas da planta, desligando-a completamente.
+  \item \textbf{R6 = entrada, R7 = sa\'{i}da:} os r\'{o}tulos est\~{a}o alinhados
+    com o c\'{o}digo Julia. R6 redistribui o frete recebido ($f \to g$);
+    R7 coleta o frete a expedir ($s \to f$).
+  \item \textbf{R8 com $\mathcal{C}$:} \texttt{(i,p,l) \ensuremath{\notin} C}
+    filtra as vari\'{a}veis que devem ser for\c{c}adas a zero por incompatibilidade de formato.
 \end{itemize}
 \end{mdframed}
 

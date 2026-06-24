@@ -2,219 +2,414 @@ using JuMP
 using Gurobi
 using CSV
 using DataFrames
+using Printf
+using Dates
 
 # ==============================================================================
-# 1. FUNÇÃO DE LIMPEZA DE DADOS (O problema da vírgula)
+# ██████████████████████████████████████████████████████████████████████████████
+#                    PAINEL DE CONTROLE
+#  Altere aqui antes de rodar. O script vai rodar todos os 21 cenários
+#  (ocupacao_50 até ocupacao_150) com essa configuração fixa.
+# ██████████████████████████████████████████████████████████████████████████████
 # ==============================================================================
-# Converte as strings com vírgula do padrão brasileiro para Float no Julia
-function parse_br_float(val)
-    if ismissing(val) || val == "" 
-        return 0.0 
-    end
-    return parse(Float64, replace(String(val), "," => "."))
-end
+
+fabrica_quebrada = "Nenhuma"   # "Nenhuma" | "Extrema" | "Jacarei" | qualquer planta
+limite_caminhoes = 80          # 80 (normal) | 40 (greve parcial) | 10 (colapso logístico)
+fator_demanda    = 1.0         # 1.0 (normal) | 1.5 (+50%) | 2.0 (dobra) | 3.0 (caos)
 
 # ==============================================================================
-# 2. CONFIGURAÇÃO DOS CENÁRIOS E VARIÁVEIS GLOBAIS
+# AMBIENTE GUROBI (Criado apenas uma vez para evitar vazamento de memória)
+# ==============================================================================
+const GRB_ENV = Gurobi.Env()
+
+# ==============================================================================
+# CONFIGURAÇÃO DE CAMINHOS
 # ==============================================================================
 caminho_base = "C:\\Unifesp\\Programação Linear\\Trabalho Programação Linear\\Dados\\"
 
-# O custo logístico é global (físico), lemos fora do laço!
-df_log = CSV.read(caminho_base * "input_logistic_costs_artificial.csv", DataFrame)
+CENARIOS = ["50","55","60","65","70","75","80","85","90",
+            "95","100","105","110","115","120","125","130",
+            "135","140","145","150"]
 
+# ==============================================================================
+# FUNÇÕES AUXILIARES
+# ==============================================================================
 
-# Iterando de 50% a 150% com passo de 5%
-cenarios = ["50", "55", "60", "65", "70", "75", "80", "85", "90", 
-            "95", "100", "105", "110", "115", "120", "125", "130", 
-            "135", "140", "145", "150"]
-
-resultados_custo = []
-
-for cenario in cenarios
-    println("\n==================================================")
-    println("Montando e Resolvendo Cenário: ", cenario)
+# Converte número brasileiro "1.234,56" para Float64 1234.56
+# Aceita também valores que já vieram como Float64 ou Int do CSV
+function parse_br_float(val)
+    ismissing(val) && return 0.0
+    val isa Number && return Float64(val)
+    s = strip(string(val))
+    s == "" && return 0.0
     
-    # --------------------------------------------------------------------------
-    # 3. LEITURA DOS DADOS DO CENÁRIO ATUAL
-    # --------------------------------------------------------------------------
-    # Ajuste o caminho conforme as pastas do seu computador
-    caminho_pasta = "C:\\Unifesp\\Programação Linear\\Trabalho Programação Linear\\Dados\\ocupacao_" * cenario * "\\"
+    # Se tem vírgula, é formato BR garantido
+    if occursin(",", s)
+        s = replace(s, "." => "")  # Tira os milhares
+        s = replace(s, "," => ".") # Vírgula vira decimal
+    else
+        # Se só tem ponto, verifica se é uma exportação de milhar do Excel (ex: 120.000)
+        partes = split(s, ".")
+        if length(partes) == 2 && length(partes[2]) == 3
+            s = replace(s, "." => "") # Remove o ponto falso
+        end
+    end
+    return parse(Float64, s)
+end
+
+# Barra de progresso simples no terminal
+function progresso(atual, total, label="")
+    pct    = round(Int, atual / total * 100)
+    blocos = round(Int, pct / 5)
+    barra  = "█"^blocos * "░"^(20 - blocos)
+    print("\r  [$barra] $pct%  $label")
+    atual == total && println()
+end
+
+# Formata número com separador de milhar manualmente (Julia nao tem %,f)
+function fmt_real(x::Real)
+    isnan(x) && return "           ---"
+    s = @sprintf("%.2f", abs(x))
+    partes = split(s, ".")
+    inteiro = partes[1]
+    decimal = partes[2]
     
-    df_need  = CSV.read(caminho_pasta * "input_production_need_artificial.csv", DataFrame)
-    df_rate  = CSV.read(caminho_pasta * "input_production_rate_artificial.csv", DataFrame)
-    df_costs = CSV.read(caminho_pasta * "input_sku_costs_artificial.csv", DataFrame) # (Se houver)
+    # Faz a separação de milhares com segurança (da direita para a esquerda)
+    chars = collect(inteiro)
+    resultado = ""
+    for (j, c) in enumerate(reverse(chars))
+        j > 1 && j % 3 == 1 && (resultado = "." * resultado)
+        resultado = string(c) * resultado
+    end
+    
+    x < 0 && (resultado = "-" * resultado)
+    return @sprintf("%14s", resultado * "," * decimal)
+end
+
+# ==============================================================================
+# FUNÇÃO PRINCIPAL: monta e resolve um cenário
+# ==============================================================================
+
+function resolver_cenario(cenario, fabrica_quebrada, limite_caminhoes, fator_demanda, df_log)
+
+    caminho_pasta = caminho_base * "ocupacao_" * cenario * "\\"
+
+    # ── Leitura dos dados ────────────────────────────────────────────────────
+    df_need  = CSV.read(caminho_pasta * "input_production_need_artificial.csv",    DataFrame)
+    df_rate  = CSV.read(caminho_pasta * "input_production_rate_artificial.csv",    DataFrame)
+    df_costs = CSV.read(caminho_pasta * "input_sku_costs_artificial.csv",          DataFrame)
     df_limit = CSV.read(caminho_pasta * "input_line_storage_limit_artificial.csv", DataFrame)
 
-    # Tratamento da vírgula na demanda
+    # ── Mapeamento Cronológico do Tempo (Regra do Documento 11) ──────────────
+    # Extrai datas limpas (sem hora) de ambas as tabelas
+    datas_demanda = [split(string(d), " ")[1] for d in df_need.deadline if !ismissing(d)]
+    datas_taxa    = [split(string(d), " ")[1] for d in df_rate.ref_date if !ismissing(d)]
+    
+    # Une, remove duplicatas e ordena do dia mais antigo para o mais novo
+    datas_unicas = sort(unique(vcat(datas_demanda, datas_taxa)))
+    
+    # Cria o dicionário: "2026-12-01" -> 1, "2026-12-02" -> 2...
+    mapa_tempo = Dict(data => t for (t, data) in enumerate(datas_unicas))
+    
+    # Função local para converter a data usando o mapa
+    function get_t(data_str)
+        d_limpa = split(string(data_str), " ")[1]
+        return get(mapa_tempo, d_limpa, -1)
+    end
+
+    # Conversão de formato brasileiro para todos os campos numéricos relevantes
     df_need.prod_need = parse_br_float.(df_need.prod_need)
 
-    # --------------------------------------------------------------------------
-    # 4. EXTRAÇÃO DOS CONJUNTOS (Substitua pela sua lógica de extração)
-    # --------------------------------------------------------------------------
-    I = unique(df_need.product_id)         # SKUs
-    P = unique(df_rate.plant)              # Plantas
-    T = 1:15                               # Horizonte de 15 dias
-    
-    # Dicionário mapeando as linhas l contidas em cada planta p (L_p)
-    # Exemplo: L_p["Jacarei"] = ["JAC_L1", "JAC_L2", "JAC_L3"]
-    L_p = Dict(p => unique(df_rate[df_rate.plant .== p, :production_line]) for p in P)
+    # ── Conjuntos (Baseados na estrutura, não na demanda/taxa) ───────────────
+    P   = unique(df_rate.plant)
+    T   = 1:15
+    L_p = Dict(p => unique(df_limit[df_limit.plant .== p, :production_line]) for p in P)
+    I   = unique(df_costs.product_id)
 
-    # OBS: Crie aqui os dicionários de parâmetros (eta, r, k, v, ct, e_max) 
-    # a partir dos DataFrames filtrados para usar nas equações abaixo.
-    
+    # ── Parâmetros ───────────────────────────────────────────────────────────
+    k     = Dict((r.product_id, r.plant, r.production_line) => parse_br_float(r.production_cost) for r in eachrow(df_costs))
+    v     = Dict((r.product_id, r.plant, r.production_line) => parse_br_float(r.inventory_cost) for r in eachrow(df_costs))
+    ct    = Dict((r.origem, r.destino) => parse_br_float(r.custo_total_frete) for r in eachrow(df_log))
+    e_max = Dict((r.plant, r.production_line) => parse_br_float(r.storage_limit) for r in eachrow(df_limit))
 
-# --------------------------------------------------------------------------
-    # 4.B CRIANDO OS DICIONÁRIOS DE PARÂMETROS
-    # --------------------------------------------------------------------------
-    
-    # 1. Custos de Produção (k) e Estoque (v)
-    k = Dict()
-    v = Dict()
-    for linha in eachrow(df_costs)
-        k[(linha.product_id, linha.plant, linha.production_line)] = linha.production_cost
-        v[(linha.product_id, linha.plant, linha.production_line)] = linha.inventory_cost
+    # Demanda (Processamento rápido com get() fallback)
+    eta = Dict{Tuple{Any,Any,Any,Int}, Float64}()
+    for r in eachrow(df_need)
+        t     = extrair_dia(r.deadline)
+        chave = (r.product_id, r.plant, r.production_line, t)
+        eta[chave] = get(eta, chave, 0.0) + r.prod_need
     end
 
-    # 2. Custo Logístico de Frete (ct)
-    ct = Dict()
-    for linha in eachrow(df_log)
-        ct[(linha.origem, linha.destino)] = linha.custo_total_frete
-    end
-    
-    # 3. Limite de Armazém (e_max)
-    e_max = Dict()
-    for linha in eachrow(df_limit)
-        e_max[(linha.plant, linha.production_line)] = linha.storage_limit
+    # Taxa de produção
+    r_taxa = Dict{Tuple{Any,Any,Int}, Float64}()
+    for r in eachrow(df_rate)
+        t = extrair_dia(r.ref_date)
+        r_taxa[(r.plant, r.production_line, t)] = parse_br_float(r.rate)
     end
 
-    # 4. Demanda do Cliente (eta)
-    eta = Dict()
-    # Primeiro preenchemos com 0.0 usando laços aninhados seguros
-    for i in I
-        for p in P
-            for l in L_p[p]
-                for t in T
-                    eta[(i, p, l, t)] = 0.0
-                end
-            end
+    # Conjunto C (Capabilidade): Blindado contra erros de digitação nos CSVs
+    formatos_da_linha = Dict(r.production_line => strip(lowercase(string(r.sku_size_shape))) for r in eachrow(df_rate))
+    formato_do_sku    = Dict(r.product_id => strip(lowercase(string(r.sku_size_shape))) for r in eachrow(df_need))
+
+    C = Set{Tuple{Any, Any, Any}}()
+    for i in I, p in P, l in L_p[p]
+        if get(formato_do_sku, i, "none_sku") == get(formatos_da_linha, l, "none_line")
+            push!(C, (i, p, l))
         end
     end
-    
-    # AGORA SIM: Lemos o CSV e colocamos os pedidos reais!
-    for linha in eachrow(df_need)
-        dia_str = string(linha.deadline)[9:10]
-        t = parse(Int, dia_str) 
-        eta[(linha.product_id, linha.plant, linha.production_line, t)] += linha.prod_need
-    end
 
-    # 5. Taxas de Produção da Máquina (r)
-    r = Dict()
-    # Primeiro preenchemos com 0.0 usando laços aninhados seguros
-    for p in P
-        for l in L_p[p]
-            for t in T
-                r[(p, l, t)] = 0.0
-            end
-        end
-    end
-    
-    # AGORA SIM: Lemos o CSV e colocamos a velocidade real das máquinas!
-    for linha in eachrow(df_rate)
-        dia_str = string(linha.ref_date)[9:10]
-        t = parse(Int, dia_str)
-        r[(linha.plant, linha.production_line, t)] = linha.rate
-    end
+    # ── Modelo ───────────────────────────────────────────────────────────────
+    # Instancia associada ao GRB_ENV global para evitar recriar ambiente e economizar RAM
+    modelo = Model(() -> Gurobi.Optimizer(GRB_ENV))
+    set_silent(modelo)
 
-    # --------------------------------------------------------------------------
-    # 5. INICIALIZAÇÃO DO MODELO GUROBI
-    # --------------------------------------------------------------------------
-    modelo = Model(Gurobi.Optimizer)
-    # set_silent(modelo) # Descomente se não quiser ver o log do Gurobi na tela
-    
-    # --------------------------------------------------------------------------
-    # 6. VARIÁVEIS DE DECISÃO
-    # --------------------------------------------------------------------------
     @variable(modelo, x[i in I, p in P, l in L_p[p], t in T] >= 0)
     @variable(modelo, e[i in I, p in P, l in L_p[p], t in T] >= 0)
     @variable(modelo, a[i in I, p in P, l in L_p[p], t in T] >= 0)
     @variable(modelo, f[i in I, o in P, d in P, t in T; o != d] >= 0)
     @variable(modelo, g[i in I, p in P, l in L_p[p], t in T] >= 0)
     @variable(modelo, s[i in I, p in P, l in L_p[p], t in T] >= 0)
- 
+    @variable(modelo, w[i in I, p in P, l in L_p[p], t in T] >= 0)
+    @variable(modelo, b[i in I, p in P, l in L_p[p], t in T] >= 0) # <--- NOVA VARIÁVEL
 
-    # Regra Crítica: Produção = 0 se o formato da linha não for compatível com o SKU
-    # (Adicione um laço if verificando o conjunto C e force fix_value(x[i,p,l,t], 0))
-
-    # --------------------------------------------------------------------------
-    # 7. FUNÇÃO OBJETIVO
-    # --------------------------------------------------------------------------
+    # ── Função objetivo (Protegida contra KeyErrors com punição para rotas irreais) ───
     @objective(modelo, Min,
-        sum(k[i,p,l] * x[i,p,l,t] for p in P, l in L_p[p], i in I, t in T) +
-        sum(v[i,p,l] * e[i,p,l,t] for p in P, l in L_p[p], i in I, t in T) +
-        sum(ct[o,d] * (f[i,o,d,t] / 200000) for i in I, o in P, d in P, t in T if o != d) 
+        sum(get(k, (i,p,l), 9999.0) * x[i,p,l,t]
+            for p in P for l in L_p[p] for i in I for t in T if (i,p,l) ∈ C) +
+        sum(get(v, (i,p,l), 9999.0) * e[i,p,l,t]
+            for p in P for l in L_p[p] for i in I for t in T) +
+        sum(get(ct, (o,d), 999999.0) * (f[i,o,d,t] / 200_000)
+            for i in I for o in P for d in P for t in T if o != d) +
+        sum(50_000 * b[i,p,l,t]     # <--- MULTA POR DIA DE ATRASO
+            for p in P for l in L_p[p] for i in I for t in T) +
+        sum(1_000_000 * w[i,p,l,t]  # <--- CANCELAMENTO ABSOLUTO
+            for p in P for l in L_p[p] for i in I for t in T)
     )
-    # --------------------------------------------------------------------------
-    # 8. RESTRIÇÕES DO SISTEMA (Baseado na Formulação Compacta)
-    # --------------------------------------------------------------------------
-    # R1 - Limite de Armazenagem da Linha
+    # ── Restrições ───────────────────────────────────────────────────────────
+
+    # R1: limite de armazenagem (espaço compartilhado entre SKUs)
     @constraint(modelo, R1[p in P, l in L_p[p], t in T],
-        sum(e[i,p,l,t] for i in I) <= e_max[p,l]
+        sum(e[i,p,l,t] for i in I) <= get(e_max, (p,l), 0.0)
     )
 
-    #R2 - Balanço de Estoque (com condição inicial do armazém vazio)
+   # ── Parâmetro Extra: Estoque Inicial (Warm-up) ───────────────────────────
+    # Assumimos que o armazém começa com 30% da sua capacidade máxima preenchida,
+    # distribuída igualmente entre os SKUs que a linha sabe produzir.
+    e0 = Dict{Tuple{Any, Any, Any}, Float64}()
+    for p in P, l in L_p[p]
+        skus_compativeis = [i for i in I if (i,p,l) ∈ C]
+        num_skus = max(1, length(skus_compativeis))
+        cap_linha = get(e_max, (p,l), 0.0)
+        
+        for i in I
+            if i in skus_compativeis
+                e0[(i,p,l)] = (cap_linha * 0.30) / num_skus
+            else
+                e0[(i,p,l)] = 0.0
+            end
+        end
+    end
+
+    # ... (mantenha a declaração de variáveis e Função Objetivo que você já tem) ...
+
+    # R2: balanço de estoque (com o choque inicial amortecido por e0)
     @constraint(modelo, R2[i in I, p in P, l in L_p[p], t in T],
-        e[i,p,l,t] == (t == 1 ? 0.0 : e[i,p,l,t-1]) + x[i,p,l,t] + g[i,p,l,t] - s[i,p,l,t] - a[i,p,l,t]
+        e[i,p,l,t] == (t == 1 ? e0[(i,p,l)] : e[i,p,l,t-1]) +
+                      x[i,p,l,t] + g[i,p,l,t] - s[i,p,l,t] - a[i,p,l,t]
     )
 
-    # R3 - Atendimento à Demanda (com folga de capacidade)
+    # R3: atendimento à demanda com fator de escalonamento e atraso permitido
     @constraint(modelo, R3[i in I, p in P, l in L_p[p], t in T],
-        a[i,p,l,t] >= eta[i,p,l,t] # AQUI MUDOU PARA ==
+        a[i,p,l,t] + b[i,p,l,t] + w[i,p,l,t] == 
+        get(eta, (i,p,l,t), 0.0) * fator_demanda + (t == 1 ? 0.0 : b[i,p,l,t-1])
     )
 
-    # R4 - Capacidade Produtiva (24 horas)
+    # R4: capacidade produtiva (planta quebrada => limite 0h)
     @constraint(modelo, R4[p in P, l in L_p[p], t in T],
-        # Só soma se a taxa de produção (r) existir e for maior que zero para blindar divisão por zero
-        sum(x[i,p,l,t] / r[p,l,t] for i in I if r[p,l,t] > 0) <= 24
+        sum(x[i,p,l,t] / get(r_taxa, (p,l,t), 0.001)
+            for i in I if (i,p,l) ∈ C && get(r_taxa, (p,l,t), 0.0) > 0) <=
+        (p == fabrica_quebrada ? 0.0 : 24.0)
     )
 
-    # R5 - Capacidade Logística de Expedição (80 caminhões)
+    # R5: capacidade logística de saída por planta
     @constraint(modelo, R5[p in P, t in T],
-        sum(f[i,p,d,t] / 200000 for i in I, d in P if d != p) <= 80
+        sum(f[i,p,d,t] / 200_000 for i in I, d in P if d != p) <= limite_caminhoes
     )
 
-    # R7 - Transbordo na Doca de Entrada
-    @constraint(modelo, R7[i in I, p in P, t in T],
+    # R6: doca de ENTRADA — o que chega de frete é redistribuído entre as linhas (via g)
+    @constraint(modelo, R6[i in I, p in P, t in T],
         sum(g[i,p,l,t] for l in L_p[p]) == sum(f[i,o,p,t] for o in P if o != p)
     )
 
-    # R8 - Capabilidade (Impede produção incompatível com o formato da planta)
-    # A função !haskey(k, (i,p,l)) significa: "Se a chave (i,p,l) NÃO existe no dicionário k"
-    @constraint(modelo, R8[i in I, p in P, l in L_p[p], t in T; !haskey(k, (i,p,l))],
+    # R7: doca de SAÍDA — o que as linhas enviam ao pátio (via s) é carregado nos caminhões
+    @constraint(modelo, R7[i in I, p in P, t in T],
+        sum(s[i,p,l,t] for l in L_p[p]) == sum(f[i,p,d,t] for d in P if d != p)
+    )
+
+    # R8: capabilidade de formato — produção fora de C é zero
+    @constraint(modelo, R8[i in I, p in P, l in L_p[p], t in T; (i,p,l) ∉ C],
         x[i,p,l,t] == 0
     )
 
-    # --------------------------------------------------------------------------
-    # 9. SOLUÇÃO E OUTPUT
-    # --------------------------------------------------------------------------
- # --------------------------------------------------------------------------
-    # 9. SOLUÇÃO E OUTPUT (O Relatório da Diretoria)
-    # --------------------------------------------------------------------------
+    # ── Otimização ───────────────────────────────────────────────────────────
     optimize!(modelo)
     status = termination_status(modelo)
-    
-    if status == MOI.OPTIMAL
-        custo_final = objective_value(modelo)
-        println("✓ Solução ótima encontrada para o cenário de ", cenario, "%")
-        println("  Custo Total: R\$ $(round(custo_final, digits=2))")
-        println("  ✓ ATENDIMENTO: 100% dos pedidos entregues no prazo!")
-        
-        # Pode manter aqui o seu laço de impressão dos caminhões f...
-        
-    elseif status == MOI.INFEASIBLE
-        println("\n✗ ALERTA FATAL: INFEASIBLE no cenário de ", cenario, "%")
-        println("  A matemática provou que é fisicamente impossível atender essa demanda.")
-        println("  Motivo: A restrição R4 (24 horas) travou a produção, não gerou estoque suficiente (R2), e falhou em cumprir a exigência cega da R3.")
-    else
-        println("Status inexperado: ", status)
+
+    if status ∉ (MOI.OPTIMAL, MOI.FEASIBLE_POINT)
+        # Limpeza forçada antes do return prematuro
+        empty!(modelo)
+        GC.gc()
+        return (
+            cenario          = cenario,
+            status           = string(status),
+            custo_producao   = NaN, custo_estoque    = NaN,
+            custo_logistica  = NaN, custo_penalidade = NaN,
+            custo_total      = NaN, demanda_total    = NaN,
+            atendido         = NaN, nao_atendido     = NaN,
+            taxa_atendimento = NaN, caminhoes        = NaN,
+        )
     end
+
+# ── Métricas ─────────────────────────────────────────────────────────────
+    total_w    = sum(value(w[i,p,l,t]) for p in P for l in L_p[p] for i in I for t in T)
+    total_a    = sum(value(a[i,p,l,t]) for p in P for l in L_p[p] for i in I for t in T)
+    total_b    = sum(value(b[i,p,l,t]) for p in P for l in L_p[p] for i in I for t in T) # <--- CAPTURA O ATRASO
+    
+    custo_pen_w = total_w * 1_000_000
+    custo_pen_b = total_b * 50_000 # <--- CUSTO DO ATRASO
+    
+    custo_prod = sum(get(k, (i,p,l), 0.0) * value(x[i,p,l,t])
+                     for p in P for l in L_p[p] for i in I for t in T if (i,p,l) ∈ C)
+    custo_est  = sum(get(v, (i,p,l), 0.0) * value(e[i,p,l,t])
+                     for p in P for l in L_p[p] for i in I for t in T)
+    custo_log  = sum(get(ct, (o,d), 0.0) * value(f[i,o,d,t]) / 200_000
+                     for i in I for o in P for d in P for t in T if o != d)
+    caminhoes  = sum(value(f[i,o,d,t]) / 200_000
+                     for i in I for o in P for d in P for t in T if o != d)
+    
+    taxa       = (total_a + total_b + total_w) > 0 ? total_a / (total_a + total_b + total_w) * 100 : 100.0
+    obj_val    = objective_value(modelo)
+
+    # Limpeza de Memória
+    empty!(modelo)
+    GC.gc()
+
+    return (
+        cenario          = cenario,
+        status           = "OPTIMAL",
+        custo_producao   = round(custo_prod,              digits=2),
+        custo_estoque    = round(custo_est,               digits=2),
+        custo_logistica  = round(custo_log,               digits=2),
+        custo_atraso     = round(custo_pen_b,             digits=2), # <--- NOVO
+        custo_multa_w    = round(custo_pen_w,             digits=2), # <--- ATUALIZADO
+        custo_total      = round(obj_val,                 digits=2),
+        demanda_total    = round(total_a + total_b + total_w, digits=0),
+        atendido         = round(total_a,                 digits=0),
+        nao_atendido     = round(total_w,                 digits=0),
+        latas_atrasadas  = round(total_b,                 digits=0), # <--- NOVO
+        taxa_atendimento = round(taxa,                    digits=2),
+        caminhoes        = round(caminhoes,               digits=1),
+    )
 end
+
+
+# ==============================================================================
+# OUTPUT NO TERMINAL
+# ==============================================================================
+
+function sep(c="─", n=100) println(c^n) end
+
+function imprimir_painel(fab, lim, fator)
+    println()
+    sep("═")
+    println("  BALL CORPORATION — ANÁLISE DE SENSIBILIDADE")
+    println("  Rodado em: $(Dates.format(now(), "dd/mm/yyyy HH:MM"))")
+    sep("─")
+    println("  CONFIGURAÇÃO DO PAINEL:")
+    println("    Fator de demanda  : $(fator)x  $(fator > 1.0 ? "($(round(Int, fator*100))% da demanda original)" : "(normal)")")
+    println("    Fábrica quebrada  : $fab")
+    println("    Limite caminhões  : $lim caminhões/dia/planta")
+    sep("═")
+end
+
+function imprimir_tabela(resultados)
+    println()
+    @printf("  %-9s  %-14s  %-14s  %-14s  %-14s  %-14s  %-11s\n",
+        "Cenário", "Custo Prod.", "Custo Estq.", "Custo Log.", "Custo Atraso", "Multa Cancel.", "Atendimento")
+    sep()
+    for r in resultados
+        if r.status == "OPTIMAL"
+            @printf("  ocup_%-4s  %s  %s  %s  %s  %s  %9.2f%%\n",
+                r.cenario,
+                fmt_real(r.custo_producao),
+                fmt_real(r.custo_estoque),
+                fmt_real(r.custo_logistica),
+                fmt_real(r.custo_atraso),
+                fmt_real(r.custo_multa_w),
+                r.taxa_atendimento)
+        else
+            @printf("  ocup_%-4s  %-14s  %-14s  %-14s  %-14s  %-14s  [%s]\n",
+                r.cenario, "---","---","---","---","---", r.status)
+        end
+    end
+    sep()
+
+    # Resumo
+    opts = filter(r -> r.status == "OPTIMAL", resultados)
+    if !isempty(opts)
+        println()
+        println("  RESUMO:")
+        @printf("    Cenários resolvidos    : %d / %d\n", length(opts), length(resultados))
+
+        idx_min = argmin([isnan(r.custo_total) ? Inf  : r.custo_total for r in resultados])
+        idx_max = argmax([isnan(r.custo_total) ? -Inf : r.custo_total for r in resultados])
+        
+        # Totalizando as falhas de serviço
+        total_cancelado = sum(r.nao_atendido for r in opts)
+        total_atrasado  = sum(r.latas_atrasadas for r in opts)
+
+        @printf("    Custo total mínimo     : %s  (ocupacao_%s)\n",
+            fmt_real(minimum(r.custo_total for r in opts)),
+            resultados[idx_min].cenario)
+        @printf("    Custo total máximo     : %s  (ocupacao_%s)\n",
+            fmt_real(maximum(r.custo_total for r in opts)),
+            resultados[idx_max].cenario)
+        @printf("    Taxa de Atendimento    : %.2f%% (min) — %.2f%% (max)\n",
+            minimum(r.taxa_atendimento for r in opts),
+            maximum(r.taxa_atendimento for r in opts))
+        
+        println("    Análise de Nível de Serviço:")
+        @printf("      ↳ Latas Canceladas   : %.0f un\n", total_cancelado)
+        @printf("      ↳ Latas Atrasadas    : %.0f un\n", total_atrasado)
+    end
+    println()
+end
+
+# ==============================================================================
+# EXECUÇÃO
+# ==============================================================================
+
+df_log = CSV.read(caminho_base * "input_logistic_costs_artificial.csv", DataFrame)
+
+imprimir_painel(fabrica_quebrada, limite_caminhoes, fator_demanda)
+
+println("\n  Resolvendo $(length(CENARIOS)) cenários...\n")
+resultados = []
+for (idx, cenario) in enumerate(CENARIOS)
+    progresso(idx, length(CENARIOS), "ocupacao_$cenario")
+    r = resolver_cenario(cenario, fabrica_quebrada, limite_caminhoes, fator_demanda, df_log)
+    push!(resultados, r)
+end
+
+imprimir_tabela(resultados)
+
+# ── Exporta CSV ──────────────────────────────────────────────────────────────
+df_saida = DataFrame(resultados)
+df_saida.fabrica_quebrada .= fabrica_quebrada
+df_saida.limite_caminhoes .= limite_caminhoes
+df_saida.fator_demanda    .= fator_demanda
+
+timestamp    = Dates.format(now(), "yyyymmdd_HHMM")
+nome_arquivo = "resultados_$(fabrica_quebrada)_cam$(limite_caminhoes)_fator$(fator_demanda)_$(timestamp).csv"
+CSV.write(caminho_base * nome_arquivo, df_saida)
+println("  Resultados salvos em: $nome_arquivo\n")
