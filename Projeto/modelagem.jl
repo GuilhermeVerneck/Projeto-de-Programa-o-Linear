@@ -18,10 +18,14 @@ limite_caminhoes = 80         # 80 (normal) | 40 (greve parcial) | 10 (colapso l
 fator_demanda    = 1.0         # 1.0 (normal) | 1.5 (choque +50%) | 2.0 (dobra a demanda) | 3.0 (caos)
                                # Dica: combine fator_demanda=2.0 com cenario ocupacao_100
                                # para simular 200% de ocupação — além dos dados reais!
+ 
+fator_oee      = 1.0 # <--- NOVO: As máquinas rodam a 85% da eficiência (absorve micro-paradas)
 
 # ==============================================================================
 # CONFIGURAÇÃO DE CAMINHOS
 # ==============================================================================
+const GRB_ENV = Gurobi.Env()
+
 caminho_base = "C:\\Unifesp\\Programação Linear\\Trabalho Programação Linear\\Dados\\"
 
 CENARIOS = ["50","55","60","65","70","75","80","85","90",
@@ -42,10 +46,11 @@ function extrair_dia(data_str)
 end
 
 function progresso(atual, total, label="")
-    pct   = round(Int, atual / total * 100)
+    pct    = round(Int, atual / total * 100)
     blocos = round(Int, pct / 5)
     barra  = "█"^blocos * "░"^(20 - blocos)
-    print("\r  [$barra] $pct%  $label")
+    print("\r  [$barra] $pct%  ($atual/$total)  $label          ")
+    flush(stdout)
     atual == total && println()
 end
 
@@ -108,7 +113,7 @@ function resolver_cenario(cenario, fabrica_quebrada, limite_caminhoes, fator_dem
         )
 
         # ── Modelo ───────────────────────────────────────────────────────────────
-        modelo = Model(Gurobi.Optimizer)
+        modelo = Model(() -> Gurobi.Optimizer(GRB_ENV))
         set_silent(modelo)
 
         @variable(modelo, x[i in I, p in P, l in L_p[p], t in T] >= 0)
@@ -149,7 +154,7 @@ function resolver_cenario(cenario, fabrica_quebrada, limite_caminhoes, fator_dem
 
         # R4 – Capacidade produtiva (desliga planta quebrada)
         @constraint(modelo, R4[p in P, l in L_p[p], t in T],
-            sum(x[i,p,l,t] / r_taxa[(p,l,t)]
+            sum(x[i,p,l,t] / (r_taxa[(p,l,t)] * fator_oee)
             for i in I if (i,p,l) ∈ C && r_taxa[(p,l,t)] > 0) <=
             (p == fabrica_quebrada ? 0.0 : 24.0)
         )
@@ -188,7 +193,7 @@ function resolver_cenario(cenario, fabrica_quebrada, limite_caminhoes, fator_dem
         atendido         = NaN, nao_atendido     = NaN,
         taxa_atendimento = NaN, caminhoes        = NaN,
     )
-          
+
     # ── Métricas ─────────────────────────────────────────────────────────────
     total_w = sum(value(w[i,p,l,t]) for p in P for l in L_p[p] for i in I for t in T)
     total_a = sum(value(a[i,p,l,t]) for p in P for l in L_p[p] for i in I for t in T)
@@ -204,6 +209,32 @@ function resolver_cenario(cenario, fabrica_quebrada, limite_caminhoes, fator_dem
     caminhoes  = sum(value(f[i,o,d,t]) / 200_000
                      for i in I for o in P for d in P for t in T if o != d)
     taxa       = total_demanda > 0 ? (total_a / total_demanda) * 100 : 100.0
+    obj_val = objective_value(modelo)
+
+    
+    # ── Export detalhado ─────────────────────────────────────────────────────
+    rows = []
+    for p in P, l in L_p[p], i in I, t in T
+        push!(rows, (
+            cenario    = cenario,
+            plant      = p,
+            linha      = l,
+            produto    = i,
+            periodo    = t,
+            producao   = value(x[i,p,l,t]),
+            estoque    = value(e[i,p,l,t]),
+            atendido   = value(a[i,p,l,t]),
+            nao_atend  = value(w[i,p,l,t]),
+            enviado    = sum(value(f[i,p,d,t]) for d in P if d != p),
+            recebido   = sum(value(f[i,o,p,t]) for o in P if o != p),
+        ))
+    end
+    df_det = DataFrame(rows)
+    CSV.write(caminho_base * "detalhe_ocupacao_$(cenario).csv", df_det)
+
+
+    empty!(modelo)
+    GC.gc()                    
 
     return (
         cenario          = cenario,
@@ -212,7 +243,7 @@ function resolver_cenario(cenario, fabrica_quebrada, limite_caminhoes, fator_dem
         custo_estoque    = round(custo_est,  digits=2),
         custo_logistica  = round(custo_log,  digits=2),
         custo_penalidade = round(custo_pen,  digits=2),
-        custo_total      = round(objective_value(modelo), digits=2),
+        custo_total      = round(obj_val, digits=2),
         demanda_total    = round(total_demanda, digits=0),
         atendido         = round(total_a,   digits=0),
         nao_atendido     = round(total_w,   digits=0),
@@ -228,7 +259,7 @@ end
 
 function sep(c="─", n=100) println(c^n) end
 
-function imprimir_painel(fab, lim, fator)
+function imprimir_painel(fab, lim, fator, oee)
     println()
     sep("═")
     println("  BALL CORPORATION — ANÁLISE DE SENSIBILIDADE")
@@ -236,6 +267,7 @@ function imprimir_painel(fab, lim, fator)
     sep("─")
     println("  CONFIGURAÇÃO DO PAINEL:")
     println("    Fator de demanda  : $(fator)x  $(fator > 1.0 ? "($(round(Int, fator*100))% da demanda original)" : "(normal)")")
+    println("    Eficiência (OEE)  : $(round(Int, oee*100))% da capacidade nominal")
     println("    Fábrica quebrada  : $fab")
     println("    Limite caminhões  : $lim caminhões/dia/planta")
     sep("═")
@@ -284,23 +316,58 @@ function imprimir_tabela(resultados)
     println()
 end
 
+# depois da função imprimir_tabela, antes do bloco EXECUÇÃO
+function imprimir_evolucao(resultados)
+    opts = filter(r -> r.status == "OPTIMAL", resultados)
+    isempty(opts) && return
+
+    println("\n  EVOLUÇÃO ENTRE CENÁRIOS (delta em relação ao anterior):")
+    sep()
+    @printf("  %-9s  %13s  %13s  %13s  %13s  %10s  %9s\n",
+        "Cenário", "Δ CustoProd", "Δ CustoEstq", "Δ CustoLog", "Δ CustoMulta", "Δ Atend%", "Δ Caminhões")
+    sep()
+
+    prev = nothing
+    for r in opts
+        if prev === nothing
+            @printf("  ocup_%-4s  %13.2f  %13.2f  %13.2f  %13.2f  %9.2f%%  %9.1f\n",
+                r.cenario, r.custo_producao, r.custo_estoque,
+                r.custo_logistica, r.custo_penalidade,
+                r.taxa_atendimento, r.caminhoes)
+        else
+            @printf("  ocup_%-4s  %+13.2f  %+13.2f  %+13.2f  %+13.2f  %+9.2f%%  %+9.1f\n",
+                r.cenario,
+                r.custo_producao  - prev.custo_producao,
+                r.custo_estoque   - prev.custo_estoque,
+                r.custo_logistica - prev.custo_logistica,
+                r.custo_penalidade - prev.custo_penalidade,
+                r.taxa_atendimento - prev.taxa_atendimento,
+                r.caminhoes        - prev.caminhoes)
+        end
+        prev = r
+    end
+    sep()
+end
+
+
 # ==============================================================================
 # EXECUÇÃO
 # ==============================================================================
 
 df_log = CSV.read(caminho_base * "input_logistic_costs_artificial.csv", DataFrame)
 
-imprimir_painel(fabrica_quebrada, limite_caminhoes, fator_demanda)
+imprimir_painel(fabrica_quebrada, limite_caminhoes, fator_demanda, fator_oee)
 
 println("\n  Resolvendo $(length(CENARIOS)) cenários...\n")
 resultados = []
 for (idx, cenario) in enumerate(CENARIOS)
-    progresso(idx, length(CENARIOS), "ocupacao_$cenario")
     r = resolver_cenario(cenario, fabrica_quebrada, limite_caminhoes, fator_demanda, df_log)
     push!(resultados, r)
+    progresso(idx, length(CENARIOS), "ocupacao_$cenario")
 end
 
 imprimir_tabela(resultados)
+imprimir_evolucao(resultados)
 
 # ── Exporta CSV ──────────────────────────────────────────────────────────────
 df_saida = DataFrame(resultados)
