@@ -163,8 +163,9 @@ log\'{i}stica e penalidade por demanda n\~{a}o atendida. O modelo \'{e} estritam
 \begin{mdframed}[style=destaque]
   \textbf{\color{ballblue}Conjunto $\mathcal{C}$ --- Capabilidade.}
   Os tr\^{e}s formatos s\~{a}o: \textit{9.1 Oz Sleek}, \textit{12 Oz Standard} e \textit{16 Oz Tall}.
-  Cada planta $p$ opera com exatamente 1 formato. Uma tripla $(i,p,l)$ pertence a $\mathcal{C}$
-  se o formato do SKU $i$ coincide com o formato da planta $p$.
+  Cada \textbf{linha} $l$ opera com exatamente 1 formato, definido no arquivo de taxas
+  (\texttt{sku\_size\_shape} em \texttt{input\_production\_rate}). Uma tripla $(i,p,l)$
+  pertence a $\mathcal{C}$ se o formato do SKU $i$ coincide com o formato da linha $l$.
   Fora de $\mathcal{C}$, a produ\c{c}\~{a}o \'{e} proibida ($x_{i,p,l,t} = 0$ via R8).
   Os $\approx 10\%$ de pedidos incompat\'{i}veis s\~{a}o resolvidos via transfer\^{e}ncia $f_{i,o,d,t}$
   de uma planta apta, seguida de redistribui\c{c}\~{a}o interna $g_{i,p,l,t}$.
@@ -183,8 +184,11 @@ log\'{i}stica e penalidade por demanda n\~{a}o atendida. O modelo \'{e} estritam
 \subsection*{Produ\c{c}\~{a}o \textnormal{\small(\texttt{input\_production\_rate} e \texttt{input\_sku\_costs})}}
 
 \begin{align*}
-  r_{p,l,t}   &: \text{taxa de produ\c{c}\~{a}o da linha } l \in L_p \text{ no dia } t \text{ (latas/hora)} \\
+  r_{p,l,t}   &: \text{taxa nominal de produ\c{c}\~{a}o da linha } l \in L_p \text{ no dia } t \text{ (latas/hora)} \\
                &\quad \text{\small Indexado por linha e dia --- n\~{a}o por SKU. Aus\^{e}ncia de registro implica produ\c{c}\~{a}o proibida.} \\[4pt]
+  \rho        &: \text{efici\^{e}ncia operacional das m\'{a}quinas (OEE), } 0 < \rho \leq 1.
+                  \text{ A taxa \emph{efetiva} \'{e} } r_{p,l,t}\cdot\rho. \text{ Base: } \rho = 1{,}0. \\[4pt]
+  H           &: \text{janela di\'{a}ria de horas-m\'{a}quina por linha. Base: } H = 24\text{ h/dia}. \\[4pt]
   k_{i,p,l}   &: \text{custo de produ\c{c}\~{a}o do SKU } i \text{ na linha } l \in L_p \text{ (R\$/lata)} \\
   v_{i,p,l}   &: \text{custo de estocagem do SKU } i \text{ na linha } l \in L_p \text{ (R\$/lata/dia)}
 \end{align*}
@@ -571,15 +575,20 @@ O solver s\'{o} aciona $w$ quando esgota os 24\,h produtivos de todas as linhas.
 \vspace{8pt}
 
 \begin{mdframed}[style=destaque]
-\textbf{\color{ballblue}R4 --- Capacidade produtiva (turno de 24\,h).}
+\textbf{\color{ballblue}R4 --- Capacidade produtiva (janela de horas-m\'{a}quina).}
 \medskip
 
-A soma das horas consumidas por todos os SKUs na linha $l$ n\~{a}o pode ultrapassar 24\,h.
-O tempo para produzir $x_{i,p,l,t}$ latas \'{e} $x_{i,p,l,t} / r_{p,l,t}$ horas:
+A soma das horas consumidas por todos os SKUs na linha $l$ n\~{a}o pode ultrapassar a
+janela di\'{a}ria $H$. O tempo para produzir $x_{i,p,l,t}$ latas depende da taxa nominal
+$r_{p,l,t}$ ajustada pela efici\^{e}ncia operacional $\rho$ (OEE): a taxa efetiva \'{e}
+$r_{p,l,t}\cdot\rho$, logo o tempo \'{e} $x_{i,p,l,t} / (r_{p,l,t}\cdot\rho)$ horas:
 \[
-  \sum_{i \in I} \frac{x_{i,p,l,t}}{r_{p,l,t}} \;\leq\; 24
+  \sum_{i \in I} \frac{x_{i,p,l,t}}{r_{p,l,t}\cdot\rho} \;\leq\; H_{p}
   \qquad \forall\, p \in P,\; l \in L_p,\; t \in T
 \]
+onde $H_{p} = H = 24$\,h para plantas operacionais e $H_{p} = 0$ quando a planta $p$
+est\'{a} desativada (par\^{a}metro \texttt{fabrica\_quebrada} da an\'{a}lise de
+sensibilidade). Na configura\c{c}\~{a}o base, $\rho = 1{,}0$ e $H_{p} = 24$\,h.
 Para $(i,p,l) \notin \mathcal{C}$, temos $x_{i,p,l,t} = 0$ por R8, logo esses
 termos n\~{a}o contribuem para a soma.
 \end{mdframed}
@@ -671,8 +680,8 @@ Linhas s\'{o} podem produzir SKUs compat\'{i}veis com seu formato:
   &a_{i,p,l,t} + w_{i,p,l,t}
     &&= \eta_{i,p,l,t}
     &&\quad\forall\,i,p,l,t \tag{R3}\\[6pt]
-  &\textstyle\sum_{i} \tfrac{x_{i,p,l,t}}{r_{p,l,t}}
-    &&\leq 24
+  &\textstyle\sum_{i} \tfrac{x_{i,p,l,t}}{r_{p,l,t}\cdot\rho}
+    &&\leq H_{p}
     &&\quad\forall\,p,l,t \tag{R4}\\[6pt]
   &\textstyle\sum_{i,d\neq p} \tfrac{f_{i,p,d,t}}{200{.}000}
     &&\leq 80
@@ -907,9 +916,9 @@ toda capacidade f\'{i}sica.
 @constraint(modelo, R3[i in I, p in P, l in L_p[p], t in T],
     a[i,p,l,t] + w[i,p,l,t] == eta[(i,p,l,t)] * fator_demanda)
 
-# R4: capacidade produtiva (planta quebrada => limite 0h)
+# R4: capacidade produtiva (taxa efetiva = rate * OEE; planta quebrada => 0h)
 @constraint(modelo, R4[p in P, l in L_p[p], t in T],
-    sum(x[i,p,l,t] / r_taxa[(p,l,t)]
+    sum(x[i,p,l,t] / (r_taxa[(p,l,t)] * fator_oee)
         for i in I if (i,p,l) in C && r_taxa[(p,l,t)] > 0) <=
     (p == fabrica_quebrada ? 0.0 : 24.0))
 
@@ -945,6 +954,9 @@ toda capacidade f\'{i}sica.
     expl\'{i}cito baseado em formato.
   \item \textbf{R4 planta quebrada:} \texttt{p == fabrica\_quebrada ? 0.0 : 24.0}
     zera o limite de horas da planta, desligando-a completamente.
+  \item \textbf{R4 efici\^{e}ncia (OEE):} o divisor \texttt{r\_taxa[(p,l,t)] * fator\_oee}
+    aplica a efici\^{e}ncia operacional $\rho$. Com $\rho < 1$, a taxa efetiva cai e cada
+    lata consome mais horas-m\'{a}quina, apertando R4.
   \item \textbf{R6 = entrada, R7 = sa\'{i}da:} os r\'{o}tulos est\~{a}o alinhados
     com o c\'{o}digo Julia. R6 redistribui o frete recebido ($f \to g$);
     R7 coleta o frete a expedir ($s \to f$).
@@ -973,7 +985,7 @@ como o custo \'{o}timo, a taxa de atendimento e o uso log\'{i}stico respondem.
 Essa \'{e} a base do \textbf{Painel de Controle} implementado no c\'{o}digo.
 \end{mdframed}
 
-\subsection*{10.2 Os tr\^{e}s eixos de perturba\c{c}\~{a}o}
+\subsection*{10.2 Os quatro eixos de perturba\c{c}\~{a}o}
 
 \begin{center}
 \renewcommand{\arraystretch}{1.5}
@@ -993,7 +1005,12 @@ Essa \'{e} a base do \textbf{Painel de Controle} implementado no c\'{o}digo.
   \texttt{limite\_caminhoes} &
     Substitui o valor 80 na restri\c{c}\~{a}o R5. &
     Simula greve de transportadores ou escassez de ve\'{i}culos.
-    Revela o quanto a rede depende do frete interplanta. \\
+    Revela o quanto a rede depende do frete interplanta. \\[4pt]
+  \texttt{fator\_oee} &
+    Efici\^{e}ncia operacional $\rho$ que multiplica a taxa nominal em R4
+    (taxa efetiva $= r_{p,l,t}\cdot\rho$). $1.0$ = capacidade nominal. &
+    Simula desgaste, setups e microparadas das linhas. Reduzir $\rho$ encurta
+    a capacidade produtiva sem desligar a planta. \\
   \bottomrule
 \end{tabular}
 \end{center}
@@ -1033,11 +1050,51 @@ contendo uma linha por cen\'{a}rio de ocupa\c{c}\~{a}o. Colunas-chave:
     $80 \times 10 \times 15 = 12.000$, R5 est\'{a} saturada.
 \end{itemize}
 
+\subsection*{10.5 An\'{a}lise dual (pre\c{c}os-sombra)}
+
+Al\'{e}m do resumo consolidado, cada cen\'{a}rio exporta o detalhamento primal
+(\texttt{detalhe\_ocupacao\_<N>.csv}) e os \textbf{pre\c{c}os-sombra} das restri\c{c}\~{o}es
+ativas --- a leitura dual do problema, que quantifica o valor marginal de relaxar cada
+recurso. Como o modelo \'{e} um PL cont\'{i}nuo, os duais s\~{a}o obtidos diretamente do
+solver (\texttt{shadow\_price} do JuMP) quando existe solu\c{c}\~{a}o dual vi\'{a}vel.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\small
+\begin{tabular}{>{\bfseries\color{ballblue}}c p{3.2cm} p{7.5cm}}
+  \toprule
+  Dual & Restri\c{c}\~{a}o & Interpreta\c{c}\~{a}o econ\^{o}mica \\
+  \midrule
+  $\mu_{p,l,t}$    & R4 (horas) &
+    Varia\c{c}\~{a}o do custo \'{o}timo por $+1$ hora-m\'{a}quina na linha $l$.
+    Exportado em \texttt{duals\_capacidade\_ocupacao\_<N>.csv} (\texttt{mu\_hora\_maquina}). \\[4pt]
+  $\gamma_{p,l,t}$ & R1 (armazenagem) &
+    Valor marginal de $+1$ unidade de capacidade de armazenagem
+    (\texttt{gamma\_armazenagem} no mesmo arquivo). \'{E} $\approx 0$ quando o armazém n\~{a}o \'{e} gargalo. \\[4pt]
+  $\pi_{i,p,l,t}$  & R3 (demanda) &
+    Custo marginal de atender $+1$ lata de demanda. Exportado em
+    \texttt{duals\_demanda\_ocupacao\_<N>.csv} (\texttt{pi\_demanda}), com a flag
+    \texttt{saturado} indicando onde h\'{a} venda perdida ($w > 0$). \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\begin{mdframed}[style=destaque]
+\textbf{\color{ballblue}Como interpretar.} Onde a demanda \'{e} atendida via produ\c{c}\~{a}o
+local com capacidade sobrando, $\pi$ reflete o custo unit\'{a}rio de produ\c{c}\~{a}o/estoque.
+Onde R4 satura, $\mu$ torna-se relevante --- uma hora-m\'{a}quina extra ``vale''
+a economia que ela gera. Nos pontos de \textbf{venda perdida}, $\pi$ aproxima-se do
+Big-$M$ ($10^6$): a \'{u}ltima lata s\'{o} poderia ser atendida pagando a penalidade,
+sinalizando que o gargalo \'{e} f\'{i}sico, n\~{a}o econ\^{o}mico.
+\end{mdframed}
+
 {\color{accentgray}\rule{\linewidth}{0.5pt}}
 \begin{center}
   \small\color{darkgray}
-  O c\'{o}digo completo est\'{a} no arquivo \texttt{analise\_cenarios.jl}.
-  Ajuste apenas \texttt{caminho\_base} e as tr\^{e}s vari\'{a}veis do Painel de Controle antes de rodar.
+  O c\'{o}digo completo est\'{a} no arquivo \texttt{modelagem.jl}. Ajuste os caminhos
+  \texttt{input\_dir}/\texttt{output\_dir} no struct \texttt{Config} e as quatro vari\'{a}veis
+  do Painel de Controle (\texttt{fabrica\_quebrada}, \texttt{limite\_caminhoes},
+  \texttt{fator\_demanda}, \texttt{fator\_oee}) antes de rodar.
 \end{center}
 
 \end{document}

@@ -1,0 +1,901 @@
+id,production_line,plant,product_id,production_cost,inventory_cost
+1,JAC_L1,Jacarei,H2OH_Limao,10.73,0.3485
+2,JAC_L1,Jacarei,Brahma_Lata,11.67,0.335
+3,JAC_L1,Jacarei,Schweppes_Citrus,11.85,0.3842
+4,JAC_L1,Jacarei,Sukita_Laranja,9.55,0.2936
+5,JAC_L1,Jacarei,Del_Valle_Uva,10.87,0.3626
+6,JAC_L1,Jacarei,Spaten_Lata,9.71,0.284
+7,JAC_L1,Jacarei,Heineken_Lata,10.88,0.3367
+8,JAC_L1,Jacarei,Del_Valle_Laranja,7.93,0.319
+9,JAC_L1,Jacarei,Amstel_Lata,8.47,0.2908
+10,JAC_L1,Jacarei,Pepsi,10.9,0.4016
+11,JAC_L1,Jacarei,Coca_Cola,11.46,0.3659
+12,JAC_L1,Jacarei,Stella_Artois_Pure_Gold,9.01,0.3373
+13,JAC_L1,Jacarei,Itaipava_Lata,8.93,0.3407
+14,JAC_L1,Jacarei,Fanta_Uva,10.48,0.3735
+15,JAC_L1,Jacarei,Del_Valle_Pessego,8.86,0.2954
+16,JAC_L1,Jacarei,Sprite_Zero,10.28,0.3537
+17,JAC_L1,Jacarei,Skol_Lata,10.16,0.3005
+18,JAC_L1,Jacarei,Guarana_Antarctica,10.19,0.3704
+19,JAC_L1,Jacarei,Eisenbahn_Pilsen,11.86,0.3884
+20,JAC_L1,Jacarei,Kuat,10.54,0.336
+21,JAC_L1,Jacarei,Pepsi_Black,10.93,0.3155
+22,JAC_L1,Jacarei,Sprite,10.69,0.4574
+23,JAC_L1,Jacarei,Coca_Cola_Zero,10.13,0.3259
+24,JAC_L1,Jacarei,Itubaina,11.86,0.2903
+25,JAC_L1,Jacarei,Guarana_Antarctica_Zero,12.01,0.3737
+26,JAC_L1,Jacarei,Budweiser_Lata,9.05,0.3579
+27,JAC_L1,Jacarei,Fanta_Laranja,11.87,0.2888
+28,JAC_L1,Jacarei,Antarctica_Lata,10.88,0.3301
+29,JAC_L1,Jacarei,Maguary_Caju,12.27,0.3434
+30,JAC_L1,Jacarei,Maguary_Maracuja,9.71,0.3247
+31,JAC_L2,Jacarei,H2OH_Limao,10.12,0.2926
+32,JAC_L2,Jacarei,Brahma_Lata,10.06,0.3782
+33,JAC_L2,Jacarei,Schweppes_Citrus,8.2,0.2985
+34,JAC_L2,Jacarei,Sukita_Laranja,9.96,0.3826
+35,JAC_L2,Jacarei,Del_Valle_Uva,11.27,0.3666
+36,JAC_L2,Jacarei,Spaten_Lata,11.59,0.3404
+37,JAC_L2,Jacarei,Heineken_Lata,11.15,0.3591
+38,JAC_L2,Jacarei,Del_Valle_Laranja,12.42,0.3326
+39,JAC_L2,Jacarei,Amstel_Lata,10.98,0.3691
+40,JAC_L2,Jacarei,Pepsi,11.64,0.3768
+41,JAC_L2,Jacarei,Coca_Cola,11.35,0.3083
+42,JAC_L2,Jacarei,Stella_Artois_Pure_Gold,11.78,0.4223
+43,JAC_L2,Jacarei,Itaipava_Lata,9.95,0.3197
+44,JAC_L2,Jacarei,Fanta_Uva,9.6,0.3245
+45,JAC_L2,Jacarei,Del_Valle_Pessego,10.43,0.3426
+46,JAC_L2,Jacarei,Sprite_Zero,9.17,0.3269
+47,JAC_L2,Jacarei,Skol_Lata,9.03,0.3571
+48,JAC_L2,Jacarei,Guarana_Antarctica,9.15,0.319
+49,JAC_L2,Jacarei,Eisenbahn_Pilsen,10.26,0.3089
+50,JAC_L2,Jacarei,Kuat,9.65,0.3756
+51,JAC_L2,Jacarei,Pepsi_Black,11.03,0.3543
+52,JAC_L2,Jacarei,Sprite,11.44,0.3414
+53,JAC_L2,Jacarei,Coca_Cola_Zero,10.74,0.3468
+54,JAC_L2,Jacarei,Itubaina,8.77,0.3792
+55,JAC_L2,Jacarei,Guarana_Antarctica_Zero,9.21,0.2946
+56,JAC_L2,Jacarei,Budweiser_Lata,8.35,0.3866
+57,JAC_L2,Jacarei,Fanta_Laranja,8.52,0.3652
+58,JAC_L2,Jacarei,Antarctica_Lata,10.77,0.3388
+59,JAC_L2,Jacarei,Maguary_Caju,9.9,0.3602
+60,JAC_L2,Jacarei,Maguary_Maracuja,10.15,0.2712
+61,JAC_L3,Jacarei,H2OH_Limao,9.73,0.3294
+62,JAC_L3,Jacarei,Brahma_Lata,9.7,0.3499
+63,JAC_L3,Jacarei,Schweppes_Citrus,10.96,0.3805
+64,JAC_L3,Jacarei,Sukita_Laranja,10.79,0.3802
+65,JAC_L3,Jacarei,Del_Valle_Uva,8.33,0.3224
+66,JAC_L3,Jacarei,Spaten_Lata,12.73,0.3801
+67,JAC_L3,Jacarei,Heineken_Lata,10.42,0.3287
+68,JAC_L3,Jacarei,Del_Valle_Laranja,10.49,0.3769
+69,JAC_L3,Jacarei,Amstel_Lata,8.95,0.4362
+70,JAC_L3,Jacarei,Pepsi,10.61,0.3943
+71,JAC_L3,Jacarei,Coca_Cola,11.66,0.3498
+72,JAC_L3,Jacarei,Stella_Artois_Pure_Gold,9.76,0.3608
+73,JAC_L3,Jacarei,Itaipava_Lata,11.34,0.3075
+74,JAC_L3,Jacarei,Fanta_Uva,10.67,0.3567
+75,JAC_L3,Jacarei,Del_Valle_Pessego,10.36,0.3586
+76,JAC_L3,Jacarei,Sprite_Zero,10.39,0.3096
+77,JAC_L3,Jacarei,Skol_Lata,8.7,0.3298
+78,JAC_L3,Jacarei,Guarana_Antarctica,11.23,0.3791
+79,JAC_L3,Jacarei,Eisenbahn_Pilsen,10.69,0.3113
+80,JAC_L3,Jacarei,Kuat,11.0,0.3077
+81,JAC_L3,Jacarei,Pepsi_Black,11.12,0.3858
+82,JAC_L3,Jacarei,Sprite,9.1,0.3209
+83,JAC_L3,Jacarei,Coca_Cola_Zero,10.92,0.3309
+84,JAC_L3,Jacarei,Itubaina,11.71,0.2597
+85,JAC_L3,Jacarei,Guarana_Antarctica_Zero,10.67,0.2945
+86,JAC_L3,Jacarei,Budweiser_Lata,10.12,0.3302
+87,JAC_L3,Jacarei,Fanta_Laranja,9.66,0.3453
+88,JAC_L3,Jacarei,Antarctica_Lata,9.4,0.3433
+89,JAC_L3,Jacarei,Maguary_Caju,10.9,0.4176
+90,JAC_L3,Jacarei,Maguary_Maracuja,11.43,0.3445
+91,EXT_L1,Extrema,H2OH_Limao,11.13,0.3777
+92,EXT_L1,Extrema,Brahma_Lata,12.14,0.3824
+93,EXT_L1,Extrema,Schweppes_Citrus,10.65,0.32
+94,EXT_L1,Extrema,Sukita_Laranja,11.34,0.3505
+95,EXT_L1,Extrema,Del_Valle_Uva,10.57,0.325
+96,EXT_L1,Extrema,Spaten_Lata,11.49,0.2741
+97,EXT_L1,Extrema,Heineken_Lata,12.19,0.3404
+98,EXT_L1,Extrema,Del_Valle_Laranja,10.42,0.3962
+99,EXT_L1,Extrema,Amstel_Lata,10.95,0.3553
+100,EXT_L1,Extrema,Pepsi,10.71,0.3584
+101,EXT_L1,Extrema,Coca_Cola,11.16,0.2802
+102,EXT_L1,Extrema,Stella_Artois_Pure_Gold,10.39,0.3431
+103,EXT_L1,Extrema,Itaipava_Lata,10.79,0.3329
+104,EXT_L1,Extrema,Fanta_Uva,12.28,0.3783
+105,EXT_L1,Extrema,Del_Valle_Pessego,11.31,0.3229
+106,EXT_L1,Extrema,Sprite_Zero,11.39,0.4062
+107,EXT_L1,Extrema,Skol_Lata,9.79,0.3465
+108,EXT_L1,Extrema,Guarana_Antarctica,10.09,0.3496
+109,EXT_L1,Extrema,Eisenbahn_Pilsen,11.53,0.4563
+110,EXT_L1,Extrema,Kuat,11.0,0.2723
+111,EXT_L1,Extrema,Pepsi_Black,9.92,0.3368
+112,EXT_L1,Extrema,Sprite,7.85,0.3204
+113,EXT_L1,Extrema,Coca_Cola_Zero,10.56,0.3541
+114,EXT_L1,Extrema,Itubaina,10.67,0.2987
+115,EXT_L1,Extrema,Guarana_Antarctica_Zero,11.53,0.3556
+116,EXT_L1,Extrema,Budweiser_Lata,7.66,0.3402
+117,EXT_L1,Extrema,Fanta_Laranja,9.69,0.4094
+118,EXT_L1,Extrema,Antarctica_Lata,10.09,0.3432
+119,EXT_L1,Extrema,Maguary_Caju,9.78,0.3732
+120,EXT_L1,Extrema,Maguary_Maracuja,9.27,0.3628
+121,EXT_L2,Extrema,H2OH_Limao,9.34,0.3657
+122,EXT_L2,Extrema,Brahma_Lata,9.0,0.4099
+123,EXT_L2,Extrema,Schweppes_Citrus,11.65,0.3483
+124,EXT_L2,Extrema,Sukita_Laranja,8.83,0.3418
+125,EXT_L2,Extrema,Del_Valle_Uva,10.69,0.3641
+126,EXT_L2,Extrema,Spaten_Lata,10.44,0.3502
+127,EXT_L2,Extrema,Heineken_Lata,11.82,0.3042
+128,EXT_L2,Extrema,Del_Valle_Laranja,9.95,0.3045
+129,EXT_L2,Extrema,Amstel_Lata,12.09,0.3908
+130,EXT_L2,Extrema,Pepsi,9.52,0.3681
+131,EXT_L2,Extrema,Coca_Cola,10.73,0.3969
+132,EXT_L2,Extrema,Stella_Artois_Pure_Gold,9.82,0.3887
+133,EXT_L2,Extrema,Itaipava_Lata,11.65,0.4196
+134,EXT_L2,Extrema,Fanta_Uva,8.46,0.3238
+135,EXT_L2,Extrema,Del_Valle_Pessego,12.31,0.2882
+136,EXT_L2,Extrema,Sprite_Zero,10.77,0.3914
+137,EXT_L2,Extrema,Skol_Lata,9.17,0.3229
+138,EXT_L2,Extrema,Guarana_Antarctica,11.77,0.3828
+139,EXT_L2,Extrema,Eisenbahn_Pilsen,10.48,0.3991
+140,EXT_L2,Extrema,Kuat,10.28,0.3426
+141,EXT_L2,Extrema,Pepsi_Black,11.42,0.3055
+142,EXT_L2,Extrema,Sprite,10.75,0.3942
+143,EXT_L2,Extrema,Coca_Cola_Zero,10.69,0.3038
+144,EXT_L2,Extrema,Itubaina,8.81,0.3245
+145,EXT_L2,Extrema,Guarana_Antarctica_Zero,12.48,0.3895
+146,EXT_L2,Extrema,Budweiser_Lata,10.41,0.3455
+147,EXT_L2,Extrema,Fanta_Laranja,10.35,0.3197
+148,EXT_L2,Extrema,Antarctica_Lata,9.74,0.3392
+149,EXT_L2,Extrema,Maguary_Caju,9.94,0.3482
+150,EXT_L2,Extrema,Maguary_Maracuja,9.9,0.3575
+151,EXT_L3,Extrema,H2OH_Limao,11.09,0.3896
+152,EXT_L3,Extrema,Brahma_Lata,9.75,0.3412
+153,EXT_L3,Extrema,Schweppes_Citrus,10.8,0.2914
+154,EXT_L3,Extrema,Sukita_Laranja,7.53,0.4267
+155,EXT_L3,Extrema,Del_Valle_Uva,11.31,0.2931
+156,EXT_L3,Extrema,Spaten_Lata,10.29,0.4056
+157,EXT_L3,Extrema,Heineken_Lata,8.17,0.3315
+158,EXT_L3,Extrema,Del_Valle_Laranja,8.63,0.3717
+159,EXT_L3,Extrema,Amstel_Lata,11.75,0.3015
+160,EXT_L3,Extrema,Pepsi,10.98,0.4301
+161,EXT_L3,Extrema,Coca_Cola,12.03,0.3892
+162,EXT_L3,Extrema,Stella_Artois_Pure_Gold,11.47,0.3482
+163,EXT_L3,Extrema,Itaipava_Lata,9.39,0.3144
+164,EXT_L3,Extrema,Fanta_Uva,11.01,0.4111
+165,EXT_L3,Extrema,Del_Valle_Pessego,10.06,0.3436
+166,EXT_L3,Extrema,Sprite_Zero,8.78,0.3091
+167,EXT_L3,Extrema,Skol_Lata,9.36,0.3209
+168,EXT_L3,Extrema,Guarana_Antarctica,11.16,0.3288
+169,EXT_L3,Extrema,Eisenbahn_Pilsen,9.3,0.3467
+170,EXT_L3,Extrema,Kuat,11.73,0.3073
+171,EXT_L3,Extrema,Pepsi_Black,9.77,0.3667
+172,EXT_L3,Extrema,Sprite,10.16,0.3473
+173,EXT_L3,Extrema,Coca_Cola_Zero,9.73,0.4143
+174,EXT_L3,Extrema,Itubaina,11.59,0.3694
+175,EXT_L3,Extrema,Guarana_Antarctica_Zero,8.24,0.2678
+176,EXT_L3,Extrema,Budweiser_Lata,12.31,0.3238
+177,EXT_L3,Extrema,Fanta_Laranja,9.68,0.4557
+178,EXT_L3,Extrema,Antarctica_Lata,10.62,0.3577
+179,EXT_L3,Extrema,Maguary_Caju,10.97,0.388
+180,EXT_L3,Extrema,Maguary_Maracuja,10.47,0.3846
+181,TRE_L1,Tres Rios,H2OH_Limao,12.16,0.3435
+182,TRE_L1,Tres Rios,Brahma_Lata,10.09,0.3878
+183,TRE_L1,Tres Rios,Schweppes_Citrus,8.49,0.2951
+184,TRE_L1,Tres Rios,Sukita_Laranja,10.95,0.3852
+185,TRE_L1,Tres Rios,Del_Valle_Uva,13.08,0.3736
+186,TRE_L1,Tres Rios,Spaten_Lata,10.92,0.3603
+187,TRE_L1,Tres Rios,Heineken_Lata,10.41,0.3723
+188,TRE_L1,Tres Rios,Del_Valle_Laranja,10.17,0.3713
+189,TRE_L1,Tres Rios,Amstel_Lata,8.54,0.2461
+190,TRE_L1,Tres Rios,Pepsi,8.93,0.3313
+191,TRE_L1,Tres Rios,Coca_Cola,9.14,0.3795
+192,TRE_L1,Tres Rios,Stella_Artois_Pure_Gold,12.14,0.3666
+193,TRE_L1,Tres Rios,Itaipava_Lata,12.15,0.3704
+194,TRE_L1,Tres Rios,Fanta_Uva,10.52,0.3665
+195,TRE_L1,Tres Rios,Del_Valle_Pessego,8.26,0.2761
+196,TRE_L1,Tres Rios,Sprite_Zero,11.78,0.2803
+197,TRE_L1,Tres Rios,Skol_Lata,10.85,0.3309
+198,TRE_L1,Tres Rios,Guarana_Antarctica,7.77,0.3963
+199,TRE_L1,Tres Rios,Eisenbahn_Pilsen,10.31,0.3137
+200,TRE_L1,Tres Rios,Kuat,10.47,0.2781
+201,TRE_L1,Tres Rios,Pepsi_Black,12.61,0.4521
+202,TRE_L1,Tres Rios,Sprite,11.37,0.3885
+203,TRE_L1,Tres Rios,Coca_Cola_Zero,13.31,0.3394
+204,TRE_L1,Tres Rios,Itubaina,10.56,0.3598
+205,TRE_L1,Tres Rios,Guarana_Antarctica_Zero,10.97,0.3302
+206,TRE_L1,Tres Rios,Budweiser_Lata,9.92,0.289
+207,TRE_L1,Tres Rios,Fanta_Laranja,11.44,0.398
+208,TRE_L1,Tres Rios,Antarctica_Lata,10.72,0.3172
+209,TRE_L1,Tres Rios,Maguary_Caju,8.92,0.3513
+210,TRE_L1,Tres Rios,Maguary_Maracuja,8.47,0.346
+211,TRE_L2,Tres Rios,H2OH_Limao,12.02,0.4272
+212,TRE_L2,Tres Rios,Brahma_Lata,9.43,0.3393
+213,TRE_L2,Tres Rios,Schweppes_Citrus,10.67,0.361
+214,TRE_L2,Tres Rios,Sukita_Laranja,11.37,0.3671
+215,TRE_L2,Tres Rios,Del_Valle_Uva,11.38,0.3315
+216,TRE_L2,Tres Rios,Spaten_Lata,10.56,0.2943
+217,TRE_L2,Tres Rios,Heineken_Lata,10.37,0.3941
+218,TRE_L2,Tres Rios,Del_Valle_Laranja,9.93,0.3599
+219,TRE_L2,Tres Rios,Amstel_Lata,11.87,0.3281
+220,TRE_L2,Tres Rios,Pepsi,11.24,0.3003
+221,TRE_L2,Tres Rios,Coca_Cola,12.26,0.3173
+222,TRE_L2,Tres Rios,Stella_Artois_Pure_Gold,12.72,0.3358
+223,TRE_L2,Tres Rios,Itaipava_Lata,9.93,0.369
+224,TRE_L2,Tres Rios,Fanta_Uva,9.52,0.3388
+225,TRE_L2,Tres Rios,Del_Valle_Pessego,10.12,0.3639
+226,TRE_L2,Tres Rios,Sprite_Zero,8.72,0.3427
+227,TRE_L2,Tres Rios,Skol_Lata,11.25,0.3215
+228,TRE_L2,Tres Rios,Guarana_Antarctica,9.32,0.316
+229,TRE_L2,Tres Rios,Eisenbahn_Pilsen,11.36,0.2996
+230,TRE_L2,Tres Rios,Kuat,8.93,0.3453
+231,TRE_L2,Tres Rios,Pepsi_Black,10.86,0.3602
+232,TRE_L2,Tres Rios,Sprite,8.47,0.3577
+233,TRE_L2,Tres Rios,Coca_Cola_Zero,10.23,0.3405
+234,TRE_L2,Tres Rios,Itubaina,11.35,0.2859
+235,TRE_L2,Tres Rios,Guarana_Antarctica_Zero,11.51,0.3315
+236,TRE_L2,Tres Rios,Budweiser_Lata,10.77,0.3251
+237,TRE_L2,Tres Rios,Fanta_Laranja,11.06,0.3415
+238,TRE_L2,Tres Rios,Antarctica_Lata,10.93,0.346
+239,TRE_L2,Tres Rios,Maguary_Caju,10.99,0.338
+240,TRE_L2,Tres Rios,Maguary_Maracuja,9.46,0.3404
+241,TRE_L3,Tres Rios,H2OH_Limao,10.5,0.3321
+242,TRE_L3,Tres Rios,Brahma_Lata,10.55,0.4225
+243,TRE_L3,Tres Rios,Schweppes_Citrus,11.09,0.4023
+244,TRE_L3,Tres Rios,Sukita_Laranja,10.83,0.2939
+245,TRE_L3,Tres Rios,Del_Valle_Uva,10.31,0.4094
+246,TRE_L3,Tres Rios,Spaten_Lata,7.06,0.3581
+247,TRE_L3,Tres Rios,Heineken_Lata,11.01,0.3312
+248,TRE_L3,Tres Rios,Del_Valle_Laranja,7.92,0.3154
+249,TRE_L3,Tres Rios,Amstel_Lata,8.59,0.3133
+250,TRE_L3,Tres Rios,Pepsi,11.85,0.3428
+251,TRE_L3,Tres Rios,Coca_Cola,9.14,0.2879
+252,TRE_L3,Tres Rios,Stella_Artois_Pure_Gold,10.09,0.3821
+253,TRE_L3,Tres Rios,Itaipava_Lata,10.91,0.3692
+254,TRE_L3,Tres Rios,Fanta_Uva,10.84,0.3927
+255,TRE_L3,Tres Rios,Del_Valle_Pessego,8.74,0.3463
+256,TRE_L3,Tres Rios,Sprite_Zero,10.88,0.3733
+257,TRE_L3,Tres Rios,Skol_Lata,9.88,0.3028
+258,TRE_L3,Tres Rios,Guarana_Antarctica,8.91,0.3955
+259,TRE_L3,Tres Rios,Eisenbahn_Pilsen,10.41,0.3153
+260,TRE_L3,Tres Rios,Kuat,11.59,0.4245
+261,TRE_L3,Tres Rios,Pepsi_Black,9.79,0.3713
+262,TRE_L3,Tres Rios,Sprite,11.14,0.3358
+263,TRE_L3,Tres Rios,Coca_Cola_Zero,10.7,0.289
+264,TRE_L3,Tres Rios,Itubaina,10.24,0.3631
+265,TRE_L3,Tres Rios,Guarana_Antarctica_Zero,10.46,0.3343
+266,TRE_L3,Tres Rios,Budweiser_Lata,10.67,0.3411
+267,TRE_L3,Tres Rios,Fanta_Laranja,7.68,0.3343
+268,TRE_L3,Tres Rios,Antarctica_Lata,9.9,0.3476
+269,TRE_L3,Tres Rios,Maguary_Caju,10.12,0.3162
+270,TRE_L3,Tres Rios,Maguary_Maracuja,9.84,0.416
+271,ALA_L1,Alagoinhas,H2OH_Limao,8.58,0.3877
+272,ALA_L1,Alagoinhas,Brahma_Lata,10.2,0.3956
+273,ALA_L1,Alagoinhas,Schweppes_Citrus,10.43,0.3565
+274,ALA_L1,Alagoinhas,Sukita_Laranja,10.76,0.3087
+275,ALA_L1,Alagoinhas,Del_Valle_Uva,12.02,0.2846
+276,ALA_L1,Alagoinhas,Spaten_Lata,9.34,0.2675
+277,ALA_L1,Alagoinhas,Heineken_Lata,10.35,0.3426
+278,ALA_L1,Alagoinhas,Del_Valle_Laranja,11.85,0.3582
+279,ALA_L1,Alagoinhas,Amstel_Lata,10.96,0.3519
+280,ALA_L1,Alagoinhas,Pepsi,10.29,0.365
+281,ALA_L1,Alagoinhas,Coca_Cola,10.83,0.3708
+282,ALA_L1,Alagoinhas,Stella_Artois_Pure_Gold,10.48,0.3432
+283,ALA_L1,Alagoinhas,Itaipava_Lata,9.91,0.2986
+284,ALA_L1,Alagoinhas,Fanta_Uva,9.42,0.2877
+285,ALA_L1,Alagoinhas,Del_Valle_Pessego,11.51,0.3358
+286,ALA_L1,Alagoinhas,Sprite_Zero,10.08,0.3152
+287,ALA_L1,Alagoinhas,Skol_Lata,10.7,0.3137
+288,ALA_L1,Alagoinhas,Guarana_Antarctica,9.55,0.3698
+289,ALA_L1,Alagoinhas,Eisenbahn_Pilsen,10.52,0.3801
+290,ALA_L1,Alagoinhas,Kuat,11.34,0.3939
+291,ALA_L1,Alagoinhas,Pepsi_Black,8.63,0.3513
+292,ALA_L1,Alagoinhas,Sprite,9.32,0.3442
+293,ALA_L1,Alagoinhas,Coca_Cola_Zero,10.53,0.3438
+294,ALA_L1,Alagoinhas,Itubaina,11.63,0.3049
+295,ALA_L1,Alagoinhas,Guarana_Antarctica_Zero,9.64,0.3514
+296,ALA_L1,Alagoinhas,Budweiser_Lata,10.58,0.3174
+297,ALA_L1,Alagoinhas,Fanta_Laranja,11.92,0.3814
+298,ALA_L1,Alagoinhas,Antarctica_Lata,12.05,0.3882
+299,ALA_L1,Alagoinhas,Maguary_Caju,11.03,0.3665
+300,ALA_L1,Alagoinhas,Maguary_Maracuja,11.93,0.3409
+301,ALA_L2,Alagoinhas,H2OH_Limao,9.07,0.3595
+302,ALA_L2,Alagoinhas,Brahma_Lata,9.95,0.3733
+303,ALA_L2,Alagoinhas,Schweppes_Citrus,8.7,0.289
+304,ALA_L2,Alagoinhas,Sukita_Laranja,11.17,0.3547
+305,ALA_L2,Alagoinhas,Del_Valle_Uva,10.69,0.4005
+306,ALA_L2,Alagoinhas,Spaten_Lata,10.88,0.3178
+307,ALA_L2,Alagoinhas,Heineken_Lata,9.74,0.3915
+308,ALA_L2,Alagoinhas,Del_Valle_Laranja,10.55,0.3463
+309,ALA_L2,Alagoinhas,Amstel_Lata,10.87,0.3118
+310,ALA_L2,Alagoinhas,Pepsi,10.91,0.352
+311,ALA_L2,Alagoinhas,Coca_Cola,9.79,0.4175
+312,ALA_L2,Alagoinhas,Stella_Artois_Pure_Gold,8.75,0.316
+313,ALA_L2,Alagoinhas,Itaipava_Lata,11.38,0.3373
+314,ALA_L2,Alagoinhas,Fanta_Uva,12.66,0.4238
+315,ALA_L2,Alagoinhas,Del_Valle_Pessego,9.75,0.3845
+316,ALA_L2,Alagoinhas,Sprite_Zero,9.85,0.4036
+317,ALA_L2,Alagoinhas,Skol_Lata,11.75,0.3409
+318,ALA_L2,Alagoinhas,Guarana_Antarctica,10.83,0.4254
+319,ALA_L2,Alagoinhas,Eisenbahn_Pilsen,10.32,0.3692
+320,ALA_L2,Alagoinhas,Kuat,12.8,0.3038
+321,ALA_L2,Alagoinhas,Pepsi_Black,11.07,0.3228
+322,ALA_L2,Alagoinhas,Sprite,10.13,0.4188
+323,ALA_L2,Alagoinhas,Coca_Cola_Zero,8.75,0.4106
+324,ALA_L2,Alagoinhas,Itubaina,9.2,0.2728
+325,ALA_L2,Alagoinhas,Guarana_Antarctica_Zero,9.7,0.3461
+326,ALA_L2,Alagoinhas,Budweiser_Lata,8.28,0.4071
+327,ALA_L2,Alagoinhas,Fanta_Laranja,11.99,0.3853
+328,ALA_L2,Alagoinhas,Antarctica_Lata,10.4,0.348
+329,ALA_L2,Alagoinhas,Maguary_Caju,10.19,0.3426
+330,ALA_L2,Alagoinhas,Maguary_Maracuja,9.25,0.3853
+331,ALA_L3,Alagoinhas,H2OH_Limao,7.5,0.3222
+332,ALA_L3,Alagoinhas,Brahma_Lata,11.87,0.3311
+333,ALA_L3,Alagoinhas,Schweppes_Citrus,11.91,0.3755
+334,ALA_L3,Alagoinhas,Sukita_Laranja,11.28,0.4739
+335,ALA_L3,Alagoinhas,Del_Valle_Uva,12.31,0.3774
+336,ALA_L3,Alagoinhas,Spaten_Lata,8.98,0.4259
+337,ALA_L3,Alagoinhas,Heineken_Lata,12.25,0.2908
+338,ALA_L3,Alagoinhas,Del_Valle_Laranja,12.83,0.2646
+339,ALA_L3,Alagoinhas,Amstel_Lata,8.73,0.3668
+340,ALA_L3,Alagoinhas,Pepsi,8.61,0.3735
+341,ALA_L3,Alagoinhas,Coca_Cola,7.01,0.4138
+342,ALA_L3,Alagoinhas,Stella_Artois_Pure_Gold,12.64,0.2858
+343,ALA_L3,Alagoinhas,Itaipava_Lata,10.5,0.4203
+344,ALA_L3,Alagoinhas,Fanta_Uva,10.24,0.3251
+345,ALA_L3,Alagoinhas,Del_Valle_Pessego,12.57,0.3723
+346,ALA_L3,Alagoinhas,Sprite_Zero,11.52,0.3471
+347,ALA_L3,Alagoinhas,Skol_Lata,11.46,0.4197
+348,ALA_L3,Alagoinhas,Guarana_Antarctica,9.91,0.2997
+349,ALA_L3,Alagoinhas,Eisenbahn_Pilsen,10.99,0.3559
+350,ALA_L3,Alagoinhas,Kuat,11.38,0.3578
+351,ALA_L3,Alagoinhas,Pepsi_Black,10.27,0.3598
+352,ALA_L3,Alagoinhas,Sprite,11.84,0.348
+353,ALA_L3,Alagoinhas,Coca_Cola_Zero,9.2,0.2822
+354,ALA_L3,Alagoinhas,Itubaina,11.58,0.4144
+355,ALA_L3,Alagoinhas,Guarana_Antarctica_Zero,10.7,0.2831
+356,ALA_L3,Alagoinhas,Budweiser_Lata,9.93,0.3467
+357,ALA_L3,Alagoinhas,Fanta_Laranja,11.09,0.4106
+358,ALA_L3,Alagoinhas,Antarctica_Lata,11.23,0.3487
+359,ALA_L3,Alagoinhas,Maguary_Caju,11.08,0.3647
+360,ALA_L3,Alagoinhas,Maguary_Maracuja,9.09,0.3275
+361,FRU_L1,Frutal,H2OH_Limao,10.82,0.3581
+362,FRU_L1,Frutal,Brahma_Lata,9.28,0.3746
+363,FRU_L1,Frutal,Schweppes_Citrus,9.79,0.3937
+364,FRU_L1,Frutal,Sukita_Laranja,12.91,0.3526
+365,FRU_L1,Frutal,Del_Valle_Uva,9.97,0.3221
+366,FRU_L1,Frutal,Spaten_Lata,8.22,0.3505
+367,FRU_L1,Frutal,Heineken_Lata,10.29,0.3305
+368,FRU_L1,Frutal,Del_Valle_Laranja,9.61,0.3253
+369,FRU_L1,Frutal,Amstel_Lata,8.74,0.3388
+370,FRU_L1,Frutal,Pepsi,10.45,0.2955
+371,FRU_L1,Frutal,Coca_Cola,9.25,0.4038
+372,FRU_L1,Frutal,Stella_Artois_Pure_Gold,9.22,0.3963
+373,FRU_L1,Frutal,Itaipava_Lata,12.32,0.3808
+374,FRU_L1,Frutal,Fanta_Uva,9.07,0.4433
+375,FRU_L1,Frutal,Del_Valle_Pessego,9.89,0.3672
+376,FRU_L1,Frutal,Sprite_Zero,13.03,0.344
+377,FRU_L1,Frutal,Skol_Lata,10.8,0.3531
+378,FRU_L1,Frutal,Guarana_Antarctica,12.55,0.4141
+379,FRU_L1,Frutal,Eisenbahn_Pilsen,9.06,0.2525
+380,FRU_L1,Frutal,Kuat,9.4,0.3551
+381,FRU_L1,Frutal,Pepsi_Black,12.01,0.3073
+382,FRU_L1,Frutal,Sprite,10.36,0.392
+383,FRU_L1,Frutal,Coca_Cola_Zero,10.63,0.3045
+384,FRU_L1,Frutal,Itubaina,9.34,0.3845
+385,FRU_L1,Frutal,Guarana_Antarctica_Zero,10.46,0.2956
+386,FRU_L1,Frutal,Budweiser_Lata,6.7,0.3404
+387,FRU_L1,Frutal,Fanta_Laranja,10.93,0.3283
+388,FRU_L1,Frutal,Antarctica_Lata,9.0,0.3283
+389,FRU_L1,Frutal,Maguary_Caju,9.91,0.3367
+390,FRU_L1,Frutal,Maguary_Maracuja,10.82,0.3844
+391,FRU_L2,Frutal,H2OH_Limao,11.29,0.356
+392,FRU_L2,Frutal,Brahma_Lata,9.71,0.3577
+393,FRU_L2,Frutal,Schweppes_Citrus,10.62,0.2987
+394,FRU_L2,Frutal,Sukita_Laranja,10.32,0.3829
+395,FRU_L2,Frutal,Del_Valle_Uva,8.89,0.3264
+396,FRU_L2,Frutal,Spaten_Lata,9.87,0.3344
+397,FRU_L2,Frutal,Heineken_Lata,10.44,0.4023
+398,FRU_L2,Frutal,Del_Valle_Laranja,10.36,0.3663
+399,FRU_L2,Frutal,Amstel_Lata,8.9,0.379
+400,FRU_L2,Frutal,Pepsi,10.61,0.3957
+401,FRU_L2,Frutal,Coca_Cola,9.97,0.3521
+402,FRU_L2,Frutal,Stella_Artois_Pure_Gold,11.18,0.3791
+403,FRU_L2,Frutal,Itaipava_Lata,11.82,0.4162
+404,FRU_L2,Frutal,Fanta_Uva,10.6,0.3209
+405,FRU_L2,Frutal,Del_Valle_Pessego,10.62,0.385
+406,FRU_L2,Frutal,Sprite_Zero,10.99,0.383
+407,FRU_L2,Frutal,Skol_Lata,10.18,0.3938
+408,FRU_L2,Frutal,Guarana_Antarctica,8.88,0.3729
+409,FRU_L2,Frutal,Eisenbahn_Pilsen,9.01,0.3701
+410,FRU_L2,Frutal,Kuat,10.4,0.3674
+411,FRU_L2,Frutal,Pepsi_Black,10.32,0.3063
+412,FRU_L2,Frutal,Sprite,10.41,0.3602
+413,FRU_L2,Frutal,Coca_Cola_Zero,10.49,0.285
+414,FRU_L2,Frutal,Itubaina,11.45,0.3851
+415,FRU_L2,Frutal,Guarana_Antarctica_Zero,11.17,0.3385
+416,FRU_L2,Frutal,Budweiser_Lata,9.08,0.3331
+417,FRU_L2,Frutal,Fanta_Laranja,9.95,0.3519
+418,FRU_L2,Frutal,Antarctica_Lata,10.89,0.3593
+419,FRU_L2,Frutal,Maguary_Caju,9.81,0.2513
+420,FRU_L2,Frutal,Maguary_Maracuja,12.1,0.4076
+421,FRU_L3,Frutal,H2OH_Limao,10.76,0.4546
+422,FRU_L3,Frutal,Brahma_Lata,8.48,0.4253
+423,FRU_L3,Frutal,Schweppes_Citrus,10.76,0.3791
+424,FRU_L3,Frutal,Sukita_Laranja,10.62,0.3738
+425,FRU_L3,Frutal,Del_Valle_Uva,10.55,0.3494
+426,FRU_L3,Frutal,Spaten_Lata,10.06,0.3272
+427,FRU_L3,Frutal,Heineken_Lata,11.41,0.3442
+428,FRU_L3,Frutal,Del_Valle_Laranja,10.7,0.3665
+429,FRU_L3,Frutal,Amstel_Lata,9.55,0.3101
+430,FRU_L3,Frutal,Pepsi,10.23,0.2793
+431,FRU_L3,Frutal,Coca_Cola,9.04,0.2617
+432,FRU_L3,Frutal,Stella_Artois_Pure_Gold,11.58,0.3298
+433,FRU_L3,Frutal,Itaipava_Lata,9.95,0.3569
+434,FRU_L3,Frutal,Fanta_Uva,9.35,0.323
+435,FRU_L3,Frutal,Del_Valle_Pessego,11.97,0.3941
+436,FRU_L3,Frutal,Sprite_Zero,12.76,0.3675
+437,FRU_L3,Frutal,Skol_Lata,12.6,0.3764
+438,FRU_L3,Frutal,Guarana_Antarctica,10.85,0.3911
+439,FRU_L3,Frutal,Eisenbahn_Pilsen,12.07,0.3669
+440,FRU_L3,Frutal,Kuat,10.75,0.3612
+441,FRU_L3,Frutal,Pepsi_Black,11.7,0.3046
+442,FRU_L3,Frutal,Sprite,12.01,0.3525
+443,FRU_L3,Frutal,Coca_Cola_Zero,8.84,0.3766
+444,FRU_L3,Frutal,Itubaina,11.64,0.3612
+445,FRU_L3,Frutal,Guarana_Antarctica_Zero,7.92,0.3615
+446,FRU_L3,Frutal,Budweiser_Lata,10.21,0.4489
+447,FRU_L3,Frutal,Fanta_Laranja,10.56,0.4029
+448,FRU_L3,Frutal,Antarctica_Lata,9.43,0.3634
+449,FRU_L3,Frutal,Maguary_Caju,10.5,0.4012
+450,FRU_L3,Frutal,Maguary_Maracuja,12.19,0.3238
+451,POU_L1,Pouso Alegre,H2OH_Limao,11.61,0.4373
+452,POU_L1,Pouso Alegre,Brahma_Lata,9.18,0.348
+453,POU_L1,Pouso Alegre,Schweppes_Citrus,9.71,0.322
+454,POU_L1,Pouso Alegre,Sukita_Laranja,10.24,0.3861
+455,POU_L1,Pouso Alegre,Del_Valle_Uva,11.66,0.2995
+456,POU_L1,Pouso Alegre,Spaten_Lata,8.63,0.3279
+457,POU_L1,Pouso Alegre,Heineken_Lata,11.32,0.4081
+458,POU_L1,Pouso Alegre,Del_Valle_Laranja,8.06,0.3613
+459,POU_L1,Pouso Alegre,Amstel_Lata,10.19,0.3493
+460,POU_L1,Pouso Alegre,Pepsi,11.88,0.3876
+461,POU_L1,Pouso Alegre,Coca_Cola,10.4,0.3531
+462,POU_L1,Pouso Alegre,Stella_Artois_Pure_Gold,10.95,0.3626
+463,POU_L1,Pouso Alegre,Itaipava_Lata,9.87,0.3115
+464,POU_L1,Pouso Alegre,Fanta_Uva,12.4,0.4104
+465,POU_L1,Pouso Alegre,Del_Valle_Pessego,10.08,0.3888
+466,POU_L1,Pouso Alegre,Sprite_Zero,10.66,0.3312
+467,POU_L1,Pouso Alegre,Skol_Lata,10.2,0.2743
+468,POU_L1,Pouso Alegre,Guarana_Antarctica,14.06,0.3501
+469,POU_L1,Pouso Alegre,Eisenbahn_Pilsen,8.18,0.3796
+470,POU_L1,Pouso Alegre,Kuat,11.72,0.3407
+471,POU_L1,Pouso Alegre,Pepsi_Black,12.34,0.3897
+472,POU_L1,Pouso Alegre,Sprite,10.09,0.3501
+473,POU_L1,Pouso Alegre,Coca_Cola_Zero,10.19,0.3097
+474,POU_L1,Pouso Alegre,Itubaina,10.6,0.3731
+475,POU_L1,Pouso Alegre,Guarana_Antarctica_Zero,11.05,0.3373
+476,POU_L1,Pouso Alegre,Budweiser_Lata,10.61,0.3068
+477,POU_L1,Pouso Alegre,Fanta_Laranja,8.38,0.3267
+478,POU_L1,Pouso Alegre,Antarctica_Lata,10.69,0.2654
+479,POU_L1,Pouso Alegre,Maguary_Caju,10.06,0.3336
+480,POU_L1,Pouso Alegre,Maguary_Maracuja,8.85,0.3526
+481,POU_L2,Pouso Alegre,H2OH_Limao,9.36,0.3928
+482,POU_L2,Pouso Alegre,Brahma_Lata,12.34,0.3268
+483,POU_L2,Pouso Alegre,Schweppes_Citrus,10.26,0.3318
+484,POU_L2,Pouso Alegre,Sukita_Laranja,9.41,0.3254
+485,POU_L2,Pouso Alegre,Del_Valle_Uva,9.86,0.349
+486,POU_L2,Pouso Alegre,Spaten_Lata,11.54,0.4238
+487,POU_L2,Pouso Alegre,Heineken_Lata,9.55,0.3618
+488,POU_L2,Pouso Alegre,Del_Valle_Laranja,10.02,0.438
+489,POU_L2,Pouso Alegre,Amstel_Lata,11.09,0.3834
+490,POU_L2,Pouso Alegre,Pepsi,9.71,0.3869
+491,POU_L2,Pouso Alegre,Coca_Cola,10.88,0.3781
+492,POU_L2,Pouso Alegre,Stella_Artois_Pure_Gold,9.57,0.3524
+493,POU_L2,Pouso Alegre,Itaipava_Lata,10.16,0.3254
+494,POU_L2,Pouso Alegre,Fanta_Uva,11.8,0.41
+495,POU_L2,Pouso Alegre,Del_Valle_Pessego,11.61,0.4036
+496,POU_L2,Pouso Alegre,Sprite_Zero,10.68,0.3536
+497,POU_L2,Pouso Alegre,Skol_Lata,11.7,0.3371
+498,POU_L2,Pouso Alegre,Guarana_Antarctica,10.97,0.2835
+499,POU_L2,Pouso Alegre,Eisenbahn_Pilsen,10.83,0.2966
+500,POU_L2,Pouso Alegre,Kuat,9.37,0.3864
+501,POU_L2,Pouso Alegre,Pepsi_Black,9.97,0.3469
+502,POU_L2,Pouso Alegre,Sprite,10.11,0.318
+503,POU_L2,Pouso Alegre,Coca_Cola_Zero,8.08,0.3499
+504,POU_L2,Pouso Alegre,Itubaina,9.36,0.3546
+505,POU_L2,Pouso Alegre,Guarana_Antarctica_Zero,11.99,0.3156
+506,POU_L2,Pouso Alegre,Budweiser_Lata,10.12,0.318
+507,POU_L2,Pouso Alegre,Fanta_Laranja,10.9,0.3939
+508,POU_L2,Pouso Alegre,Antarctica_Lata,10.29,0.3846
+509,POU_L2,Pouso Alegre,Maguary_Caju,10.33,0.2956
+510,POU_L2,Pouso Alegre,Maguary_Maracuja,12.4,0.3712
+511,POU_L3,Pouso Alegre,H2OH_Limao,12.93,0.3311
+512,POU_L3,Pouso Alegre,Brahma_Lata,11.95,0.3445
+513,POU_L3,Pouso Alegre,Schweppes_Citrus,10.9,0.4059
+514,POU_L3,Pouso Alegre,Sukita_Laranja,10.4,0.3989
+515,POU_L3,Pouso Alegre,Del_Valle_Uva,8.52,0.322
+516,POU_L3,Pouso Alegre,Spaten_Lata,11.94,0.3181
+517,POU_L3,Pouso Alegre,Heineken_Lata,7.86,0.3867
+518,POU_L3,Pouso Alegre,Del_Valle_Laranja,11.42,0.2887
+519,POU_L3,Pouso Alegre,Amstel_Lata,13.33,0.3373
+520,POU_L3,Pouso Alegre,Pepsi,9.9,0.3631
+521,POU_L3,Pouso Alegre,Coca_Cola,11.86,0.3546
+522,POU_L3,Pouso Alegre,Stella_Artois_Pure_Gold,12.77,0.3578
+523,POU_L3,Pouso Alegre,Itaipava_Lata,8.02,0.3658
+524,POU_L3,Pouso Alegre,Fanta_Uva,9.41,0.3713
+525,POU_L3,Pouso Alegre,Del_Valle_Pessego,9.39,0.3967
+526,POU_L3,Pouso Alegre,Sprite_Zero,10.29,0.3281
+527,POU_L3,Pouso Alegre,Skol_Lata,8.7,0.3184
+528,POU_L3,Pouso Alegre,Guarana_Antarctica,10.98,0.3357
+529,POU_L3,Pouso Alegre,Eisenbahn_Pilsen,11.65,0.2638
+530,POU_L3,Pouso Alegre,Kuat,10.81,0.3864
+531,POU_L3,Pouso Alegre,Pepsi_Black,8.58,0.3363
+532,POU_L3,Pouso Alegre,Sprite,10.15,0.3719
+533,POU_L3,Pouso Alegre,Coca_Cola_Zero,9.05,0.3799
+534,POU_L3,Pouso Alegre,Itubaina,11.8,0.3301
+535,POU_L3,Pouso Alegre,Guarana_Antarctica_Zero,10.15,0.3525
+536,POU_L3,Pouso Alegre,Budweiser_Lata,13.2,0.3066
+537,POU_L3,Pouso Alegre,Fanta_Laranja,8.45,0.287
+538,POU_L3,Pouso Alegre,Antarctica_Lata,10.93,0.3732
+539,POU_L3,Pouso Alegre,Maguary_Caju,11.29,0.2804
+540,POU_L3,Pouso Alegre,Maguary_Maracuja,9.56,0.4182
+541,GAM_L1,Gama,H2OH_Limao,11.03,0.3473
+542,GAM_L1,Gama,Brahma_Lata,10.97,0.2873
+543,GAM_L1,Gama,Schweppes_Citrus,8.78,0.3601
+544,GAM_L1,Gama,Sukita_Laranja,11.4,0.3803
+545,GAM_L1,Gama,Del_Valle_Uva,10.57,0.2802
+546,GAM_L1,Gama,Spaten_Lata,10.33,0.3314
+547,GAM_L1,Gama,Heineken_Lata,11.64,0.4043
+548,GAM_L1,Gama,Del_Valle_Laranja,10.49,0.3493
+549,GAM_L1,Gama,Amstel_Lata,9.35,0.3802
+550,GAM_L1,Gama,Pepsi,10.32,0.3617
+551,GAM_L1,Gama,Coca_Cola,10.39,0.3133
+552,GAM_L1,Gama,Stella_Artois_Pure_Gold,9.43,0.3222
+553,GAM_L1,Gama,Itaipava_Lata,12.25,0.3617
+554,GAM_L1,Gama,Fanta_Uva,11.65,0.2835
+555,GAM_L1,Gama,Del_Valle_Pessego,9.09,0.3055
+556,GAM_L1,Gama,Sprite_Zero,11.02,0.4331
+557,GAM_L1,Gama,Skol_Lata,9.96,0.3159
+558,GAM_L1,Gama,Guarana_Antarctica,11.14,0.3655
+559,GAM_L1,Gama,Eisenbahn_Pilsen,12.54,0.3646
+560,GAM_L1,Gama,Kuat,10.46,0.281
+561,GAM_L1,Gama,Pepsi_Black,11.34,0.3851
+562,GAM_L1,Gama,Sprite,9.28,0.3343
+563,GAM_L1,Gama,Coca_Cola_Zero,11.69,0.2976
+564,GAM_L1,Gama,Itubaina,9.76,0.3753
+565,GAM_L1,Gama,Guarana_Antarctica_Zero,8.69,0.4152
+566,GAM_L1,Gama,Budweiser_Lata,11.75,0.3005
+567,GAM_L1,Gama,Fanta_Laranja,11.27,0.4605
+568,GAM_L1,Gama,Antarctica_Lata,11.08,0.338
+569,GAM_L1,Gama,Maguary_Caju,11.84,0.3405
+570,GAM_L1,Gama,Maguary_Maracuja,10.32,0.3753
+571,GAM_L2,Gama,H2OH_Limao,8.94,0.3582
+572,GAM_L2,Gama,Brahma_Lata,10.46,0.3142
+573,GAM_L2,Gama,Schweppes_Citrus,8.27,0.4269
+574,GAM_L2,Gama,Sukita_Laranja,9.86,0.3379
+575,GAM_L2,Gama,Del_Valle_Uva,9.1,0.3491
+576,GAM_L2,Gama,Spaten_Lata,8.83,0.4733
+577,GAM_L2,Gama,Heineken_Lata,10.87,0.3063
+578,GAM_L2,Gama,Del_Valle_Laranja,7.55,0.3573
+579,GAM_L2,Gama,Amstel_Lata,11.18,0.3335
+580,GAM_L2,Gama,Pepsi,10.1,0.323
+581,GAM_L2,Gama,Coca_Cola,11.51,0.328
+582,GAM_L2,Gama,Stella_Artois_Pure_Gold,9.88,0.365
+583,GAM_L2,Gama,Itaipava_Lata,8.69,0.357
+584,GAM_L2,Gama,Fanta_Uva,11.39,0.2329
+585,GAM_L2,Gama,Del_Valle_Pessego,12.12,0.4069
+586,GAM_L2,Gama,Sprite_Zero,10.21,0.4229
+587,GAM_L2,Gama,Skol_Lata,11.38,0.3631
+588,GAM_L2,Gama,Guarana_Antarctica,9.04,0.3782
+589,GAM_L2,Gama,Eisenbahn_Pilsen,11.75,0.3488
+590,GAM_L2,Gama,Kuat,9.92,0.3536
+591,GAM_L2,Gama,Pepsi_Black,10.78,0.3066
+592,GAM_L2,Gama,Sprite,10.97,0.3504
+593,GAM_L2,Gama,Coca_Cola_Zero,8.86,0.2921
+594,GAM_L2,Gama,Itubaina,10.32,0.375
+595,GAM_L2,Gama,Guarana_Antarctica_Zero,10.02,0.3159
+596,GAM_L2,Gama,Budweiser_Lata,12.78,0.4393
+597,GAM_L2,Gama,Fanta_Laranja,9.92,0.333
+598,GAM_L2,Gama,Antarctica_Lata,10.4,0.3139
+599,GAM_L2,Gama,Maguary_Caju,11.75,0.3636
+600,GAM_L2,Gama,Maguary_Maracuja,10.78,0.4485
+601,GAM_L3,Gama,H2OH_Limao,9.24,0.3817
+602,GAM_L3,Gama,Brahma_Lata,10.42,0.3535
+603,GAM_L3,Gama,Schweppes_Citrus,10.98,0.2769
+604,GAM_L3,Gama,Sukita_Laranja,9.15,0.4327
+605,GAM_L3,Gama,Del_Valle_Uva,9.58,0.3928
+606,GAM_L3,Gama,Spaten_Lata,10.08,0.3554
+607,GAM_L3,Gama,Heineken_Lata,9.83,0.2682
+608,GAM_L3,Gama,Del_Valle_Laranja,12.39,0.3905
+609,GAM_L3,Gama,Amstel_Lata,9.58,0.3633
+610,GAM_L3,Gama,Pepsi,10.36,0.3391
+611,GAM_L3,Gama,Coca_Cola,11.94,0.3442
+612,GAM_L3,Gama,Stella_Artois_Pure_Gold,8.89,0.3125
+613,GAM_L3,Gama,Itaipava_Lata,10.87,0.3388
+614,GAM_L3,Gama,Fanta_Uva,9.29,0.3583
+615,GAM_L3,Gama,Del_Valle_Pessego,9.66,0.3589
+616,GAM_L3,Gama,Sprite_Zero,10.31,0.4068
+617,GAM_L3,Gama,Skol_Lata,11.32,0.4166
+618,GAM_L3,Gama,Guarana_Antarctica,8.99,0.3404
+619,GAM_L3,Gama,Eisenbahn_Pilsen,10.78,0.3466
+620,GAM_L3,Gama,Kuat,10.77,0.3307
+621,GAM_L3,Gama,Pepsi_Black,9.02,0.3061
+622,GAM_L3,Gama,Sprite,9.9,0.3317
+623,GAM_L3,Gama,Coca_Cola_Zero,12.96,0.3559
+624,GAM_L3,Gama,Itubaina,10.16,0.4279
+625,GAM_L3,Gama,Guarana_Antarctica_Zero,9.85,0.3533
+626,GAM_L3,Gama,Budweiser_Lata,8.88,0.2928
+627,GAM_L3,Gama,Fanta_Laranja,10.46,0.3177
+628,GAM_L3,Gama,Antarctica_Lata,10.78,0.3192
+629,GAM_L3,Gama,Maguary_Caju,10.07,0.2473
+630,GAM_L3,Gama,Maguary_Maracuja,11.63,0.3375
+631,VIA_L1,Viamao,H2OH_Limao,11.17,0.3696
+632,VIA_L1,Viamao,Brahma_Lata,9.74,0.3135
+633,VIA_L1,Viamao,Schweppes_Citrus,11.18,0.303
+634,VIA_L1,Viamao,Sukita_Laranja,8.89,0.2615
+635,VIA_L1,Viamao,Del_Valle_Uva,8.77,0.3379
+636,VIA_L1,Viamao,Spaten_Lata,9.82,0.3418
+637,VIA_L1,Viamao,Heineken_Lata,11.46,0.3244
+638,VIA_L1,Viamao,Del_Valle_Laranja,10.83,0.2826
+639,VIA_L1,Viamao,Amstel_Lata,11.9,0.3432
+640,VIA_L1,Viamao,Pepsi,11.15,0.3768
+641,VIA_L1,Viamao,Coca_Cola,11.04,0.3695
+642,VIA_L1,Viamao,Stella_Artois_Pure_Gold,10.04,0.3097
+643,VIA_L1,Viamao,Itaipava_Lata,10.96,0.366
+644,VIA_L1,Viamao,Fanta_Uva,11.0,0.3381
+645,VIA_L1,Viamao,Del_Valle_Pessego,10.17,0.4209
+646,VIA_L1,Viamao,Sprite_Zero,8.82,0.35
+647,VIA_L1,Viamao,Skol_Lata,11.28,0.286
+648,VIA_L1,Viamao,Guarana_Antarctica,8.45,0.3107
+649,VIA_L1,Viamao,Eisenbahn_Pilsen,12.31,0.3685
+650,VIA_L1,Viamao,Kuat,9.78,0.3519
+651,VIA_L1,Viamao,Pepsi_Black,9.56,0.359
+652,VIA_L1,Viamao,Sprite,9.84,0.4275
+653,VIA_L1,Viamao,Coca_Cola_Zero,9.45,0.3562
+654,VIA_L1,Viamao,Itubaina,9.08,0.3585
+655,VIA_L1,Viamao,Guarana_Antarctica_Zero,10.45,0.3363
+656,VIA_L1,Viamao,Budweiser_Lata,10.11,0.3648
+657,VIA_L1,Viamao,Fanta_Laranja,9.53,0.3642
+658,VIA_L1,Viamao,Antarctica_Lata,10.9,0.3854
+659,VIA_L1,Viamao,Maguary_Caju,9.97,0.319
+660,VIA_L1,Viamao,Maguary_Maracuja,8.68,0.3406
+661,VIA_L2,Viamao,H2OH_Limao,10.76,0.3397
+662,VIA_L2,Viamao,Brahma_Lata,9.5,0.3207
+663,VIA_L2,Viamao,Schweppes_Citrus,9.73,0.3614
+664,VIA_L2,Viamao,Sukita_Laranja,9.55,0.332
+665,VIA_L2,Viamao,Del_Valle_Uva,9.89,0.3286
+666,VIA_L2,Viamao,Spaten_Lata,9.7,0.3639
+667,VIA_L2,Viamao,Heineken_Lata,11.02,0.3087
+668,VIA_L2,Viamao,Del_Valle_Laranja,9.69,0.3811
+669,VIA_L2,Viamao,Amstel_Lata,8.35,0.3562
+670,VIA_L2,Viamao,Pepsi,11.51,0.3769
+671,VIA_L2,Viamao,Coca_Cola,10.31,0.3226
+672,VIA_L2,Viamao,Stella_Artois_Pure_Gold,10.64,0.4171
+673,VIA_L2,Viamao,Itaipava_Lata,10.79,0.352
+674,VIA_L2,Viamao,Fanta_Uva,7.62,0.4157
+675,VIA_L2,Viamao,Del_Valle_Pessego,11.12,0.3505
+676,VIA_L2,Viamao,Sprite_Zero,9.58,0.3398
+677,VIA_L2,Viamao,Skol_Lata,10.74,0.3186
+678,VIA_L2,Viamao,Guarana_Antarctica,11.14,0.4241
+679,VIA_L2,Viamao,Eisenbahn_Pilsen,10.51,0.3338
+680,VIA_L2,Viamao,Kuat,10.14,0.4118
+681,VIA_L2,Viamao,Pepsi_Black,10.98,0.3273
+682,VIA_L2,Viamao,Sprite,8.51,0.3472
+683,VIA_L2,Viamao,Coca_Cola_Zero,9.89,0.274
+684,VIA_L2,Viamao,Itubaina,12.44,0.4108
+685,VIA_L2,Viamao,Guarana_Antarctica_Zero,11.01,0.4031
+686,VIA_L2,Viamao,Budweiser_Lata,9.6,0.3883
+687,VIA_L2,Viamao,Fanta_Laranja,11.92,0.3153
+688,VIA_L2,Viamao,Antarctica_Lata,10.02,0.3552
+689,VIA_L2,Viamao,Maguary_Caju,9.43,0.3096
+690,VIA_L2,Viamao,Maguary_Maracuja,11.06,0.3557
+691,VIA_L3,Viamao,H2OH_Limao,11.7,0.3438
+692,VIA_L3,Viamao,Brahma_Lata,13.34,0.3534
+693,VIA_L3,Viamao,Schweppes_Citrus,11.81,0.376
+694,VIA_L3,Viamao,Sukita_Laranja,9.37,0.4077
+695,VIA_L3,Viamao,Del_Valle_Uva,9.63,0.3498
+696,VIA_L3,Viamao,Spaten_Lata,10.6,0.3452
+697,VIA_L3,Viamao,Heineken_Lata,10.92,0.2666
+698,VIA_L3,Viamao,Del_Valle_Laranja,10.47,0.371
+699,VIA_L3,Viamao,Amstel_Lata,11.03,0.4019
+700,VIA_L3,Viamao,Pepsi,11.23,0.3806
+701,VIA_L3,Viamao,Coca_Cola,9.34,0.3363
+702,VIA_L3,Viamao,Stella_Artois_Pure_Gold,11.66,0.366
+703,VIA_L3,Viamao,Itaipava_Lata,9.56,0.3029
+704,VIA_L3,Viamao,Fanta_Uva,9.78,0.4208
+705,VIA_L3,Viamao,Del_Valle_Pessego,9.78,0.269
+706,VIA_L3,Viamao,Sprite_Zero,10.63,0.3573
+707,VIA_L3,Viamao,Skol_Lata,12.51,0.3633
+708,VIA_L3,Viamao,Guarana_Antarctica,9.55,0.3774
+709,VIA_L3,Viamao,Eisenbahn_Pilsen,11.84,0.3601
+710,VIA_L3,Viamao,Kuat,10.38,0.3603
+711,VIA_L3,Viamao,Pepsi_Black,8.62,0.3693
+712,VIA_L3,Viamao,Sprite,11.51,0.3491
+713,VIA_L3,Viamao,Coca_Cola_Zero,10.37,0.3099
+714,VIA_L3,Viamao,Itubaina,11.45,0.3514
+715,VIA_L3,Viamao,Guarana_Antarctica_Zero,11.64,0.3896
+716,VIA_L3,Viamao,Budweiser_Lata,8.92,0.3255
+717,VIA_L3,Viamao,Fanta_Laranja,9.93,0.3437
+718,VIA_L3,Viamao,Antarctica_Lata,12.71,0.3594
+719,VIA_L3,Viamao,Maguary_Caju,10.82,0.3474
+720,VIA_L3,Viamao,Maguary_Maracuja,9.01,0.3823
+721,ITU_L1,Itupeva,H2OH_Limao,8.68,0.35
+722,ITU_L1,Itupeva,Brahma_Lata,10.92,0.2672
+723,ITU_L1,Itupeva,Schweppes_Citrus,11.03,0.4031
+724,ITU_L1,Itupeva,Sukita_Laranja,11.94,0.3586
+725,ITU_L1,Itupeva,Del_Valle_Uva,10.03,0.3281
+726,ITU_L1,Itupeva,Spaten_Lata,11.36,0.3927
+727,ITU_L1,Itupeva,Heineken_Lata,11.29,0.3564
+728,ITU_L1,Itupeva,Del_Valle_Laranja,9.92,0.4099
+729,ITU_L1,Itupeva,Amstel_Lata,12.49,0.3183
+730,ITU_L1,Itupeva,Pepsi,11.63,0.2971
+731,ITU_L1,Itupeva,Coca_Cola,10.64,0.3643
+732,ITU_L1,Itupeva,Stella_Artois_Pure_Gold,10.74,0.3072
+733,ITU_L1,Itupeva,Itaipava_Lata,10.4,0.352
+734,ITU_L1,Itupeva,Fanta_Uva,11.77,0.2989
+735,ITU_L1,Itupeva,Del_Valle_Pessego,11.37,0.3938
+736,ITU_L1,Itupeva,Sprite_Zero,8.85,0.3426
+737,ITU_L1,Itupeva,Skol_Lata,12.07,0.3915
+738,ITU_L1,Itupeva,Guarana_Antarctica,12.96,0.4089
+739,ITU_L1,Itupeva,Eisenbahn_Pilsen,12.24,0.3278
+740,ITU_L1,Itupeva,Kuat,10.92,0.3087
+741,ITU_L1,Itupeva,Pepsi_Black,11.63,0.3404
+742,ITU_L1,Itupeva,Sprite,9.5,0.3428
+743,ITU_L1,Itupeva,Coca_Cola_Zero,12.45,0.3387
+744,ITU_L1,Itupeva,Itubaina,10.87,0.3629
+745,ITU_L1,Itupeva,Guarana_Antarctica_Zero,9.94,0.4085
+746,ITU_L1,Itupeva,Budweiser_Lata,10.08,0.3846
+747,ITU_L1,Itupeva,Fanta_Laranja,11.1,0.3841
+748,ITU_L1,Itupeva,Antarctica_Lata,9.41,0.3135
+749,ITU_L1,Itupeva,Maguary_Caju,10.16,0.346
+750,ITU_L1,Itupeva,Maguary_Maracuja,9.27,0.3777
+751,ITU_L2,Itupeva,H2OH_Limao,9.44,0.4061
+752,ITU_L2,Itupeva,Brahma_Lata,8.38,0.3199
+753,ITU_L2,Itupeva,Schweppes_Citrus,10.47,0.3145
+754,ITU_L2,Itupeva,Sukita_Laranja,9.81,0.3484
+755,ITU_L2,Itupeva,Del_Valle_Uva,10.68,0.37
+756,ITU_L2,Itupeva,Spaten_Lata,9.9,0.3791
+757,ITU_L2,Itupeva,Heineken_Lata,9.43,0.3326
+758,ITU_L2,Itupeva,Del_Valle_Laranja,10.66,0.3611
+759,ITU_L2,Itupeva,Amstel_Lata,9.82,0.3271
+760,ITU_L2,Itupeva,Pepsi,10.05,0.3649
+761,ITU_L2,Itupeva,Coca_Cola,12.06,0.3633
+762,ITU_L2,Itupeva,Stella_Artois_Pure_Gold,10.03,0.3023
+763,ITU_L2,Itupeva,Itaipava_Lata,12.26,0.4705
+764,ITU_L2,Itupeva,Fanta_Uva,9.44,0.3956
+765,ITU_L2,Itupeva,Del_Valle_Pessego,9.49,0.3237
+766,ITU_L2,Itupeva,Sprite_Zero,10.99,0.3587
+767,ITU_L2,Itupeva,Skol_Lata,10.18,0.3338
+768,ITU_L2,Itupeva,Guarana_Antarctica,13.49,0.3421
+769,ITU_L2,Itupeva,Eisenbahn_Pilsen,9.7,0.3176
+770,ITU_L2,Itupeva,Kuat,8.81,0.3365
+771,ITU_L2,Itupeva,Pepsi_Black,9.74,0.356
+772,ITU_L2,Itupeva,Sprite,10.02,0.2498
+773,ITU_L2,Itupeva,Coca_Cola_Zero,11.2,0.3614
+774,ITU_L2,Itupeva,Itubaina,11.99,0.317
+775,ITU_L2,Itupeva,Guarana_Antarctica_Zero,12.4,0.3831
+776,ITU_L2,Itupeva,Budweiser_Lata,10.63,0.3733
+777,ITU_L2,Itupeva,Fanta_Laranja,9.95,0.2978
+778,ITU_L2,Itupeva,Antarctica_Lata,10.32,0.3481
+779,ITU_L2,Itupeva,Maguary_Caju,10.99,0.2828
+780,ITU_L2,Itupeva,Maguary_Maracuja,11.3,0.4043
+781,ITU_L3,Itupeva,H2OH_Limao,10.02,0.3476
+782,ITU_L3,Itupeva,Brahma_Lata,10.87,0.3199
+783,ITU_L3,Itupeva,Schweppes_Citrus,11.16,0.3645
+784,ITU_L3,Itupeva,Sukita_Laranja,8.45,0.4119
+785,ITU_L3,Itupeva,Del_Valle_Uva,9.29,0.3338
+786,ITU_L3,Itupeva,Spaten_Lata,12.43,0.4244
+787,ITU_L3,Itupeva,Heineken_Lata,12.64,0.3077
+788,ITU_L3,Itupeva,Del_Valle_Laranja,12.19,0.3559
+789,ITU_L3,Itupeva,Amstel_Lata,9.08,0.3541
+790,ITU_L3,Itupeva,Pepsi,9.13,0.3117
+791,ITU_L3,Itupeva,Coca_Cola,10.34,0.3818
+792,ITU_L3,Itupeva,Stella_Artois_Pure_Gold,8.07,0.3998
+793,ITU_L3,Itupeva,Itaipava_Lata,10.92,0.3395
+794,ITU_L3,Itupeva,Fanta_Uva,9.89,0.2933
+795,ITU_L3,Itupeva,Del_Valle_Pessego,9.14,0.3536
+796,ITU_L3,Itupeva,Sprite_Zero,10.08,0.3639
+797,ITU_L3,Itupeva,Skol_Lata,11.81,0.3489
+798,ITU_L3,Itupeva,Guarana_Antarctica,11.52,0.3536
+799,ITU_L3,Itupeva,Eisenbahn_Pilsen,12.51,0.274
+800,ITU_L3,Itupeva,Kuat,10.64,0.3244
+801,ITU_L3,Itupeva,Pepsi_Black,10.22,0.3947
+802,ITU_L3,Itupeva,Sprite,8.92,0.4179
+803,ITU_L3,Itupeva,Coca_Cola_Zero,10.05,0.3792
+804,ITU_L3,Itupeva,Itubaina,11.28,0.3991
+805,ITU_L3,Itupeva,Guarana_Antarctica_Zero,7.95,0.3653
+806,ITU_L3,Itupeva,Budweiser_Lata,9.05,0.3195
+807,ITU_L3,Itupeva,Fanta_Laranja,9.35,0.3205
+808,ITU_L3,Itupeva,Antarctica_Lata,10.61,0.3084
+809,ITU_L3,Itupeva,Maguary_Caju,11.65,0.3171
+810,ITU_L3,Itupeva,Maguary_Maracuja,10.59,0.3172
+811,CAB_L1,Cabo de Santo Agostinho,H2OH_Limao,11.81,0.3341
+812,CAB_L1,Cabo de Santo Agostinho,Brahma_Lata,10.34,0.3571
+813,CAB_L1,Cabo de Santo Agostinho,Schweppes_Citrus,10.77,0.3549
+814,CAB_L1,Cabo de Santo Agostinho,Sukita_Laranja,11.11,0.3453
+815,CAB_L1,Cabo de Santo Agostinho,Del_Valle_Uva,9.21,0.4017
+816,CAB_L1,Cabo de Santo Agostinho,Spaten_Lata,12.9,0.3933
+817,CAB_L1,Cabo de Santo Agostinho,Heineken_Lata,11.65,0.4248
+818,CAB_L1,Cabo de Santo Agostinho,Del_Valle_Laranja,13.35,0.3501
+819,CAB_L1,Cabo de Santo Agostinho,Amstel_Lata,10.34,0.3457
+820,CAB_L1,Cabo de Santo Agostinho,Pepsi,10.32,0.377
+821,CAB_L1,Cabo de Santo Agostinho,Coca_Cola,9.18,0.3199
+822,CAB_L1,Cabo de Santo Agostinho,Stella_Artois_Pure_Gold,11.59,0.2732
+823,CAB_L1,Cabo de Santo Agostinho,Itaipava_Lata,10.05,0.3227
+824,CAB_L1,Cabo de Santo Agostinho,Fanta_Uva,10.97,0.3392
+825,CAB_L1,Cabo de Santo Agostinho,Del_Valle_Pessego,12.75,0.2613
+826,CAB_L1,Cabo de Santo Agostinho,Sprite_Zero,10.99,0.3906
+827,CAB_L1,Cabo de Santo Agostinho,Skol_Lata,9.44,0.3193
+828,CAB_L1,Cabo de Santo Agostinho,Guarana_Antarctica,9.47,0.3081
+829,CAB_L1,Cabo de Santo Agostinho,Eisenbahn_Pilsen,10.48,0.3389
+830,CAB_L1,Cabo de Santo Agostinho,Kuat,10.53,0.3754
+831,CAB_L1,Cabo de Santo Agostinho,Pepsi_Black,12.6,0.2347
+832,CAB_L1,Cabo de Santo Agostinho,Sprite,11.31,0.3951
+833,CAB_L1,Cabo de Santo Agostinho,Coca_Cola_Zero,8.09,0.398
+834,CAB_L1,Cabo de Santo Agostinho,Itubaina,10.85,0.3846
+835,CAB_L1,Cabo de Santo Agostinho,Guarana_Antarctica_Zero,11.2,0.4311
+836,CAB_L1,Cabo de Santo Agostinho,Budweiser_Lata,8.49,0.2962
+837,CAB_L1,Cabo de Santo Agostinho,Fanta_Laranja,10.78,0.2708
+838,CAB_L1,Cabo de Santo Agostinho,Antarctica_Lata,10.64,0.3304
+839,CAB_L1,Cabo de Santo Agostinho,Maguary_Caju,12.16,0.3677
+840,CAB_L1,Cabo de Santo Agostinho,Maguary_Maracuja,8.35,0.3699
+841,CAB_L2,Cabo de Santo Agostinho,H2OH_Limao,10.27,0.2984
+842,CAB_L2,Cabo de Santo Agostinho,Brahma_Lata,9.88,0.3462
+843,CAB_L2,Cabo de Santo Agostinho,Schweppes_Citrus,11.62,0.3363
+844,CAB_L2,Cabo de Santo Agostinho,Sukita_Laranja,9.5,0.3304
+845,CAB_L2,Cabo de Santo Agostinho,Del_Valle_Uva,9.94,0.3492
+846,CAB_L2,Cabo de Santo Agostinho,Spaten_Lata,11.08,0.3082
+847,CAB_L2,Cabo de Santo Agostinho,Heineken_Lata,10.65,0.4407
+848,CAB_L2,Cabo de Santo Agostinho,Del_Valle_Laranja,13.19,0.3748
+849,CAB_L2,Cabo de Santo Agostinho,Amstel_Lata,11.37,0.348
+850,CAB_L2,Cabo de Santo Agostinho,Pepsi,8.11,0.3711
+851,CAB_L2,Cabo de Santo Agostinho,Coca_Cola,8.48,0.3664
+852,CAB_L2,Cabo de Santo Agostinho,Stella_Artois_Pure_Gold,8.65,0.3671
+853,CAB_L2,Cabo de Santo Agostinho,Itaipava_Lata,11.13,0.4601
+854,CAB_L2,Cabo de Santo Agostinho,Fanta_Uva,8.26,0.353
+855,CAB_L2,Cabo de Santo Agostinho,Del_Valle_Pessego,12.19,0.3135
+856,CAB_L2,Cabo de Santo Agostinho,Sprite_Zero,11.3,0.3831
+857,CAB_L2,Cabo de Santo Agostinho,Skol_Lata,9.98,0.2953
+858,CAB_L2,Cabo de Santo Agostinho,Guarana_Antarctica,10.47,0.3137
+859,CAB_L2,Cabo de Santo Agostinho,Eisenbahn_Pilsen,11.86,0.3369
+860,CAB_L2,Cabo de Santo Agostinho,Kuat,11.7,0.353
+861,CAB_L2,Cabo de Santo Agostinho,Pepsi_Black,9.05,0.3752
+862,CAB_L2,Cabo de Santo Agostinho,Sprite,11.06,0.3727
+863,CAB_L2,Cabo de Santo Agostinho,Coca_Cola_Zero,10.59,0.4231
+864,CAB_L2,Cabo de Santo Agostinho,Itubaina,11.49,0.3815
+865,CAB_L2,Cabo de Santo Agostinho,Guarana_Antarctica_Zero,8.95,0.2852
+866,CAB_L2,Cabo de Santo Agostinho,Budweiser_Lata,10.5,0.3387
+867,CAB_L2,Cabo de Santo Agostinho,Fanta_Laranja,11.04,0.3356
+868,CAB_L2,Cabo de Santo Agostinho,Antarctica_Lata,9.19,0.3669
+869,CAB_L2,Cabo de Santo Agostinho,Maguary_Caju,10.7,0.2882
+870,CAB_L2,Cabo de Santo Agostinho,Maguary_Maracuja,9.94,0.3128
+871,CAB_L3,Cabo de Santo Agostinho,H2OH_Limao,8.7,0.3453
+872,CAB_L3,Cabo de Santo Agostinho,Brahma_Lata,13.24,0.3269
+873,CAB_L3,Cabo de Santo Agostinho,Schweppes_Citrus,11.7,0.3894
+874,CAB_L3,Cabo de Santo Agostinho,Sukita_Laranja,10.49,0.467
+875,CAB_L3,Cabo de Santo Agostinho,Del_Valle_Uva,9.0,0.4072
+876,CAB_L3,Cabo de Santo Agostinho,Spaten_Lata,10.24,0.398
+877,CAB_L3,Cabo de Santo Agostinho,Heineken_Lata,11.12,0.3501
+878,CAB_L3,Cabo de Santo Agostinho,Del_Valle_Laranja,8.47,0.3598
+879,CAB_L3,Cabo de Santo Agostinho,Amstel_Lata,13.43,0.2921
+880,CAB_L3,Cabo de Santo Agostinho,Pepsi,8.83,0.4127
+881,CAB_L3,Cabo de Santo Agostinho,Coca_Cola,10.91,0.3735
+882,CAB_L3,Cabo de Santo Agostinho,Stella_Artois_Pure_Gold,10.21,0.3027
+883,CAB_L3,Cabo de Santo Agostinho,Itaipava_Lata,10.45,0.3528
+884,CAB_L3,Cabo de Santo Agostinho,Fanta_Uva,11.05,0.3083
+885,CAB_L3,Cabo de Santo Agostinho,Del_Valle_Pessego,10.23,0.3415
+886,CAB_L3,Cabo de Santo Agostinho,Sprite_Zero,10.63,0.3653
+887,CAB_L3,Cabo de Santo Agostinho,Skol_Lata,8.84,0.3415
+888,CAB_L3,Cabo de Santo Agostinho,Guarana_Antarctica,12.61,0.3043
+889,CAB_L3,Cabo de Santo Agostinho,Eisenbahn_Pilsen,8.89,0.3153
+890,CAB_L3,Cabo de Santo Agostinho,Kuat,11.83,0.3164
+891,CAB_L3,Cabo de Santo Agostinho,Pepsi_Black,12.83,0.2911
+892,CAB_L3,Cabo de Santo Agostinho,Sprite,10.71,0.2805
+893,CAB_L3,Cabo de Santo Agostinho,Coca_Cola_Zero,9.98,0.3354
+894,CAB_L3,Cabo de Santo Agostinho,Itubaina,13.12,0.2952
+895,CAB_L3,Cabo de Santo Agostinho,Guarana_Antarctica_Zero,11.13,0.4032
+896,CAB_L3,Cabo de Santo Agostinho,Budweiser_Lata,12.88,0.2695
+897,CAB_L3,Cabo de Santo Agostinho,Fanta_Laranja,12.09,0.4137
+898,CAB_L3,Cabo de Santo Agostinho,Antarctica_Lata,11.94,0.3421
+899,CAB_L3,Cabo de Santo Agostinho,Maguary_Caju,11.25,0.4244
+900,CAB_L3,Cabo de Santo Agostinho,Maguary_Maracuja,10.2,0.2943

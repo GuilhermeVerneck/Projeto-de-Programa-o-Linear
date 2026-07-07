@@ -1,0 +1,31 @@
+id,production_line,plant,storage_limit
+1,JAC_L1,Jacarei,165536
+2,JAC_L2,Jacarei,144225
+3,JAC_L3,Jacarei,155355
+4,EXT_L1,Extrema,122104
+5,EXT_L2,Extrema,159299
+6,EXT_L3,Extrema,152782
+7,TRE_L1,Tres Rios,133675
+8,TRE_L2,Tres Rios,124678
+9,TRE_L3,Tres Rios,174575
+10,ALA_L1,Alagoinhas,145713
+11,ALA_L2,Alagoinhas,181265
+12,ALA_L3,Alagoinhas,131948
+13,FRU_L1,Frutal,124024
+14,FRU_L2,Frutal,174679
+15,FRU_L3,Frutal,166640
+16,POU_L1,Pouso Alegre,125600
+17,POU_L2,Pouso Alegre,144804
+18,POU_L3,Pouso Alegre,139619
+19,GAM_L1,Gama,135646
+20,GAM_L2,Gama,191270
+21,GAM_L3,Gama,145360
+22,VIA_L1,Viamao,127512
+23,VIA_L2,Viamao,118653
+24,VIA_L3,Viamao,142863
+25,ITU_L1,Itupeva,121677
+26,ITU_L2,Itupeva,169976
+27,ITU_L3,Itupeva,125935
+28,CAB_L1,Cabo de Santo Agostinho,164199
+29,CAB_L2,Cabo de Santo Agostinho,166992
+30,CAB_L3,Cabo de Santo Agostinho,159972
