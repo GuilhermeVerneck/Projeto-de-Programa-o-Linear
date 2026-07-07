@@ -1,0 +1,451 @@
+cenario,plant,linha,periodo,mu_hora_maquina,gamma_armazenagem,unidade
+55,Jacarei,JAC_L1,1,0.0,0.0,lata
+55,Jacarei,JAC_L1,2,0.0,0.0,lata
+55,Jacarei,JAC_L1,3,0.0,0.0,lata
+55,Jacarei,JAC_L1,4,0.0,0.0,lata
+55,Jacarei,JAC_L1,5,0.0,0.0,lata
+55,Jacarei,JAC_L1,6,0.0,0.0,lata
+55,Jacarei,JAC_L1,7,0.0,0.0,lata
+55,Jacarei,JAC_L1,8,-341.80582880000657,0.0,lata
+55,Jacarei,JAC_L1,9,-124.55681000000004,0.0,lata
+55,Jacarei,JAC_L1,10,0.0,0.0,lata
+55,Jacarei,JAC_L1,11,-438.4681612500008,0.0,lata
+55,Jacarei,JAC_L1,12,0.0,0.0,lata
+55,Jacarei,JAC_L1,13,-124.47429750000083,0.0,lata
+55,Jacarei,JAC_L1,14,-477.6482177000016,0.0,lata
+55,Jacarei,JAC_L1,15,0.0,0.0,lata
+55,Jacarei,JAC_L2,1,0.0,0.0,lata
+55,Jacarei,JAC_L2,2,0.0,0.0,lata
+55,Jacarei,JAC_L2,3,0.0,0.0,lata
+55,Jacarei,JAC_L2,4,0.0,0.0,lata
+55,Jacarei,JAC_L2,5,0.0,0.0,lata
+55,Jacarei,JAC_L2,6,0.0,0.0,lata
+55,Jacarei,JAC_L2,7,0.0,0.0,lata
+55,Jacarei,JAC_L2,8,0.0,0.0,lata
+55,Jacarei,JAC_L2,9,0.0,0.0,lata
+55,Jacarei,JAC_L2,10,0.0,0.0,lata
+55,Jacarei,JAC_L2,11,0.0,0.0,lata
+55,Jacarei,JAC_L2,12,0.0,0.0,lata
+55,Jacarei,JAC_L2,13,0.0,0.0,lata
+55,Jacarei,JAC_L2,14,0.0,0.0,lata
+55,Jacarei,JAC_L2,15,0.0,0.0,lata
+55,Jacarei,JAC_L3,1,-34.86967154999911,0.0,lata
+55,Jacarei,JAC_L3,2,-327.8825276999996,0.0,lata
+55,Jacarei,JAC_L3,3,0.0,0.0,lata
+55,Jacarei,JAC_L3,4,0.0,0.0,lata
+55,Jacarei,JAC_L3,5,-29.390293799993742,0.0,lata
+55,Jacarei,JAC_L3,6,0.0,0.0,lata
+55,Jacarei,JAC_L3,7,0.0,0.0,lata
+55,Jacarei,JAC_L3,8,-260.26889700000174,0.0,lata
+55,Jacarei,JAC_L3,9,-582.1363048500007,0.0,lata
+55,Jacarei,JAC_L3,10,-452.35306304999904,0.0,lata
+55,Jacarei,JAC_L3,11,-172.49864720000005,0.0,lata
+55,Jacarei,JAC_L3,12,-72.68012720000115,0.0,lata
+55,Jacarei,JAC_L3,13,0.0,0.0,lata
+55,Jacarei,JAC_L3,14,-198.73774509999384,0.0,lata
+55,Jacarei,JAC_L3,15,0.0,0.0,lata
+55,Extrema,EXT_L1,1,0.0,0.0,lata
+55,Extrema,EXT_L1,2,0.0,0.0,lata
+55,Extrema,EXT_L1,3,-142.71929519999867,0.0,lata
+55,Extrema,EXT_L1,4,0.0,0.0,lata
+55,Extrema,EXT_L1,5,0.0,0.0,lata
+55,Extrema,EXT_L1,6,-297.56771774999834,0.0,lata
+55,Extrema,EXT_L1,7,0.0,0.0,lata
+55,Extrema,EXT_L1,8,-278.3832154999982,0.0,lata
+55,Extrema,EXT_L1,9,0.0,0.0,lata
+55,Extrema,EXT_L1,10,-140.5153219999993,0.0,lata
+55,Extrema,EXT_L1,11,0.0,0.0,lata
+55,Extrema,EXT_L1,12,0.0,0.0,lata
+55,Extrema,EXT_L1,13,0.0,0.0,lata
+55,Extrema,EXT_L1,14,0.0,0.0,lata
+55,Extrema,EXT_L1,15,0.0,0.0,lata
+55,Extrema,EXT_L2,1,-571.6033305000019,0.0,lata
+55,Extrema,EXT_L2,2,-1078.2693652499984,0.0,lata
+55,Extrema,EXT_L2,3,-915.9050836499991,0.0,lata
+55,Extrema,EXT_L2,4,-687.59633235,0.0,lata
+55,Extrema,EXT_L2,5,-569.4842160000007,0.0,lata
+55,Extrema,EXT_L2,6,-1010.6045355000006,0.0,lata
+55,Extrema,EXT_L2,7,-1548.5446075000018,0.0,lata
+55,Extrema,EXT_L2,8,-1254.7962451500007,0.0,lata
+55,Extrema,EXT_L2,9,-988.5736281000027,0.0,lata
+55,Extrema,EXT_L2,10,-1015.6372680000004,0.0,lata
+55,Extrema,EXT_L2,11,-1099.3172206500021,0.0,lata
+55,Extrema,EXT_L2,12,-1557.4162972500017,0.0,lata
+55,Extrema,EXT_L2,13,-506.9709756000011,0.0,lata
+55,Extrema,EXT_L2,14,-946.6282210000027,0.0,lata
+55,Extrema,EXT_L2,15,0.0,0.0,lata
+55,Extrema,EXT_L3,1,-247.93871599999875,0.0,lata
+55,Extrema,EXT_L3,2,-662.1219442999991,0.0,lata
+55,Extrema,EXT_L3,3,-45.12297899999612,0.0,lata
+55,Extrema,EXT_L3,4,-380.12938404999295,0.0,lata
+55,Extrema,EXT_L3,5,-878.4565549999934,0.0,lata
+55,Extrema,EXT_L3,6,0.0,0.0,lata
+55,Extrema,EXT_L3,7,-53.645672850001574,0.0,lata
+55,Extrema,EXT_L3,8,-461.52832075000333,0.0,lata
+55,Extrema,EXT_L3,9,-913.4962199999991,0.0,lata
+55,Extrema,EXT_L3,10,-1207.3626996000003,0.0,lata
+55,Extrema,EXT_L3,11,-489.52186125000117,0.0,lata
+55,Extrema,EXT_L3,12,-817.6788184500001,0.0,lata
+55,Extrema,EXT_L3,13,-1352.9788079500013,0.0,lata
+55,Extrema,EXT_L3,14,-994.157515799996,0.0,lata
+55,Extrema,EXT_L3,15,-783.5593845000003,0.0,lata
+55,Tres Rios,TRE_L1,1,-206.38932599999862,0.0,lata
+55,Tres Rios,TRE_L1,2,-22.287677399997847,0.0,lata
+55,Tres Rios,TRE_L1,3,-116.51457990000199,0.0,lata
+55,Tres Rios,TRE_L1,4,-529.1938137000034,0.0,lata
+55,Tres Rios,TRE_L1,5,-863.7843983500006,0.0,lata
+55,Tres Rios,TRE_L1,6,-1335.5768029500014,0.0,lata
+55,Tres Rios,TRE_L1,7,-217.37876189999588,0.0,lata
+55,Tres Rios,TRE_L1,8,-559.0313025000014,0.0,lata
+55,Tres Rios,TRE_L1,9,0.0,0.0,lata
+55,Tres Rios,TRE_L1,10,0.0,0.0,lata
+55,Tres Rios,TRE_L1,11,-406.53845980000006,0.0,lata
+55,Tres Rios,TRE_L1,12,-22.353930899998886,0.0,lata
+55,Tres Rios,TRE_L1,13,-248.39177579999887,0.0,lata
+55,Tres Rios,TRE_L1,14,0.0,0.0,lata
+55,Tres Rios,TRE_L1,15,-63.81585140000243,0.0,lata
+55,Tres Rios,TRE_L2,1,0.0,0.0,lata
+55,Tres Rios,TRE_L2,2,0.0,0.0,lata
+55,Tres Rios,TRE_L2,3,0.0,0.0,lata
+55,Tres Rios,TRE_L2,4,0.0,0.0,lata
+55,Tres Rios,TRE_L2,5,0.0,0.0,lata
+55,Tres Rios,TRE_L2,6,0.0,0.0,lata
+55,Tres Rios,TRE_L2,7,-32.10587940000005,0.0,lata
+55,Tres Rios,TRE_L2,8,0.0,0.0,lata
+55,Tres Rios,TRE_L2,9,0.0,0.0,lata
+55,Tres Rios,TRE_L2,10,0.0,0.0,lata
+55,Tres Rios,TRE_L2,11,0.0,0.0,lata
+55,Tres Rios,TRE_L2,12,0.0,0.0,lata
+55,Tres Rios,TRE_L2,13,-73.04355750000104,0.0,lata
+55,Tres Rios,TRE_L2,14,0.0,0.0,lata
+55,Tres Rios,TRE_L2,15,0.0,0.0,lata
+55,Tres Rios,TRE_L3,1,-176.04981255000166,0.0,lata
+55,Tres Rios,TRE_L3,2,-577.4052120000015,0.0,lata
+55,Tres Rios,TRE_L3,3,-1007.3635308000012,0.0,lata
+55,Tres Rios,TRE_L3,4,-665.8574832000049,0.0,lata
+55,Tres Rios,TRE_L3,5,-1175.0039356000034,0.0,lata
+55,Tres Rios,TRE_L3,6,-941.6326914000001,0.0,lata
+55,Tres Rios,TRE_L3,7,-1300.6779872000025,0.0,lata
+55,Tres Rios,TRE_L3,8,-1907.3890656000021,0.0,lata
+55,Tres Rios,TRE_L3,9,-1040.5378593999976,0.0,lata
+55,Tres Rios,TRE_L3,10,-1427.129071999998,0.0,lata
+55,Tres Rios,TRE_L3,11,-620.1325800000013,0.0,lata
+55,Tres Rios,TRE_L3,12,0.0,0.0,lata
+55,Tres Rios,TRE_L3,13,-35.33937099999821,0.0,lata
+55,Tres Rios,TRE_L3,14,-465.3667804500001,0.0,lata
+55,Tres Rios,TRE_L3,15,-970.2205512500022,0.0,lata
+55,Alagoinhas,ALA_L1,1,-391.33519454999987,0.0,lata
+55,Alagoinhas,ALA_L1,2,-496.6759450999907,0.0,lata
+55,Alagoinhas,ALA_L1,3,-946.5212017499907,0.0,lata
+55,Alagoinhas,ALA_L1,4,-1313.4473813999884,0.0,lata
+55,Alagoinhas,ALA_L1,5,0.0,0.0,lata
+55,Alagoinhas,ALA_L1,6,-424.65985204999924,0.0,lata
+55,Alagoinhas,ALA_L1,7,0.0,0.0,lata
+55,Alagoinhas,ALA_L1,8,0.0,0.0,lata
+55,Alagoinhas,ALA_L1,9,0.0,0.0,lata
+55,Alagoinhas,ALA_L1,10,0.0,0.0,lata
+55,Alagoinhas,ALA_L1,11,0.0,0.0,lata
+55,Alagoinhas,ALA_L1,12,0.0,0.0,lata
+55,Alagoinhas,ALA_L1,13,0.0,0.0,lata
+55,Alagoinhas,ALA_L1,14,0.0,0.0,lata
+55,Alagoinhas,ALA_L1,15,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,1,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,2,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,3,-472.43339594999816,0.0,lata
+55,Alagoinhas,ALA_L2,4,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,5,-466.78859999999986,0.0,lata
+55,Alagoinhas,ALA_L2,6,-696.8217284500006,0.0,lata
+55,Alagoinhas,ALA_L2,7,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,8,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,9,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,10,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,11,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,12,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,13,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,14,0.0,0.0,lata
+55,Alagoinhas,ALA_L2,15,0.0,0.0,lata
+55,Alagoinhas,ALA_L3,1,-126.38313740000012,0.0,lata
+55,Alagoinhas,ALA_L3,2,-643.1139949999979,0.0,lata
+55,Alagoinhas,ALA_L3,3,-98.48727250000047,0.0,lata
+55,Alagoinhas,ALA_L3,4,-591.4537929000016,0.0,lata
+55,Alagoinhas,ALA_L3,5,0.0,0.0,lata
+55,Alagoinhas,ALA_L3,6,0.0,0.0,lata
+55,Alagoinhas,ALA_L3,7,-569.225220999997,0.0,lata
+55,Alagoinhas,ALA_L3,8,0.0,0.0,lata
+55,Alagoinhas,ALA_L3,9,-333.5093586000021,0.0,lata
+55,Alagoinhas,ALA_L3,10,-802.8409535999999,0.0,lata
+55,Alagoinhas,ALA_L3,11,0.0,0.0,lata
+55,Alagoinhas,ALA_L3,12,0.0,0.0,lata
+55,Alagoinhas,ALA_L3,13,0.0,0.0,lata
+55,Alagoinhas,ALA_L3,14,-544.0104471999985,0.0,lata
+55,Alagoinhas,ALA_L3,15,-968.9738373999971,0.0,lata
+55,Frutal,FRU_L1,1,0.0,0.0,lata
+55,Frutal,FRU_L1,2,0.0,0.0,lata
+55,Frutal,FRU_L1,3,0.0,0.0,lata
+55,Frutal,FRU_L1,4,0.0,0.0,lata
+55,Frutal,FRU_L1,5,0.0,0.0,lata
+55,Frutal,FRU_L1,6,0.0,0.0,lata
+55,Frutal,FRU_L1,7,0.0,0.0,lata
+55,Frutal,FRU_L1,8,0.0,0.0,lata
+55,Frutal,FRU_L1,9,0.0,0.0,lata
+55,Frutal,FRU_L1,10,0.0,0.0,lata
+55,Frutal,FRU_L1,11,-61.200061199999254,0.0,lata
+55,Frutal,FRU_L1,12,0.0,0.0,lata
+55,Frutal,FRU_L1,13,0.0,0.0,lata
+55,Frutal,FRU_L1,14,0.0,0.0,lata
+55,Frutal,FRU_L1,15,0.0,0.0,lata
+55,Frutal,FRU_L2,1,-434.8581725999975,0.0,lata
+55,Frutal,FRU_L2,2,0.0,0.0,lata
+55,Frutal,FRU_L2,3,-418.89951999999903,0.0,lata
+55,Frutal,FRU_L2,4,-409.79010989999915,0.0,lata
+55,Frutal,FRU_L2,5,-430.0766431999982,0.0,lata
+55,Frutal,FRU_L2,6,-124.28641860000243,0.0,lata
+55,Frutal,FRU_L2,7,-420.7079250000006,0.0,lata
+55,Frutal,FRU_L2,8,-398.7091293000012,0.0,lata
+55,Frutal,FRU_L2,9,-412.91031399999883,0.0,lata
+55,Frutal,FRU_L2,10,-409.59266744999877,0.0,lata
+55,Frutal,FRU_L2,11,-962.2130500499989,0.0,lata
+55,Frutal,FRU_L2,12,-419.7394075499942,0.0,lata
+55,Frutal,FRU_L2,13,-323.7797472000002,0.0,lata
+55,Frutal,FRU_L2,14,-412.6473137999983,0.0,lata
+55,Frutal,FRU_L2,15,0.0,0.0,lata
+55,Frutal,FRU_L3,1,-1558.9327952000021,0.0,lata
+55,Frutal,FRU_L3,2,0.0,0.0,lata
+55,Frutal,FRU_L3,3,-127.0245057999964,0.0,lata
+55,Frutal,FRU_L3,4,0.0,0.0,lata
+55,Frutal,FRU_L3,5,0.0,0.0,lata
+55,Frutal,FRU_L3,6,0.0,0.0,lata
+55,Frutal,FRU_L3,7,0.0,0.0,lata
+55,Frutal,FRU_L3,8,0.0,0.0,lata
+55,Frutal,FRU_L3,9,0.0,0.0,lata
+55,Frutal,FRU_L3,10,-452.66859999999906,0.0,lata
+55,Frutal,FRU_L3,11,0.0,0.0,lata
+55,Frutal,FRU_L3,12,0.0,0.0,lata
+55,Frutal,FRU_L3,13,0.0,0.0,lata
+55,Frutal,FRU_L3,14,0.0,0.0,lata
+55,Frutal,FRU_L3,15,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,1,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,2,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,3,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,4,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,5,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,6,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,7,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,8,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,9,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,10,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,11,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,12,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,13,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,14,0.0,0.0,lata
+55,Pouso Alegre,POU_L1,15,0.0,0.0,lata
+55,Pouso Alegre,POU_L2,1,0.0,0.0,lata
+55,Pouso Alegre,POU_L2,2,0.0,0.0,lata
+55,Pouso Alegre,POU_L2,3,0.0,0.0,lata
+55,Pouso Alegre,POU_L2,4,-41.750262550000116,0.0,lata
+55,Pouso Alegre,POU_L2,5,0.0,0.0,lata
+55,Pouso Alegre,POU_L2,6,-308.8552913500025,0.0,lata
+55,Pouso Alegre,POU_L2,7,0.0,0.0,lata
+55,Pouso Alegre,POU_L2,8,-362.50056659999973,0.0,lata
+55,Pouso Alegre,POU_L2,9,0.0,0.0,lata
+55,Pouso Alegre,POU_L2,10,-407.864117500003,0.0,lata
+55,Pouso Alegre,POU_L2,11,-47.87319000000389,0.0,lata
+55,Pouso Alegre,POU_L2,12,0.0,0.0,lata
+55,Pouso Alegre,POU_L2,13,0.0,0.0,lata
+55,Pouso Alegre,POU_L2,14,0.0,0.0,lata
+55,Pouso Alegre,POU_L2,15,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,1,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,2,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,3,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,4,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,5,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,6,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,7,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,8,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,9,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,10,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,11,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,12,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,13,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,14,0.0,0.0,lata
+55,Pouso Alegre,POU_L3,15,0.0,0.0,lata
+55,Gama,GAM_L1,1,0.0,0.0,lata
+55,Gama,GAM_L1,2,0.0,0.0,lata
+55,Gama,GAM_L1,3,0.0,0.0,lata
+55,Gama,GAM_L1,4,0.0,0.0,lata
+55,Gama,GAM_L1,5,0.0,0.0,lata
+55,Gama,GAM_L1,6,0.0,0.0,lata
+55,Gama,GAM_L1,7,0.0,0.0,lata
+55,Gama,GAM_L1,8,0.0,0.0,lata
+55,Gama,GAM_L1,9,0.0,0.0,lata
+55,Gama,GAM_L1,10,0.0,0.0,lata
+55,Gama,GAM_L1,11,0.0,0.0,lata
+55,Gama,GAM_L1,12,0.0,0.0,lata
+55,Gama,GAM_L1,13,0.0,0.0,lata
+55,Gama,GAM_L1,14,0.0,0.0,lata
+55,Gama,GAM_L1,15,0.0,0.0,lata
+55,Gama,GAM_L2,1,0.0,0.0,lata
+55,Gama,GAM_L2,2,0.0,0.0,lata
+55,Gama,GAM_L2,3,0.0,0.0,lata
+55,Gama,GAM_L2,4,0.0,0.0,lata
+55,Gama,GAM_L2,5,0.0,0.0,lata
+55,Gama,GAM_L2,6,0.0,0.0,lata
+55,Gama,GAM_L2,7,0.0,0.0,lata
+55,Gama,GAM_L2,8,0.0,0.0,lata
+55,Gama,GAM_L2,9,0.0,0.0,lata
+55,Gama,GAM_L2,10,0.0,0.0,lata
+55,Gama,GAM_L2,11,0.0,0.0,lata
+55,Gama,GAM_L2,12,0.0,0.0,lata
+55,Gama,GAM_L2,13,0.0,0.0,lata
+55,Gama,GAM_L2,14,0.0,0.0,lata
+55,Gama,GAM_L2,15,0.0,0.0,lata
+55,Gama,GAM_L3,1,0.0,0.0,lata
+55,Gama,GAM_L3,2,0.0,0.0,lata
+55,Gama,GAM_L3,3,0.0,0.0,lata
+55,Gama,GAM_L3,4,0.0,0.0,lata
+55,Gama,GAM_L3,5,0.0,0.0,lata
+55,Gama,GAM_L3,6,0.0,0.0,lata
+55,Gama,GAM_L3,7,0.0,0.0,lata
+55,Gama,GAM_L3,8,0.0,0.0,lata
+55,Gama,GAM_L3,9,0.0,0.0,lata
+55,Gama,GAM_L3,10,0.0,0.0,lata
+55,Gama,GAM_L3,11,0.0,0.0,lata
+55,Gama,GAM_L3,12,0.0,0.0,lata
+55,Gama,GAM_L3,13,0.0,0.0,lata
+55,Gama,GAM_L3,14,0.0,0.0,lata
+55,Gama,GAM_L3,15,0.0,0.0,lata
+55,Viamao,VIA_L1,1,-413.73582449999776,0.0,lata
+55,Viamao,VIA_L1,2,-925.7074574499984,0.0,lata
+55,Viamao,VIA_L1,3,-532.2341513999963,0.0,lata
+55,Viamao,VIA_L1,4,-397.97880399999303,0.0,lata
+55,Viamao,VIA_L1,5,-886.9431599999934,0.0,lata
+55,Viamao,VIA_L1,6,-818.4080272499959,0.0,lata
+55,Viamao,VIA_L1,7,-132.62086259999342,0.0,lata
+55,Viamao,VIA_L1,8,0.0,0.0,lata
+55,Viamao,VIA_L1,9,-471.3054252499951,0.0,lata
+55,Viamao,VIA_L1,10,-862.5520162499997,0.0,lata
+55,Viamao,VIA_L1,11,-1097.6052239999972,0.0,lata
+55,Viamao,VIA_L1,12,-948.9976226499966,0.0,lata
+55,Viamao,VIA_L1,13,-5.646054600001662,0.0,lata
+55,Viamao,VIA_L1,14,-468.3839239500012,0.0,lata
+55,Viamao,VIA_L1,15,-875.4655122999993,0.0,lata
+55,Viamao,VIA_L2,1,-1634.3982129999986,0.0,lata
+55,Viamao,VIA_L2,2,-270.6693094999973,0.0,lata
+55,Viamao,VIA_L2,3,0.0,0.0,lata
+55,Viamao,VIA_L2,4,0.0,0.0,lata
+55,Viamao,VIA_L2,5,0.0,0.0,lata
+55,Viamao,VIA_L2,6,0.0,0.0,lata
+55,Viamao,VIA_L2,7,0.0,0.0,lata
+55,Viamao,VIA_L2,8,0.0,0.0,lata
+55,Viamao,VIA_L2,9,-321.3152324999992,0.0,lata
+55,Viamao,VIA_L2,10,0.0,0.0,lata
+55,Viamao,VIA_L2,11,0.0,0.0,lata
+55,Viamao,VIA_L2,12,0.0,0.0,lata
+55,Viamao,VIA_L2,13,-364.24198199999773,0.0,lata
+55,Viamao,VIA_L2,14,-757.3978924499988,0.0,lata
+55,Viamao,VIA_L2,15,-1134.5844719999986,0.0,lata
+55,Viamao,VIA_L3,1,-164.34570790000362,0.0,lata
+55,Viamao,VIA_L3,2,0.0,0.0,lata
+55,Viamao,VIA_L3,3,-401.0969020499997,0.0,lata
+55,Viamao,VIA_L3,4,0.0,0.0,lata
+55,Viamao,VIA_L3,5,0.0,0.0,lata
+55,Viamao,VIA_L3,6,0.0,0.0,lata
+55,Viamao,VIA_L3,7,-169.4055636000012,0.0,lata
+55,Viamao,VIA_L3,8,0.0,0.0,lata
+55,Viamao,VIA_L3,9,0.0,0.0,lata
+55,Viamao,VIA_L3,10,-433.94385130000046,0.0,lata
+55,Viamao,VIA_L3,11,0.0,0.0,lata
+55,Viamao,VIA_L3,12,-152.93084624999938,0.0,lata
+55,Viamao,VIA_L3,13,0.0,0.0,lata
+55,Viamao,VIA_L3,14,-444.29268480000246,0.0,lata
+55,Viamao,VIA_L3,15,-772.6498632499988,0.0,lata
+55,Itupeva,ITU_L1,1,-1121.1814662000015,0.0,lata
+55,Itupeva,ITU_L1,2,0.0,0.0,lata
+55,Itupeva,ITU_L1,3,-431.9525231000007,0.0,lata
+55,Itupeva,ITU_L1,4,-42.521425450002425,0.0,lata
+55,Itupeva,ITU_L1,5,-319.8655474999923,0.0,lata
+55,Itupeva,ITU_L1,6,-288.1863799999992,0.0,lata
+55,Itupeva,ITU_L1,7,-48.89300209999601,0.0,lata
+55,Itupeva,ITU_L1,8,-84.23408080000081,0.0,lata
+55,Itupeva,ITU_L1,9,-378.70962249999866,0.0,lata
+55,Itupeva,ITU_L1,10,-714.8533494999992,0.0,lata
+55,Itupeva,ITU_L1,11,0.0,0.0,lata
+55,Itupeva,ITU_L1,12,-365.5155257999977,0.0,lata
+55,Itupeva,ITU_L1,13,-23.79509439999856,0.0,lata
+55,Itupeva,ITU_L1,14,-467.5246382999976,0.0,lata
+55,Itupeva,ITU_L1,15,-278.5972499999989,0.0,lata
+55,Itupeva,ITU_L2,1,0.0,0.0,lata
+55,Itupeva,ITU_L2,2,0.0,0.0,lata
+55,Itupeva,ITU_L2,3,0.0,0.0,lata
+55,Itupeva,ITU_L2,4,0.0,0.0,lata
+55,Itupeva,ITU_L2,5,0.0,0.0,lata
+55,Itupeva,ITU_L2,6,0.0,0.0,lata
+55,Itupeva,ITU_L2,7,0.0,0.0,lata
+55,Itupeva,ITU_L2,8,0.0,0.0,lata
+55,Itupeva,ITU_L2,9,0.0,0.0,lata
+55,Itupeva,ITU_L2,10,0.0,0.0,lata
+55,Itupeva,ITU_L2,11,0.0,0.0,lata
+55,Itupeva,ITU_L2,12,0.0,0.0,lata
+55,Itupeva,ITU_L2,13,0.0,0.0,lata
+55,Itupeva,ITU_L2,14,0.0,0.0,lata
+55,Itupeva,ITU_L2,15,0.0,0.0,lata
+55,Itupeva,ITU_L3,1,0.0,0.0,lata
+55,Itupeva,ITU_L3,2,-145.54403999999886,0.0,lata
+55,Itupeva,ITU_L3,3,0.0,0.0,lata
+55,Itupeva,ITU_L3,4,-177.61817919998975,0.0,lata
+55,Itupeva,ITU_L3,5,-726.7666815999874,0.0,lata
+55,Itupeva,ITU_L3,6,-68.18662320000476,0.0,lata
+55,Itupeva,ITU_L3,7,-602.0460347500048,0.0,lata
+55,Itupeva,ITU_L3,8,-218.88893700000153,0.0,lata
+55,Itupeva,ITU_L3,9,-730.4070687000021,0.0,lata
+55,Itupeva,ITU_L3,10,-855.6010260000003,0.0,lata
+55,Itupeva,ITU_L3,11,-145.48150440000063,0.0,lata
+55,Itupeva,ITU_L3,12,-650.7483960999998,0.0,lata
+55,Itupeva,ITU_L3,13,-284.04478709999785,0.0,lata
+55,Itupeva,ITU_L3,14,-757.8515255999973,0.0,lata
+55,Itupeva,ITU_L3,15,-519.9801759999991,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,1,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,2,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,3,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,4,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,5,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,6,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,7,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,8,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,9,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,10,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,11,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,12,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,13,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,14,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L1,15,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,1,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,2,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,3,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,4,-78.04900499999894,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,5,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,6,-76.6916389500002,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,7,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,8,-246.86253655000473,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,9,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,10,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,11,-390.6001949999991,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,12,-886.0924834499947,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,13,-1333.8582799499982,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,14,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L2,15,-78.4423675500002,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,1,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,2,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,3,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,4,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,5,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,6,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,7,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,8,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,9,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,10,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,11,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,12,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,13,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,14,0.0,0.0,lata
+55,Cabo de Santo Agostinho,CAB_L3,15,0.0,0.0,lata
